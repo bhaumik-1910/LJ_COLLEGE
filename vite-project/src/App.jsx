@@ -17,7 +17,7 @@ const App = () => {
     <Box minHeight="100vh" display="flex" flexDirection="column">
       <Header />
       <Box component="main" flexGrow={1}>
-        <Hero bgImage="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=2000&auto=format&fit=crop" />
+        <Hero />
         <Container sx={{ py: 4 }}>
           <Stats />
           <Programs />
