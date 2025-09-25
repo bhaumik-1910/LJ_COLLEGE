@@ -15,6 +15,7 @@ import Tooltip from '@mui/material/Tooltip'
 import LightModeIcon from '@mui/icons-material/LightMode'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import { ThemeModeContext } from '../theme.js'
+import { Link as RouterLink } from 'react-router-dom'
 
 const Header = () => {
     const [open, setOpen] = React.useState(false)
@@ -42,7 +43,10 @@ const Header = () => {
                         {links.map((l) => (
                             <Button key={l.href} color="inherit" href={l.href}>{l.label}</Button>
                         ))}
-                        <Button variant="contained" color="primary" size="small" href="#admissions">Admissions</Button>
+                        {/* <Button variant="contained" color="primary" size="small" href="#admissions">Admissions</Button> */}
+                        <Button color="inherit" component={RouterLink} to="/login">Login</Button>
+                        {/* Login and Register */}
+                        <Button variant="outlined" size="small" component={RouterLink} to="/register">Register</Button>
                         <Tooltip title={mode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}>
                             <IconButton color="inherit" onClick={toggleMode} aria-label="Toggle theme mode">
                                 {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
@@ -73,9 +77,20 @@ const Header = () => {
                                 </ListItemButton>
                             </ListItem>
                         ))}
-                        <ListItem disablePadding>
+                        {/* <ListItem disablePadding>
                             <ListItemButton component="a" href="#admissions">
                                 <ListItemText primary="Admissions" />
+                            </ListItemButton>
+                        </ListItem> */}
+                        <ListItem disablePadding>
+                            <ListItemButton component={RouterLink} to="/login">
+                                <ListItemText primary="Login" />
+                            </ListItemButton>
+                        </ListItem>
+                        {/* Optional: show register too */}
+                        <ListItem disablePadding>
+                            <ListItemButton component={RouterLink} to="/register">
+                                <ListItemText primary="Register" />
                             </ListItemButton>
                         </ListItem>
                     </List>

@@ -5,6 +5,9 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider } from '@mui/material/styles'
 import getTheme, { ThemeModeContext } from './theme.js'
 import './index.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Login from './pages/Login.jsx'
+import Register from './pages/Register.jsx'
 
 function Root() {
   const [mode, setMode] = React.useState('light')
@@ -16,7 +19,13 @@ function Root() {
       <ThemeModeContext.Provider value={{ mode, toggle }}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <App />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<App />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Routes>
+          </BrowserRouter>
         </ThemeProvider>
       </ThemeModeContext.Provider>
     </React.StrictMode>
