@@ -27,6 +27,7 @@ export default function RegisterPage() {
         confirmPassword: "",
         designation: "",
         role: "",
+        univercity: "",
     });
 
     const handleChange = (e) => {
@@ -194,6 +195,17 @@ export default function RegisterPage() {
                         <MenuItem value="student">Student</MenuItem>
                         <MenuItem value="institute">Institute</MenuItem>
                     </TextField>
+
+                    {/* Univercity Name */}
+                    <TextField
+                        fullWidth
+                        label="Univercity Name"
+                        name="Univercity Name"
+                        value={form.univercity}
+                        onChange={handleChange}
+                        variant="standard"
+                        margin="normal"
+                    />
 
                     {/* Register button */}
                     <Button
