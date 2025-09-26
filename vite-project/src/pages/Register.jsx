@@ -1,255 +1,274 @@
+
 import React, { useState } from "react";
 import {
-    Box,
-    Grid,
-    Paper,
-    TextField,
-    Button,
-    Typography,
-    InputAdornment,
-    IconButton,
-    MenuItem,
+  Box,
+  Grid,
+  Paper,
+  TextField,
+  Button,
+  Typography,
+  InputAdornment,
+  IconButton,
+  MenuItem,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { Link as RouterLink } from 'react-router-dom';
-import img1 from  "../assets/Register-image1.jpg"
-
-// const ILLUSTRATION =
-    // "https://cdni.iconscout.com/illustration/premium/thumb/online-education-3428959-2902701.png";
-
+import { Link as RouterLink } from "react-router-dom";
+import img1 from "../assets/Register-image1.jpg";
+import img2 from "../assets/Register-logo.jpg";
 
 export default function RegisterPage() {
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [form, setForm] = useState({
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        designation: "",
-        role: "",
-        university: "",
-    });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    designation: "",
+    role: "",
+    university: "",
+  });
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-    const handleSubmit = () => {
-        console.log("Register Form Data:", form);
-        // Add API call here
-    };
+  const handleSubmit = () => {
+    console.log("Register Form Data:", form);
+    // Add API call here
+  };
 
-    return (
-    
-        <Grid
-            container
-            sx={{
-                minHeight: "100vh",
-                bgcolor: "#f5f9ff",
-                width:"92%",justifyContent:"center",display:"flex"
-            }}
-        >
-            {/* Left side image */}
-            <Grid
-                item
-                xs={12}
-                md={6}
-                sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    p: 4,
-                }}
-            >
-                <Box
-                    component="img"
-                    src={img1}
-                    alt="Education Illustration"
-                    sx={{ width: "75%",
-                          height:"87%",
-                          borderRadius:"20px"
-                     }}
-                />
-            </Grid>
-
-            {/* Right side register box */}
-            <Grid
-                item
-                xs={12}
-                md={6}
-                sx={{ display: "flex", justifyContent: "center", alignItems: "center"  }}
-            >
-                <Paper
-                    elevation={3}
-                    sx={{
-                        p: 5,
-                        borderRadius: 3,
-                        width: "100%",
-                        maxWidth: 450,
-                        textAlign: "center",
-                    }}
-                >
-                    {/* Logo */}
-                    <Box
-                        component="img"
-                        src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png"
-                        alt="University Logo"
-                        sx={{ width: 70, mb: 2 }}
-                    />
-
-                    {/* University Name */}
-                    {/* <Typography variant="h6" fontWeight="bold">
-                        UNIVERSITY NAME
-                    </Typography> */}
-                    <Typography variant="body2" color="primary" mb={3} sx={{fontWeight:"600",color:"black",fontSize:"large"}}>
-                        REGISTER ACCOUNT
-                    </Typography>
-
-                    {/* Full Name */}
-                    <TextField
-                        fullWidth
-                        label="Full Name"
-                        name="name"
-                        value={form.name}
-                        onChange={handleChange}
-                        variant="standard"
-                        // margin="normal"
-                        sx={{marginTop:"8px"}}
-                        
-                    />
-
-                    {/* Email */}
-                    <TextField
-                        fullWidth
-                        label="Email"
-                        name="email"
-                        value={form.email}
-                        onChange={handleChange}
-                        variant="standard"
-                        // margin="normal"
-                        sx={{marginTop:"8px"}}
-
-                        
+  return (
+    <Grid
+      container
+      sx={{
+        minHeight: "100vh",
+        // bgcolor: "#479f6aff",
+        display: "flex",
+        justifyContent:"center"
+      }}
+    >
+      {/* Left side image */}
+      <Grid
+        item
+        xs={12}
+        md={6}
+        sx={{
+        //   display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          p: { xs: 2, md: 4 },
+          
+        }}
+      >
+        <Box
+          component="img"
+          src={img1}
+          alt="Education Illustration"
+          sx={{
+            width: { xs: "100%", sm: "80%", md: "578px" },
+            height: { xs: "auto", md: "90%" },
+            borderRadius: "20px",
             
-                    />
+          }}
+        />
+      </Grid>
 
-                    {/* Password */}
-                    <TextField
-                        fullWidth
-                        label="Password"
-                        name="password"
-                        type={showPassword ? "text" : "password"}
-                        value={form.password}
-                        onChange={handleChange}
-                        variant="standard"
-                        // margin="normal"
-                         sx={{marginTop:"8px"}}
+      {/* Right side register box */}
+      <Grid
+        item
+        xs={12}
+        md={6}
+        sx={{
+        //   display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          p: { xs: 2, md: 4 },
+        }}
+      >
+        <Paper
+          elevation={3}
+          sx={{
+            p: { xs: 3, md: 5 },
+            borderRadius: 3,
+            width: "100%",
+            maxWidth: 450,
+            textAlign: "center",
+          }}
+        >
+          {/* Logo */}
+          <Box
+            component="img"
+            src={img2}
+            alt="University Logo"
+            sx={{ width: 70, mb: 2 }}
+          />
 
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton onClick={() => setShowPassword(!showPassword)}>
-                                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
+          <Typography
+            variant="body2"
+            mb={3}
+            sx={{
+              fontWeight: "600",
+              color: "black",
+              fontSize: { xs: "16px", md: "20px" },
+            }}
+          >
+            REGISTER ACCOUNT
+          </Typography>
 
-                    {/* Confirm Password */}
-                    <TextField
-                        fullWidth
-                        label="Confirm Password"
-                        name="confirmPassword"
-                        type={showConfirmPassword ? "text" : "password"}
-                        value={form.confirmPassword}
-                        onChange={handleChange}
-                        variant="standard"
-                        sx={{marginTop:"8px"}}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        onClick={() =>
-                                            setShowConfirmPassword(!showConfirmPassword)
-                                        }
-                                    >
-                                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
+          {/* Full Name */}
+          <TextField
+            fullWidth
+            label="Full Name"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            variant="standard"
+            sx={{ marginTop: "8px" }}
+          />
 
-                    {/* Designation */}
-                    <TextField
-                        fullWidth
-                        label="Designation"
-                        name="designation"
-                        value={form.designation}
-                        onChange={handleChange}
-                        variant="standard"
-                        // margin="normal"
-                        sx={{marginTop:"8px"}}
+          {/* Email */}
+          <TextField
+            fullWidth
+            label="Email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            variant="standard"
+            sx={{ marginTop: "8px" }}
+          />
 
-                    />
+          {/* Password */}
+          <TextField
+            fullWidth
+            label="Password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            value={form.password}
+            onChange={handleChange}
+            variant="standard"
+            sx={{ marginTop: "8px" }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowPassword(!showPassword)}>
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
 
-                    {/* Role Dropdown */}
-                    <TextField
-                        select
-                        fullWidth
-                        label="Role"
-                        name="role"
-                        value={form.role}
-                        onChange={handleChange}
-                        variant="standard"
-                        // margin="normal"
-                        sx={{marginTop:"8px"}}
+          {/* Confirm Password */}
+          <TextField
+            fullWidth
+            label="Confirm Password"
+            name="confirmPassword"
+            type={showConfirmPassword ? "text" : "password"}
+            value={form.confirmPassword}
+            onChange={handleChange}
+            variant="standard"
+            sx={{ marginTop: "8px" }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() =>
+                      setShowConfirmPassword(!showConfirmPassword)
+                    }
+                  >
+                    {showConfirmPassword ? (
+                      <VisibilityOff />
+                    ) : (
+                      <Visibility />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
 
-                    >
-                        <MenuItem value="admin">Admin</MenuItem>
-                        <MenuItem value="faculty">Faculty</MenuItem>
-                        <MenuItem value="student">Student</MenuItem>
-                    </TextField>
+          {/* Designation */}
+          <TextField
+            fullWidth
+            label="Designation"
+            name="designation"
+            value={form.designation}
+            onChange={handleChange}
+            variant="standard"
+            sx={{ marginTop: "8px" }}
+          />
 
-                    {/* University Name */}
-                    <TextField
-                        fullWidth
-                        label="University Name"
-                        name="university"
-                        value={form.university}
-                        onChange={handleChange}
-                        variant="standard"
-                        // margin="normal"
-                        sx={{marginTop:"8px"}}
+          {/* Role Dropdown */}
+          <TextField
+            select
+            fullWidth
+            label="Role"
+            name="role"
+            value={form.role}
+            onChange={handleChange}
+            variant="standard"
+            sx={{ marginTop: "8px" }}
+          >
+            <MenuItem value="admin">Admin</MenuItem>
+            <MenuItem value="faculty">Faculty</MenuItem>
+            <MenuItem value="student">Student</MenuItem>
+          </TextField>
 
-                    />
+          {/* University Name */}
+          <TextField
+            fullWidth
+            label="University Name"
+            name="university"
+            value={form.university}
+            onChange={handleChange}
+            variant="standard"
+            sx={{ marginTop: "8px" }}
+          />
 
-                    {/* Register button */}
-                    <Button
-                        fullWidth
-                        variant="contained"
-                        onClick={handleSubmit}
-                        sx={{
-                            mt: 3,
-                            py: 1.2,
-                            borderRadius: 2,
-                            textTransform: "none",
-                            fontWeight: "bold",
-                        }}
-                    >
-                        Register
-                    </Button>
-                    <Typography sx={{ mt: 2 }}>
-                        Already have an account?{' '}
-                        <Button component={RouterLink} to="/login">Log in</Button>
-                    </Typography>
-                </Paper>
-            </Grid>
-        </Grid>
+          {/* Register button */}
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={handleSubmit}
+            sx={{
+              mt: 3,
+              py: 1.2,
+              borderRadius: 2,
+              textTransform: "none",
+              fontWeight: "bold",
+            }}
+          >
+            Register
+          </Button>
 
-
-    );
+          <Typography sx={{ mt: 2, fontSize: { xs: "14px", md: "16px" } }}>
+            Already have an account?{" "}
+            <Button
+              component={RouterLink}
+              to="/login"
+              sx={{ textTransform: "none", p: 0 }}
+            >
+              Log in
+            </Button>
+          </Typography>
+        </Paper>
+      </Grid>
+    </Grid>
+  );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
