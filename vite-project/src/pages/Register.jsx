@@ -12,10 +12,12 @@ import {
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom';
+import img1 from  "../assets/Register-image1.jpg"
 
-const ILLUSTRATION =
-    "https://cdni.iconscout.com/illustration/premium/thumb/online-education-3428959-2902701.png";
+// const ILLUSTRATION =
+    // "https://cdni.iconscout.com/illustration/premium/thumb/online-education-3428959-2902701.png";
+
 
 export default function RegisterPage() {
     const [showPassword, setShowPassword] = useState(false);
@@ -40,11 +42,13 @@ export default function RegisterPage() {
     };
 
     return (
+    
         <Grid
             container
             sx={{
                 minHeight: "100vh",
                 bgcolor: "#f5f9ff",
+                width:"92%",justifyContent:"center",display:"flex"
             }}
         >
             {/* Left side image */}
@@ -61,9 +65,12 @@ export default function RegisterPage() {
             >
                 <Box
                     component="img"
-                    src={ILLUSTRATION}
+                    src={img1}
                     alt="Education Illustration"
-                    sx={{ width: "100%" }}
+                    sx={{ width: "75%",
+                          height:"87%",
+                          borderRadius:"20px"
+                     }}
                 />
             </Grid>
 
@@ -72,7 +79,7 @@ export default function RegisterPage() {
                 item
                 xs={12}
                 md={6}
-                sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+                sx={{ display: "flex", justifyContent: "center", alignItems: "center"  }}
             >
                 <Paper
                     elevation={3}
@@ -93,10 +100,10 @@ export default function RegisterPage() {
                     />
 
                     {/* University Name */}
-                    <Typography variant="h6" fontWeight="bold">
+                    {/* <Typography variant="h6" fontWeight="bold">
                         UNIVERSITY NAME
-                    </Typography>
-                    <Typography variant="body2" color="primary" mb={3}>
+                    </Typography> */}
+                    <Typography variant="body2" color="primary" mb={3} sx={{fontWeight:"600",color:"black",fontSize:"large"}}>
                         REGISTER ACCOUNT
                     </Typography>
 
@@ -108,7 +115,9 @@ export default function RegisterPage() {
                         value={form.name}
                         onChange={handleChange}
                         variant="standard"
-                        margin="normal"
+                        // margin="normal"
+                        sx={{marginTop:"8px"}}
+                        
                     />
 
                     {/* Email */}
@@ -119,7 +128,11 @@ export default function RegisterPage() {
                         value={form.email}
                         onChange={handleChange}
                         variant="standard"
-                        margin="normal"
+                        // margin="normal"
+                        sx={{marginTop:"8px"}}
+
+                        
+            
                     />
 
                     {/* Password */}
@@ -131,7 +144,9 @@ export default function RegisterPage() {
                         value={form.password}
                         onChange={handleChange}
                         variant="standard"
-                        margin="normal"
+                        // margin="normal"
+                         sx={{marginTop:"8px"}}
+
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
@@ -152,7 +167,7 @@ export default function RegisterPage() {
                         value={form.confirmPassword}
                         onChange={handleChange}
                         variant="standard"
-                        margin="normal"
+                        sx={{marginTop:"8px"}}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
@@ -176,7 +191,9 @@ export default function RegisterPage() {
                         value={form.designation}
                         onChange={handleChange}
                         variant="standard"
-                        margin="normal"
+                        // margin="normal"
+                        sx={{marginTop:"8px"}}
+
                     />
 
                     {/* Role Dropdown */}
@@ -188,7 +205,9 @@ export default function RegisterPage() {
                         value={form.role}
                         onChange={handleChange}
                         variant="standard"
-                        margin="normal"
+                        // margin="normal"
+                        sx={{marginTop:"8px"}}
+
                     >
                         <MenuItem value="admin">Admin</MenuItem>
                         <MenuItem value="faculty">Faculty</MenuItem>
@@ -203,7 +222,9 @@ export default function RegisterPage() {
                         value={form.university}
                         onChange={handleChange}
                         variant="standard"
-                        margin="normal"
+                        // margin="normal"
+                        sx={{marginTop:"8px"}}
+
                     />
 
                     {/* Register button */}
@@ -228,5 +249,7 @@ export default function RegisterPage() {
                 </Paper>
             </Grid>
         </Grid>
+
+
     );
 }
