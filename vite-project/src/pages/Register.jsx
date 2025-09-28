@@ -16,8 +16,13 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Link as RouterLink } from "react-router-dom";
 import img1 from "../assets/Register-image1.jpg";
 import img2 from "../assets/Register-logo.jpg";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterPage() {
+
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [form, setForm] = useState({
@@ -34,9 +39,54 @@ export default function RegisterPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = () => {
-    console.log("Register Form Data:", form);
-    // Add API call here
+  const handleSubmit = async () => {
+    // Basic frontend validation
+    if (!form.name || !form.email || !form.password || !form.confirmPassword) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
+    if (form.password !== form.confirmPassword) {
+      toast.error("Passwords do not match!");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5000/api/users/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          password: form.password,
+          designation: form.designation,
+          role: form.role,
+          university: form.university,
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        toast.success("User registered successfully!");
+        //Clear Form
+        setForm({
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+          designation: "",
+          role: "",
+          university: "",
+        });
+
+        setTimeout(() => {
+          navigate("/login");
+        }, 500);
+      } else {
+        toast.error(data.message || "Error registering user");
+      }
+    } catch (error) {
+      toast.error("Server error");
+    }
   };
 
   return (
@@ -46,7 +96,7 @@ export default function RegisterPage() {
         minHeight: "100vh",
         // bgcolor: "#479f6aff",
         display: "flex",
-        justifyContent:"center"
+        justifyContent: "center"
       }}
     >
       {/* Left side image */}
@@ -55,11 +105,11 @@ export default function RegisterPage() {
         xs={12}
         md={6}
         sx={{
-        //   display: "flex",
+          //   display: "flex",
           justifyContent: "center",
           alignItems: "center",
           p: { xs: 2, md: 4 },
-          
+
         }}
       >
         <Box
@@ -70,7 +120,7 @@ export default function RegisterPage() {
             width: { xs: "100%", sm: "80%", md: "578px" },
             height: { xs: "auto", md: "90%" },
             borderRadius: "20px",
-            
+
           }}
         />
       </Grid>
@@ -81,7 +131,7 @@ export default function RegisterPage() {
         xs={12}
         md={6}
         sx={{
-        //   display: "flex",
+          //   display: "flex",
           justifyContent: "center",
           alignItems: "center",
           p: { xs: 2, md: 4 },
@@ -210,6 +260,14 @@ export default function RegisterPage() {
             onChange={handleChange}
             variant="standard"
             sx={{ marginTop: "8px" }}
+            SelectProps={{
+              sx: {
+                textAlign: "left",
+                "& .MuiSelect-select": {
+                  textAlign: "left",
+                },
+              },
+            }}
           >
             <MenuItem value="admin">Admin</MenuItem>
             <MenuItem value="faculty">Faculty</MenuItem>

@@ -9,6 +9,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function Root() {
   const [mode, setMode] = React.useState('light')
   const theme = React.useMemo(() => getTheme(mode), [mode])
@@ -26,6 +29,19 @@ function Root() {
               <Route path="/register" element={<Register />} />
             </Routes>
           </BrowserRouter>
+
+          {/* ToastContainer added*/}
+          <ToastContainer
+            position="top-right"
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            pauseOnHover
+            draggable
+            theme="colored"
+          />
+
         </ThemeProvider>
       </ThemeModeContext.Provider>
     </React.StrictMode>
