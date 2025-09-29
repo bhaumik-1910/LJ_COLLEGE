@@ -6,7 +6,7 @@ const router = express.Router();
 
 // REGISTER
 router.post("/register", async (req, res) => {
-  try {
+  try {  
     const { name, email, password, designation, role, university } = req.body;
 
     if (!name || !email || !password || !role) {
