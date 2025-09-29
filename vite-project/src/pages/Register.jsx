@@ -139,7 +139,11 @@ export default function RegisterPage() {
             component="img"
             src={logo}
             alt="University Logo"
-            sx={{ width: 70, mb: 2 }}
+            sx={{ 
+              width: 90, 
+              mb: 2,
+              borderRadius: "50%",
+             }}
           />
 
           <Typography
