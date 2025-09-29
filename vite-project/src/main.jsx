@@ -10,9 +10,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 
-import AdminDashboard from "./pages/AdminDashboard.jsx";
-import FacultyDashboard from "./pages/FacultyDashboard.jsx";
-import StudentDashboard from "./pages/StudentDashboard.jsx";
+import AdminDashboard from "./pages/AdminDashboard/AdminDashboard.jsx";
+import FacultyDashboard from "./pages/FacultyDashboard/FacultyDashboard.jsx";
+import StudentDashboard from "./pages/StudentDashboard/StudentDashboard.jsx";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
