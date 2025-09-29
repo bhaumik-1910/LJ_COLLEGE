@@ -5,12 +5,12 @@ import { Typography, Box } from "@mui/material";
 export default function StudentDashboard() {
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const role = localStorage.getItem("role");
-        if (role !== "student") {
-            navigate("/"); // redirect if not student
-        }
-    }, [navigate]);
+useEffect(() => {
+    const role = localStorage.getItem("role");
+    if (role !== "student") {
+        navigate("/"); // redirect if not student
+    }
+}, [navigate]);
 
     return (
         <Box sx={{ p: 4 }}>
