@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Box,
   Grid,
@@ -13,15 +12,17 @@ import {
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { Link as RouterLink } from "react-router-dom";
-import img1 from "../assets/Register-image1.jpg";
-import img2 from "../assets/Register-logo.jpg";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import left_image from "../assets/Register-image1.jpg";
+import logo from "../assets/Register-logo.jpg";
+import { Link as RouterLink } from 'react-router-dom';
+import { AuthContext } from "../context/AuthContext";
 
 export default function RegisterPage() {
-
   const navigate = useNavigate();
+
+  const { register, loading } = useContext(AuthContext);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -40,7 +41,6 @@ export default function RegisterPage() {
   };
 
   const handleSubmit = async () => {
-    // Basic frontend validation
     if (!form.name || !form.email || !form.password || !form.confirmPassword) {
       toast.error("Please fill in all required fields.");
       return;
@@ -50,42 +50,29 @@ export default function RegisterPage() {
       return;
     }
 
-    try {
-      const response = await fetch("http://localhost:5000/api/users/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          password: form.password,
-          designation: form.designation,
-          role: form.role,
-          university: form.university,
-        }),
+    const res = await register({
+      name: form.name,
+      email: form.email,
+      password: form.password,
+      designation: form.designation,
+      role: form.role,
+      university: form.university,
+    });
+
+    if (res.success) {
+      toast.success("User registered successfully!");
+      setForm({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        designation: "",
+        role: "",
+        university: "",
       });
-
-      const data = await response.json();
-      if (response.ok) {
-        toast.success("User registered successfully!");
-        //Clear Form
-        setForm({
-          name: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-          designation: "",
-          role: "",
-          university: "",
-        });
-
-        setTimeout(() => {
-          navigate("/login");
-        }, 500);
-      } else {
-        toast.error(data.message || "Error registering user");
-      }
-    } catch (error) {
-      toast.error("Server error");
+      setTimeout(() => navigate("/login"), 500);
+    } else {
+      toast.error(res.message || "Error registering user");
     }
   };
 
@@ -114,7 +101,7 @@ export default function RegisterPage() {
       >
         <Box
           component="img"
-          src={img1}
+          src={left_image}
           alt="Education Illustration"
           sx={{
             width: { xs: "100%", sm: "80%", md: "578px" },
@@ -150,7 +137,7 @@ export default function RegisterPage() {
           {/* Logo */}
           <Box
             component="img"
-            src={img2}
+            src={logo}
             alt="University Logo"
             sx={{ width: 70, mb: 2 }}
           />
@@ -297,8 +284,9 @@ export default function RegisterPage() {
               textTransform: "none",
               fontWeight: "bold",
             }}
+            disabled={loading}
           >
-            Register
+            {loading ? 'Registering...' : 'Register'}
           </Button>
 
           <Typography sx={{ mt: 2, fontSize: { xs: "14px", md: "16px" } }}>
@@ -316,17 +304,3 @@ export default function RegisterPage() {
     </Grid>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

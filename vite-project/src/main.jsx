@@ -4,6 +4,7 @@ import App from './App.jsx'
 import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider } from '@mui/material/styles'
 import getTheme, { ThemeModeContext } from './theme.js'
+import { AuthProvider } from './context/AuthContext.jsx'
 import './index.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from './pages/Login.jsx'
@@ -26,30 +27,31 @@ function Root() {
       <ThemeModeContext.Provider value={{ mode, toggle }}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<App />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+          <AuthProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<App />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
 
-              <Route path="/admin-dashboard" element={<AdminDashboard />} />
-              <Route path="/faculty-dashboard" element={<FacultyDashboard />} />
-              <Route path="/student-dashboard" element={<StudentDashboard />} />
-            </Routes>
-          </BrowserRouter>
+                <Route path="/admin-dashboard" element={<AdminDashboard />} />
+                <Route path="/faculty-dashboard" element={<FacultyDashboard />} />
+                <Route path="/student-dashboard" element={<StudentDashboard />} />
+              </Routes>
+            </BrowserRouter>
 
-          {/* ToastContainer added*/}
-          <ToastContainer
-            position="top-right"
-            autoClose={2000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            pauseOnHover
-            draggable
-            theme="colored"
-          />
-
+            {/* ToastContainer added*/}
+            <ToastContainer
+              position="top-right"
+              autoClose={2000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              pauseOnHover
+              draggable
+              theme="colored"
+            />
+          </AuthProvider>
         </ThemeProvider>
       </ThemeModeContext.Provider>
     </React.StrictMode>

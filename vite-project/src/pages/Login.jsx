@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Box, Grid, Paper, TextField, Button, Typography, FormControlLabel, Checkbox, InputAdornment, IconButton } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { toast } from "react-toastify";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [form, setForm] = useState({ email: "", password: "" });
     const navigate = useNavigate();
+    
+    const { login, loading } = useContext(AuthContext);
 
     const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -18,30 +21,17 @@ export default function Login() {
             return;
         }
 
-        try {
-            const res = await fetch("http://localhost:5000/api/users/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(form),
-            });
-            const data = await res.json();
-
-            if (res.ok) {
-                toast.success("Login successful!");
-                localStorage.setItem("token", data.token);
-                localStorage.setItem("role", data.role);
-
-                switch (data.role) {
-                    case "admin": navigate("/admin-dashboard"); break;
-                    case "faculty": navigate("/faculty-dashboard"); break;
-                    case "student": navigate("/student-dashboard"); break;
-                    default: navigate("/"); break;
-                }
-            } else {
-                toast.error(data.message || "Invalid credentials");
+        const res = await login(form.email, form.password);
+        if (res.success) {
+            toast.success("Login successful!");
+            switch (res.role) {
+                case "admin": navigate("/admin-dashboard"); break;
+                case "faculty": navigate("/faculty-dashboard"); break;
+                case "student": navigate("/student-dashboard"); break;
+                default: navigate("/"); break;
             }
-        } catch (err) {
-            toast.error("Server error");
+        } else {
+            toast.error(res.message || "Invalid credentials");
         }
     };
 
@@ -59,7 +49,9 @@ export default function Login() {
                         InputProps={{ endAdornment: <InputAdornment position="end"><IconButton onClick={() => setShowPassword(!showPassword)}>{showPassword ? <VisibilityOff /> : <Visibility />}</IconButton></InputAdornment> }}
                     />
                     <FormControlLabel control={<Checkbox defaultChecked />} label="Remember me" sx={{ mt: 1 }} />
-                    <Button fullWidth variant="contained" sx={{ mt: 3 }} onClick={handleLogin}>Sign in</Button>
+                    <Button fullWidth variant="contained" sx={{ mt: 3 }} onClick={handleLogin} disabled={loading}>
+                        {loading ? 'Signing in...' : 'Sign in'}
+                    </Button>
                     <Typography sx={{ mt: 2 }}>Don't have an account? <Button component={RouterLink} to="/register">Register</Button></Typography>
                 </Paper>
             </Grid>
