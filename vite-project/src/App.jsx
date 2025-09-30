@@ -12,6 +12,7 @@ import Testimonials from './components/Testimonials.jsx'
 import AdmissionsCTA from './components/AdmissionsCTA.jsx'
 import Footer from './components/Footer.jsx'
 
+
 const App = () => {
   return (
     <Box minHeight="100vh" display="flex" flexDirection="column">

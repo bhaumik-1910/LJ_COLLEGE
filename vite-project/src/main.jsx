@@ -16,6 +16,8 @@ import StudentDashboard from "./pages/StudentDashboard/StudentDashboard.jsx";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PrivateRoute from './routes/PrivateRoute.jsx'
+import PublicRoute from './routes/PublicRoute.jsx'
 
 function Root() {
   const [mode, setMode] = React.useState('light')
@@ -31,12 +33,36 @@ function Root() {
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<App />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
+                {/* <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} /> */}
+                <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+                <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
 
-                <Route path="/admin-dashboard" element={<AdminDashboard />} />
-                <Route path="/faculty-dashboard" element={<FacultyDashboard />} />
-                <Route path="/student-dashboard" element={<StudentDashboard />} />
+
+                <Route
+                  path="/admin-dashboard"
+                  element={
+                    <PrivateRoute role="admin">
+                      <AdminDashboard />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/faculty-dashboard"
+                  element={
+                    <PrivateRoute role="faculty">
+                      <FacultyDashboard />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/student-dashboard"
+                  element={
+                    <PrivateRoute role="student">
+                      <StudentDashboard />
+                    </PrivateRoute>
+                  }
+                />
               </Routes>
             </BrowserRouter>
 

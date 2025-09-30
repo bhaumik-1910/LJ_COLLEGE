@@ -243,7 +243,7 @@ export default function RegisterPage() {
 
           {/* Role Dropdown */}
           <TextField
-            select
+            // select
             fullWidth
             label="Role"
             name="role"
@@ -251,18 +251,18 @@ export default function RegisterPage() {
             onChange={handleChange}
             variant="standard"
             sx={{ marginTop: "8px" }}
-            SelectProps={{
-              sx: {
-                textAlign: "left",
-                "& .MuiSelect-select": {
-                  textAlign: "left",
-                },
-              },
-            }}
+            // SelectProps={{
+            //   sx: {
+            //     textAlign: "left",
+            //     "& .MuiSelect-select": {
+            //       textAlign: "left",
+            //     },
+            //   },
+            // }}
           >
-            <MenuItem value="admin">Admin</MenuItem>
-            <MenuItem value="faculty">Faculty</MenuItem>
-            <MenuItem value="student">Student</MenuItem>
+            {/* <MenuItem value="admin">Admin</MenuItem> */}
+            {/* <MenuItem value="faculty">Faculty</MenuItem> */}
+            {/* <MenuItem value="student">Student</MenuItem> */}
           </TextField>
 
           {/* University Name */}
