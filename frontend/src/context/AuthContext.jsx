@@ -227,13 +227,13 @@ export const AuthProvider = ({ children }) => {
         }
     }, []);
 
-    const resetPassword = useCallback(async ({ email, otp, newPassword }) => {
+    const resetPassword = useCallback(async ({ email, otp, newPassword, confirmPassword }) => {
         setLoading(true);
         try {
             const res = await fetch(`${API_BASE}/users/reset-password`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, otp, newPassword }),
+                body: JSON.stringify({ email, otp, newPassword, confirmPassword }),
             });
             const data = await res.json();
             if (!res.ok) return { success: false, message: data.message || 'Password reset failed' };

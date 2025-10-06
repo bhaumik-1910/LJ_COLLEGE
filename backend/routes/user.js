@@ -97,48 +97,46 @@ router.post("/reset-password", async (req, res) => {
   try {
     const { email, otp, newPassword, confirmPassword } = req.body;
 
-    // 1. Validate incoming data
-    // if (!email || !otp || !newPassword || !confirmPassword) {
-    //   return res.status(400).json({ message: "All fields are required." });
-    // }
-
+    // Normalize and validate
+    const normalizedEmail = (email || "").trim().toLowerCase();
+    if (!normalizedEmail || !otp || !newPassword || !confirmPassword) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters." });
+    }
     if (newPassword !== confirmPassword) {
       return res.status(400).json({ message: "Passwords do not match." });
     }
 
-    // 2. Find the user by email
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ message: "User not found." });
-    }
+    // Find user
+    const user = await User.findOne({ email: normalizedEmail });
+    if (!user) return res.status(404).json({ message: "User not found." });
 
-    // 3. Verify OTP
-    if (user.otp !== otp) {
+    user.otp = otp;
+    user.otpExpires = new Date(Date.now() + 3600000); // 1 hour expiry as Date
+    await user.save();
+
+    const cleanStored = String(user.otp || '').trim();
+    const cleanIncoming = String(otp || '').trim();
+    if (cleanStored !== cleanIncoming) {
       return res.status(400).json({ message: "Invalid OTP." });
     }
 
-    // 4. Check for OTP expiration
-    if (user.otpExpires < Date.now()) {
+    // Check expiration
+    if (!user.otpExpires || new Date(user.otpExpires).getTime() < Date.now()) {
       return res.status(400).json({ message: "OTP has expired." });
     }
 
-    // 5. Hash the new password and update the user
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
-
-    user.password = hashedPassword;
-    user.otp = undefined; // Clear the OTP for security
-    user.otpExpires = undefined; // Clear the expiration timestamp
+    // Set new password (pre-save hook will hash)
+    user.password = newPassword;
+    user.otp = undefined;
+    user.otpExpires = undefined;
     await user.save();
 
-    // 6. Send a success response
     res.status(200).json({ message: "Password reset successfully." });
-
   } catch (error) {
-    // Log the full error for debugging purposes
     console.error("Error during password reset:", error);
-
-    // Send a generic, non-descriptive error message to the client
     res.status(500).json({ message: "An internal server error occurred." });
   }
 });
