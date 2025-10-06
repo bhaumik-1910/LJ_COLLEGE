@@ -43,7 +43,7 @@ const Research = () => {
                         </motion.div>
                     </Grid>
 
-                    {/* <Grid item xs={12} md={5}>
+                    {/* <Grid item   xs={12} md={5}>
                         <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, amount: .3 }} transition={{ duration: .6 }}>
                             <Box sx={{ position: 'relative', minHeight: 360 }}>
                                 <Box sx={{ position: 'absolute', inset: 0, right: '33%', bottom: '33%', borderRadius: 3, border: '1px solid', borderColor: 'divider', bgcolor: 'background.paper', backgroundImage: `url(${LAB_IMG_LEFT})`, backgroundSize: 'cover', backgroundPosition: 'center', boxShadow: '0 16px 40px -16px rgba(2,6,23,0.2)' }} />

@@ -21,7 +21,7 @@ const CampusLife = () => {
                     <Typography color="text.secondary" sx={{ mt: 1 }}>Grow through leadership, culture, sports, and service.</Typography>
                 </Box>
 
-                <Grid container spacing={8}>
+                <Grid container spacing={8} sx={{ justifyContent: 'center' }}>
                     {items.map((i, idx) => (
                         <Grid item xs={12} md={4} key={idx}>
                             <motion.div

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -28,9 +28,9 @@ import PublicRoute from './routes/PublicRoute.jsx'
 import Forget from './pages/Forget.jsx'
 
 function Root() {
-  const [mode, setMode] = React.useState('light')
-  const theme = React.useMemo(() => getTheme(mode), [mode])
-  const toggle = React.useCallback(() => setMode((m) => (m === 'light' ? 'dark' : 'light')), [])
+  const [mode, setMode] = useState('light')
+  const theme = useMemo(() => getTheme(mode), [mode])
+  const toggle = useCallback(() => setMode((m) => (m === 'light' ? 'dark' : 'light')), [])
 
   return (
     <React.StrictMode>

@@ -254,7 +254,7 @@ export default function AdminDashboard() {
             </Grid>
 
             {/* <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
+                <Grid item  xs={12} md={6}>
                     <Paper sx={{ p: 2 }}>
                         <Typography variant="h6" mb={2}>Register University (SMTP OTP)</Typography>
                         <TextField
@@ -291,7 +291,7 @@ export default function AdminDashboard() {
                     </Paper>
                 </Grid>
 
-                <Grid item xs={12} md={6}>
+                <Grid item  xs={12} md={6}>
                     <Paper sx={{ p: 2, mb: 3 }}>
                         <Typography variant="h6" mb={2}>Universities</Typography>
                         <List dense>

@@ -5,7 +5,6 @@ import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import CardActionArea from '@mui/material/CardActionArea';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import CardActions from '@mui/material/CardActions';
@@ -48,7 +47,7 @@ const Programs = () => {
                     </Typography>
                 </Box>
 
-                <Grid container spacing={4} alignItems="stretch">
+                <Grid container spacing={4} sx={{ justifyContent: 'center' }}>
                     {items.map((item, i) => (
                         <Grid item xs={12} sm={6} key={i} sx={{ display: 'flex' }}>
                             <motion.div

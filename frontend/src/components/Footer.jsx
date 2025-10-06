@@ -1,48 +1,3 @@
-// import React from 'react'
-// import Box from '@mui/material/Box'
-// import Container from '@mui/material/Container'
-// import Grid from '@mui/material/Grid'
-// import Typography from '@mui/material/Typography'
-// import Link from '@mui/material/Link'
-
-// const Footer = () => (
-//     <Box component="footer" role="contentinfo" sx={{ mt: 8, borderTop: '1px solid', borderColor: 'divider', py: 5 }}>
-//         <Container>
-//             <Grid container spacing={4} alignItems="flex-start">
-//                 <Grid item xs={12} md={4}>
-//                     <Box sx={{ mb: 1.5, display: 'grid', placeItems: 'center', width: 44, height: 44, borderRadius: 3, color: '#fff', background: (t) => `linear-gradient(135deg, ${t.palette.primary.main}, ${t.palette.secondary.main})`, fontWeight: 900 }}>
-//                         LJ
-//                     </Box>
-//                     <Typography variant="body2" color="text.secondary"> {new Date().getFullYear()} LJ University. All rights reserved.</Typography>
-//                 </Grid>
-//                 <Grid item xs={12} md={8}>
-//                     <Grid container spacing={2}>
-//                         <Grid item xs={4}>
-//                             <Typography fontWeight={600} sx={{ mb: 1 }}>Explore</Typography>
-//                             <Link underline="hover" color="text.secondary" display="block" href="#programs">Programs</Link>
-//                             <Link underline="hover" color="text.secondary" display="block" href="#research">Research</Link>
-//                             <Link underline="hover" color="text.secondary" display="block" href="#campus">Campus Life</Link>
-//                         </Grid>
-//                         <Grid item xs={4}>
-//                             <Typography fontWeight={600} sx={{ mb: 1 }}>Admissions</Typography>
-//                             <Link underline="hover" color="text.secondary" display="block" href="#admissions">Apply</Link>
-//                             <Link underline="hover" color="text.secondary" display="block" href="#">Scholarships</Link>
-//                             <Link underline="hover" color="text.secondary" display="block" href="#">Visit</Link>
-//                         </Grid>
-//                         <Grid item xs={4}>
-//                             <Typography fontWeight={600} sx={{ mb: 1 }}>Connect</Typography>
-//                             <Link underline="hover" color="text.secondary" display="block" href="#">Alumni</Link>
-//                             <Link underline="hover" color="text.secondary" display="block" href="#">Careers</Link>
-//                             <Link underline="hover" color="text.secondary" display="block" href="#">Contact</Link>
-//                         </Grid>
-//                     </Grid>
-//                 </Grid>
-//             </Grid>
-//         </Container>
-//     </Box>
-// )
-
-// export default Footer
 import React, { useState, useCallback } from "react";
 import {
     Box,
@@ -63,13 +18,11 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import PinterestIcon from "@mui/icons-material/Pinterest";
 
-// --- MOCK DEPENDENCIES ---
 // Mock Toast for newsletter submission feedback
 const useToast = () => ({
     error: (message) => console.error("Toast Error:", message),
     success: (message) => console.log("Toast Success:", message),
 });
-// --- END MOCK DEPENDENCIES ---
 
 // --- ANIMATION KEYFRAMES ---
 const pulseUnderline = keyframes`
@@ -88,7 +41,6 @@ const slideIn = keyframes`
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 `;
-// --- END ANIMATION KEYFRAMES ---
 
 // --- FOOTER STYLING ---
 const FooterContainer = styled(Box)(({ theme }) => ({
@@ -154,7 +106,6 @@ const AnimatedTitle = styled(Typography)(({ theme }) => ({
         animation: `${pulseUnderline} 2s ease-in-out infinite`,
         transition: 'all 0.3s ease',
     },
-    // Hover effect on the title (makes the underline jump slightly)
     '&:hover::after': {
         width: '105%',
         backgroundColor: '#6fa8dc',

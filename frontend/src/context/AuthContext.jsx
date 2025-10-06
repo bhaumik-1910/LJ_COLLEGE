@@ -226,7 +226,7 @@ export const AuthProvider = ({ children }) => {
             setLoading(false);
         }
     }, []);
-
+    
     const resetPassword = useCallback(async ({ email, otp, newPassword, confirmPassword }) => {
         setLoading(true);
         try {

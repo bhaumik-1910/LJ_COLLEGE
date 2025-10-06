@@ -55,7 +55,7 @@ const Header = () => {
                         {/* Login and Register */}
                         <Button color="inherit" component={RouterLink} to="/login">Login</Button>
                         <Button variant="outlined" size="small" component={RouterLink} to="/register">Register</Button>
-                        <Tooltip title={mode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}>
+                        <Tooltip title={mode === 'light' ? 'Dark Mode' : 'Light Mode'}>
                             <IconButton color="inherit" onClick={toggleMode} aria-label="Toggle theme mode">
                                 {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
                             </IconButton>

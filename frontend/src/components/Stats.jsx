@@ -17,10 +17,10 @@ const Item = ({ k, v, delay = 0 }) => (
 const Stats = () => (
     <Box component="section" sx={{ py: 4, borderTop: '1px solid', borderBottom: '1px solid', borderColor: 'divider' }}>
         <Grid container spacing={2}>
-            <Grid item xs={6} md={3}><Item k="200+" v="Programs" delay={0.05} /></Grid>
-            <Grid item xs={6} md={3}><Item k="35k+" v="Students" delay={0.1} /></Grid>
-            <Grid item xs={6} md={3}><Item k="1200+" v="Faculty" delay={0.15} /></Grid>
-            <Grid item xs={6} md={3}><Item k="$150M" v="Annual Research" delay={0.2} /></Grid>
+            <Grid xs={6} md={3}><Item k="200+" v="Programs" delay={0.05} /></Grid>
+            <Grid xs={6} md={3}><Item k="35k+" v="Students" delay={0.1} /></Grid>
+            <Grid xs={6} md={3}><Item k="1200+" v="Faculty" delay={0.15} /></Grid>
+            <Grid xs={6} md={3}><Item k="$150M" v="Annual Research" delay={0.2} /></Grid>
         </Grid>
     </Box>
 )
