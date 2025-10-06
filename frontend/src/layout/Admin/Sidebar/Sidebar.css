@@ -1,0 +1,165 @@
+/* sidebar */
+.sidebar {
+  background-color: #000000;
+  border-right: 1px solid #eee;
+  width: 260px;
+  padding: 36px 20px;
+  /* horizontal padding = 20px */
+  transition: var(--transition-default);
+}
+
+.user-info {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  column-gap: 16px;
+}
+
+.info-name {
+  font-size: 20px;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.info-img {
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+  overflow: hidden;
+  border-radius: 100%;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+/* Hide scrollbar but keep scrolling */
+.navigation {
+  margin-top: 28px;
+  height: 600px;
+  overflow-y: auto;
+  /* keep scroll */
+}
+
+.navigation::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.sidebar-change {
+  margin-left: -260px;
+}
+
+.nav-item {
+  margin-bottom: 10px;
+  margin-right: 0;
+  /* no right gap */
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 44px;
+  border-radius: 8px;
+  column-gap: 12px;
+  letter-spacing: 0.03em;
+  border: 1px solid transparent;
+  transition: var(--transition-default);
+  /* Make the row span full sidebar width (bleed over 20px padding on both sides) */
+  width: calc(100% + 40px);
+  margin-left: -20px;
+  margin-right: -20px;
+  padding: 6px 34px;
+  /* extra horizontal padding after bleeding */
+}
+
+.nav-link:hover {
+  border: 1px solid var(--clr-primar-light);
+}
+
+/* ACTIVE: change to yellow and cover full row */
+.nav-link.active {
+  background-color: #3756B2;
+  color: #e7e7e6;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
+    rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+}
+
+.nav-link.active .nav-link-text {
+  color: #000000;
+}
+
+.nav-link-icon {
+  width: 22px;
+}
+
+.nav-link-text {
+  text-transform: capitalize;
+  color: #fff;
+}
+
+@media screen and (max-width: 1400px) {
+  .sidebar {
+    padding: 24px 16px;
+  }
+
+  .nav-link {
+    width: calc(100% + 32px);
+    margin-left: -16px;
+    margin-right: -16px;
+    padding: 6px 28px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .sidebar {
+    width: 72px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .sidebar-change {
+    margin-left: -72px;
+  }
+
+  .info-name {
+    display: none;
+  }
+
+  .nav-item {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 18px;
+  }
+
+  .nav-link {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    margin: 0;
+    /* reset bleed on collapsed sidebar */
+  }
+
+  .nav-link.active {
+    border-radius: 100%;
+  }
+
+  .nav-link:hover {
+    border-radius: 100%;
+  }
+
+  .nav-link-text {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .sidebar {
+    margin-left: -72px;
+  }
+
+  .sidebar-change {
+    margin-left: 0px;
+  }
+}

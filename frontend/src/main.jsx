@@ -1,0 +1,106 @@
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.jsx'
+import CssBaseline from '@mui/material/CssBaseline'
+import { ThemeProvider } from '@mui/material/styles'
+import getTheme, { ThemeModeContext } from './theme.js'
+import { AuthProvider } from './context/AuthContext.jsx'
+import './index.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Login from './pages/Login.jsx'
+import Register from './pages/Register.jsx'
+
+import FacultyDashboard from "./pages/FacultyDashboard/FacultyDashboard.jsx";
+import StudentDashboard from "./pages/StudentDashboard/StudentDashboard.jsx";
+import AdminDashboard from './pages/Admin/Dashboard.jsx'
+import { SidebarProvider } from './context/Admin/sidebarContext.jsx'
+import AdminLayout from './layout/Admin/AdminLayout.jsx'
+import U_Register from './pages/Admin/U_Register.jsx'
+import AdminUsers from './pages/Admin/Users.jsx'
+import UniversityUsers from './pages/Admin/University_Users.jsx'
+import AdminList from './pages/Admin/Admin_List.jsx'
+import AdminProfile from './pages/Admin/Profile.jsx'
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import PrivateRoute from './routes/PrivateRoute.jsx'
+import PublicRoute from './routes/PublicRoute.jsx'
+import Forget from './pages/Forget.jsx'
+
+function Root() {
+  const [mode, setMode] = React.useState('light')
+  const theme = React.useMemo(() => getTheme(mode), [mode])
+  const toggle = React.useCallback(() => setMode((m) => (m === 'light' ? 'dark' : 'light')), [])
+
+  return (
+    <React.StrictMode>
+      <ThemeModeContext.Provider value={{ mode, toggle }}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <AuthProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<App />} />
+                {/* Public auth routes */}
+                <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+                <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+                <Route path="/forgot" element={<PublicRoute><Forget /></PublicRoute>} />
+
+                {/* Admin area: nested under /admin-dashboard/* with Outlet in AdminLayout */}
+                <Route
+                  path="/admin-dashboard"
+                  element={
+                    <PrivateRoute role="admin">
+                      <SidebarProvider>
+                        <AdminLayout />
+                      </SidebarProvider>
+                    </PrivateRoute>
+                  }
+                >
+                  <Route index element={<AdminDashboard />} />
+                  <Route path="university-register" element={<U_Register />} />
+                  <Route path="users" element={<AdminUsers />} />
+                  <Route path="university-users" element={<UniversityUsers />} />
+                  <Route path="admins" element={<AdminList />} />
+                  <Route path="profile" element={<AdminProfile />} />
+                </Route>
+
+                {/* Faculty and Student dashboards */}
+                <Route
+                  path="/faculty-dashboard"
+                  element={
+                    <PrivateRoute role="faculty">
+                      <FacultyDashboard />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/student-dashboard"
+                  element={
+                    <PrivateRoute role="student">
+                      <StudentDashboard />
+                    </PrivateRoute>
+                  }
+                />
+              </Routes>
+            </BrowserRouter>
+
+            {/* ToastContainer added*/}
+            <ToastContainer
+              position="top-right"
+              autoClose={2000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              pauseOnHover
+              draggable
+              theme="colored"
+            />
+          </AuthProvider>
+        </ThemeProvider>
+      </ThemeModeContext.Provider>
+    </React.StrictMode>
+  )
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Root />)
