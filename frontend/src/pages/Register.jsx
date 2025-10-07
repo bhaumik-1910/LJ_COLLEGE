@@ -27,9 +27,9 @@ const Container = styled('div')(({ active }) => ({
   boxShadow: '0 5px 15px rgba(0, 0, 0, 0.35)',
   position: 'relative',
   overflow: 'hidden',
-  width: '880px',
+  width: '1080px',
   maxWidth: '90%',
-  minHeight: '750px', /* Increased height for better mobile fit */
+  minHeight: '780px', /* Increased height for better mobile fit */
   transition: 'all 0.6s ease-in-out',
   '@media (max-width: 768px)': {
     flexDirection: 'column',
@@ -285,6 +285,7 @@ const RegisterPage = () => {
             onClick={() => navigate("/")}
             className="!absolute !top-6 !left-6 !text-purple-700 !font-medium hover:!bg-purple-100"
             variant="text"
+            sx={{ p: 3 }}
           >
             Back
           </Button>
@@ -451,17 +452,19 @@ const RegisterPage = () => {
           {/* active={isSignUp} */}
           <Toggle >
             {/* active={isSignUp} */}
-            {/* <ToggleLeft active={isSignUp}>
+            {/* <ToggleLeft >
+              active={isSignUp} 
               <h1 style={{ fontSize: '24px', fontWeight: 700 }}>Welcome Back!</h1>
               <p style={{ fontSize: '14px', lineHeight: '20px', letterSpacing: '0.3px', margin: '20px 0' }}>Enter your personal details to use all of site features</p>
               <StyledHiddenButton variant="outlined" onClick={() => setIsSignUp(false)}>Sign In</StyledHiddenButton>
-            </ToggleLeft>
+            </ToggleLeft> */}
 
-            <ToggleRight active={isSignUp}>
-              <h1 style={{ fontSize: '24px', fontWeight: 700 }}>Hello, Friend!</h1>
-              <p style={{ fontSize: '14px', lineHeight: '20px', letterSpacing: '0.3px', margin: '20px 0' }}>Register with your personal details to use all of site features</p>
-              <StyledHiddenButton variant="outlined" onClick={() => setIsSignUp(true)}>Sign Up</StyledHiddenButton>
-            </ToggleRight> */}
+            <ToggleRight sx={{ fontFamily: "Playwrite US Modern" }} >
+              {/* active={isSignUp} */}
+              <h1 style={{ fontSize: '30px', fontWeight: 700 }}>Hello,</h1>
+              <p style={{ fontSize: '20px', lineHeight: '20px', letterSpacing: '0.3px', margin: '20px 0' }}>Register with your personal details to use all of site features..</p>
+              {/* <StyledHiddenButton variant="outlined" onClick={() => setIsSignUp(true)}>Sign Up</StyledHiddenButton> */}
+            </ToggleRight>
           </Toggle>
         </ToggleContainer>
 

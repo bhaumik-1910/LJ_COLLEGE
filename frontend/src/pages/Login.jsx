@@ -28,9 +28,9 @@ const Container = styled('div')(({ active }) => ({
     boxShadow: '0 5px 15px rgba(0, 0, 0, 0.35)',
     position: 'relative',
     overflow: 'hidden',
-    width: '768px',
+    width: '900px',
     maxWidth: '90%',
-    minHeight: '520px', /* Increased height for better mobile fit */
+    minHeight: '580px',
     transition: 'all 0.6s ease-in-out',
     '@media (max-width: 768px)': {
         flexDirection: 'column',
@@ -173,28 +173,28 @@ const Login = () => {
     // const logoUrl = "https://placehold.co/80x80/512da8/ffffff?text=Logo";
 
     // Dynamic content based on screen size for mobile toggles
-    const MobileToggle = useMemo(() => (
-        <Box
-            sx={{
-                display: { xs: 'flex', md: 'none' },
-                flexDirection: 'column',
-                alignItems: 'center',
-                p: 3,
-                bgcolor: '#512da8',
-                color: 'white',
-                textAlign: 'center'
-            }}
-        >
-            {/* <Typography variant="h6" sx={{ mb: 1 }}>{isSignUp ? "Already Registered?" : "New Here?"}</Typography> */}
-            {/* <Button
-                variant="outlined"
-                sx={{ borderColor: 'white', color: 'white' }}
-                onClick={() => setIsSignUp(prev => !prev)}
-            >
-                {isSignUp ? "Sign In" : "Sign Up"}
-            </Button> */}
-        </Box>
-    ), [isSignUp]);
+    // const MobileToggle = useMemo(() => (
+    //     <Box
+    //         sx={{
+    //             display: { xs: 'flex', md: 'none' },
+    //             flexDirection: 'column',
+    //             alignItems: 'center',
+    //             p: 3,
+    //             bgcolor: '#512da8',
+    //             color: 'white',
+    //             textAlign: 'center'
+    //         }}
+    //     >
+    //         <Typography variant="h6" sx={{ mb: 1 }}>{isSignUp ? "Already Registered?" : "New Here?"}</Typography>
+    //         <Button
+    //             variant="outlined"
+    //             sx={{ borderColor: 'white', color: 'white' }}
+    //             onClick={() => setIsSignUp(prev => !prev)}
+    //         >
+    //             {isSignUp ? "Sign In" : "Sign Up"}
+    //         </Button>
+    //     </Box>
+    // ), [isSignUp]);
 
 
     const handleLogin = async () => {
@@ -237,6 +237,7 @@ const Login = () => {
                         onClick={() => navigate("/")}
                         className="!absolute !top-6 !left-6 !text-purple-700 !font-medium hover:!bg-purple-100"
                         variant="text"
+                        sx={{ p: 3 }}
                     >
                         Back
                     </Button>
@@ -310,26 +311,29 @@ const Login = () => {
                 </SignInContainer>
 
                 {/* Toggle Container (Hidden on Mobile, handles sliding on Desktop) */}
-                <ToggleContainer active={isSignUp}>
-                    <Toggle active={isSignUp}>
+                <ToggleContainer>
+                    {/*  active={isSignUp} */}
+                    <Toggle>
+                        {/*  active={isSignUp} */}
                         {/* <ToggleLeft active={isSignUp}>
                             <h1 style={{ fontSize: '24px', fontWeight: 700 }}>Welcome Back!</h1>
                             <p style={{ fontSize: '14px', lineHeight: '20px', letterSpacing: '0.3px', margin: '20px 0' }}>Enter your personal details to use all of site features</p>
                             <StyledHiddenButton variant="outlined" onClick={() => setIsSignUp(false)}>Sign In</StyledHiddenButton>
-                        </ToggleLeft>
+                        </ToggleLeft> */}
 
-                        <ToggleRight active={isSignUp}>
-                            <h1 style={{ fontSize: '24px', fontWeight: 700 }}>Hello, Friend!</h1>
-                            <p style={{ fontSize: '14px', lineHeight: '20px', letterSpacing: '0.3px', margin: '20px 0' }}>Register with your personal details to use all of site features</p>
-                            <StyledHiddenButton variant="outlined" onClick={() => setIsSignUp(true)}>Sign Up</StyledHiddenButton>
-                        </ToggleRight> */}
+                        <ToggleRight sx={{ fontFamily: "Playwrite US Modern" }} >
+                            {/* active={isSignUp} */}
+                            <h1 style={{ fontSize: '30px', fontWeight: 700 }}>Hello,</h1>
+                            <p style={{ fontSize: '20px', lineHeight: '20px', letterSpacing: '0.3px', margin: '20px 0' }}>Login with your personal details to use all of site features..</p>
+                            {/* <StyledHiddenButton variant="outlined" onClick={() => setIsSignUp(true)}>Sign Up</StyledHiddenButton> */}
+                        </ToggleRight>
                     </Toggle>
                 </ToggleContainer>
 
                 {/* Mobile Toggle Display (Shown on Mobile, handles stacking) */}
-                {MobileToggle}
+                {/* {MobileToggle} */}
             </Container>
-        </Box>
+        </Box >
     );
 };
 

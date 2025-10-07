@@ -28,7 +28,7 @@ const Hero = () => {
                 </motion.div>
 
                 <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7, delay: .2 }}>
-                    <Typography variant="h2" color="common.white" sx={{ fontWeight: 800, mt: 1 }}>Shape the future at LJ University</Typography>
+                    <Typography variant="h2" color="common.white" sx={{ fontWeight: 800, mt: 1 }}>Shape the future at University</Typography>
                 </motion.div>
 
                 <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7, delay: .3 }}>

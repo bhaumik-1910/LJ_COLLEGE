@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import "./Sidebar.css";
-// import { personsImgs } from '../../../utils/Admin/images';
+import { uniImage } from '../../../utils/Admin/images';
 import { SidebarContext } from '../../../context/Admin/sidebarContext';
 import { navigationLinks } from '../../../data/Admin/data';
 import { AuthContext } from '../../../context/AuthContext';
@@ -56,7 +56,7 @@ const Sidebar = () => {
     <div className={`sidebar ${sidebarClass}`}>
       <div className="user-info">
         <div className="info-img img-fit-cover">
-          {/* <img src={personsImgs.person_two} alt="profile image" /> */}
+          <img src={uniImage.uni_image} alt="profile image" />
         </div>
         <span className="info-name">University</span>
       </div>

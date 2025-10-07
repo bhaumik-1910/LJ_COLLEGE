@@ -18,19 +18,15 @@ import report from "../../assets/icons/report.svg";
 // import user from "../../assets/icons/user.svg";
 // import wealth from "../../assets/icons/wealth.svg";
 
-// person images
-// import person_one from "../../assets/images/person_one.jpg";
-import person_two from "../../assets/images/person_two.jpg";
-// import person_three from "../../assets/images/person_three.jpg";
-// import person_four from "../../assets/images/person_four.jpg";
+
+import uni_image from "../../assets/images/uni_image.jpeg";
 
 export const iconsImgs = {
     // alert, bell, bills, budget, card, check, empty_check, gears, home, menu, plane, plus, report, search, user, wallet, wealth
     bills, budget, home, plane, report, wallet
 }
 
-export const personsImgs = {
-    // person_one, person_two, person_three, person_four
-    person_two
+export const uniImage = {
+    uni_image
 };
 

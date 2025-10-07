@@ -17,6 +17,7 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import PinterestIcon from "@mui/icons-material/Pinterest";
+import logo from '../assets/images/f_uni.png'
 
 // Mock Toast for newsletter submission feedback
 const useToast = () => ({
@@ -161,15 +162,26 @@ const Footer = () => {
 
                     {/* Column 1: Logo and Description */}
                     <Grid item xs={12} sm={6} md={3}>
-                        <Box sx={{ mb: 2 }}>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 1,       
+                                mb: 2,
+                            }}
+                        >
                             {/* Logo */}
-                            <Typography variant="h5" component="span" sx={{ fontWeight: 700, color: '#6fa8dc' }}>
-                                LJ
-                            </Typography>
-                            <Typography variant="h5" component="span" sx={{ fontWeight: 700, color: 'white' }}>
+                            <Box component="img" src={logo} alt="Logo" width={50} height={50} />
+
+                            {/* University text */}
+                            <Typography
+                                variant="h5"
+                                sx={{ fontWeight: 700, color: 'white' }}
+                            >
                                 University
                             </Typography>
                         </Box>
+
                         <Typography variant="body2" sx={{ opacity: 0.8, mb: 2 }}>
                             Subscribe to our YouTube channel to watch videos on web development and press the bell icon for the latest notifications.
                         </Typography>

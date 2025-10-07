@@ -100,21 +100,24 @@ export default function U_Register() {
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                     sx={{ mb: 2 }}
                 />
-                <Button variant="outlined" onClick={sendOtp}>Send OTP</Button>
+                <Box>
+                    <Button variant="outlined" onClick={sendOtp}>Send OTP</Button>
 
-                {otpSent && (
-                    <Box sx={{ mt: 2 }}>
-                        <TextField
-                            fullWidth
-                            label="Enter OTP"
-                            variant="standard"
-                            value={form.otp}
-                            onChange={(e) => setForm({ ...form, otp: e.target.value })}
-                            sx={{ mb: 1 }}
-                        />
-                        <Button variant="contained" onClick={verifyOtp}>Verify</Button>
-                    </Box>
-                )}
+
+                    {otpSent && (
+                        <>
+                            <TextField
+                                fullWidth
+                                label="Enter OTP"
+                                variant="standard"
+                                value={form.otp}
+                                onChange={(e) => setForm({ ...form, otp: e.target.value })}
+                                sx={{ mb: 2 }}
+                            />
+                            <Button variant="contained" onClick={verifyOtp}>Verify</Button>
+                        </>
+                    )}
+                </Box>
 
                 <Divider sx={{ my: 2 }} />
 
