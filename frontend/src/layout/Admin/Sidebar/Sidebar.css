@@ -4,6 +4,8 @@
   border-right: 1px solid #eee;
   width: 260px;
   padding: 36px 20px;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
   /* horizontal padding = 20px */
   transition: var(--transition-default);
 }
@@ -65,10 +67,9 @@
   transition: var(--transition-default);
   /* Make the row span full sidebar width (bleed over 20px padding on both sides) */
   width: calc(100% + 40px);
-  margin-left: -20px;
-  margin-right: -20px;
+  /* margin-left: -20px; */
+  /* margin-right: -20px; */
   padding: 6px 34px;
-  /* extra horizontal padding after bleeding */
 }
 
 .nav-link:hover {

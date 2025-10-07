@@ -49,9 +49,9 @@ const FooterContainer = styled(Box)(({ theme }) => ({
     padding: theme.spacing(8, 4),
     position: 'relative',
     overflow: 'hidden',
-
+    borderTopRightRadius: '200px',
     // Animated Gradient Background
-    background: 'linear-gradient(90deg, #0f172a, #301934, #0f172a)',
+    background: 'linear-gradient(45deg, #0f172a, #301934, #0f172a)',
     backgroundSize: '200% 200%',
     animation: `${backgroundShift} 15s ease infinite`,
 
@@ -65,7 +65,6 @@ const FooterContainer = styled(Box)(({ theme }) => ({
         height: '100%',
         backgroundColor: '#0f172a',
         zIndex: -1,
-        borderTopRightRadius: '300px',
         [theme.breakpoints.down('md')]: {
             borderTopRightRadius: '150px',
         },
