@@ -1,5 +1,4 @@
 import { iconsImgs } from "../../utils/Admin/images";
-// import { personsImgs } from "../../utils/Admin/images";
 
 export const navigationLinks = [
     { id: 1, title: 'Dashboard', image: iconsImgs.home },
@@ -9,9 +8,6 @@ export const navigationLinks = [
     { id: 5, title: 'Admins', image: iconsImgs.bills },
     { id: 6, title: 'Profile', image: iconsImgs.wallet },
     { id: 7, title: 'Logout', image: iconsImgs.report },
-    // { id: 8, title: 'Financial Advice', image: iconsImgs.wealth },
-    // { id: 9, title: 'Account', image: iconsImgs.user },
-    // { id: 10, title: 'Settings', image: iconsImgs.gears }
 ];
 
 // export const transactions = [

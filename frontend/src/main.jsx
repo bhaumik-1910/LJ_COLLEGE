@@ -10,7 +10,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 
-import FacultyDashboard from "./pages/FacultyDashboard/FacultyDashboard.jsx";
+import FacultyDashboard from "./pages/Faculty/Dashboard.jsx";
 import StudentDashboard from "./pages/StudentDashboard/StudentDashboard.jsx";
 import AdminDashboard from './pages/Admin/Dashboard.jsx'
 import { SidebarProvider } from './context/Admin/sidebarContext.jsx'
@@ -26,6 +26,9 @@ import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from './routes/PrivateRoute.jsx'
 import PublicRoute from './routes/PublicRoute.jsx'
 import Forget from './pages/Forget.jsx'
+import FacultyLayout from './layout/Faculty/FacultyLayout.jsx'
+import Add_Student from './pages/Faculty/Add_Student.jsx'
+import Student_List from './pages/Faculty/Student_List.jsx'
 
 function Root() {
   const [mode, setMode] = useState('light')
@@ -65,15 +68,24 @@ function Root() {
                   <Route path="profile" element={<AdminProfile />} />
                 </Route>
 
-                {/* Faculty and Student dashboards */}
+                {/* Faculty dashboards */}
                 <Route
                   path="/faculty-dashboard"
                   element={
                     <PrivateRoute role="faculty">
-                      <FacultyDashboard />
+                      <SidebarProvider>
+                        <FacultyLayout />
+                      </SidebarProvider>
                     </PrivateRoute>
                   }
-                />
+                >
+                  <Route index element={<FacultyDashboard />} />
+                  <Route path="add-student" element={<Add_Student />} />
+                  <Route path="student-list" element={<Student_List />} />
+                  <Route path="document-list" element={<UniversityUsers />} />
+                  <Route path="profile" element={<AdminProfile />} />
+                </Route>
+
                 <Route
                   path="/student-dashboard"
                   element={

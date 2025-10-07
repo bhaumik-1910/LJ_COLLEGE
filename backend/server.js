@@ -6,6 +6,7 @@ import connectDB from "./config/db.js";
 import userRoutes from "./routes/user.js";
 import universityRoutes from "./routes/university.js";
 import adminRoutes from "./routes/admin.js";
+import studentRoutes from "./routes/students.js";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ connectDB();
 app.use("/api/users", userRoutes)
 app.use("/api/universities", universityRoutes)
 app.use("/api/admin", adminRoutes)
+app.use('/api/faculty', studentRoutes);
 
 // Start Server
 const PORT = process.env.PORT;

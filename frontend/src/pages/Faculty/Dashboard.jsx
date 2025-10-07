@@ -16,13 +16,9 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const API_BASE = "http://localhost:5000/api";
 
-export default function AdminDashboard() {
+export default function Dashboard() {
     const navigate = useNavigate();
     const { token } = useContext(AuthContext);
-
-    // const [uniForm, setUniForm] = useState({ name: "", email: "", otp: "" });
-    // const [otpSent, setOtpSent] = useState(false);
-    // const [verified, setVerified] = useState(false);
 
     const [universities, setUniversities] = useState([]);
     const [users, setUsers] = useState([]);
@@ -45,13 +41,13 @@ export default function AdminDashboard() {
     };
 
     const fetchUsers = async () => {
-        try {
-            const res = await fetch(`${API_BASE}/admin/users`, { headers: { ...authHeader } });
-            const data = await res.json();
-            if (res.ok) setUsers(Array.isArray(data) ? data : []);
-        } catch { }
+        // try {
+        //     const res = await fetch(`${API_BASE}/admin/users`, { headers: { ...authHeader } });
+        //     const data = await res.json();
+        //     if (res.ok) setUsers(Array.isArray(data) ? data : []);
+        // } catch { }
     };
-
+    
     useEffect(() => {
         fetchUniversities();
         fetchUsers();
@@ -136,7 +132,7 @@ export default function AdminDashboard() {
                 <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
                     <Paper sx={{ ...cardStyles, bgcolor: '#4e73df' }}>
                         <AdminPanelSettingsIcon sx={{ fontSize: '3rem', mb: 1 }} />
-                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Admins</Typography>
+                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Student</Typography>
                         <Typography variant="h5" fontWeight={700}>{totalAdmins}</Typography>
                     </Paper>
                 </Grid>
