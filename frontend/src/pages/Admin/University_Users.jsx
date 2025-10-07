@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import {
     Box,
-    Paper,
     Typography,
     Table,
     TableBody,
@@ -182,15 +181,15 @@ export default function UniversityUsers() {
             <Dialog open={editOpen} onClose={() => setEditOpen(false)} fullWidth maxWidth="sm">
                 <DialogTitle>Edit User</DialogTitle>
                 <DialogContent dividers>
-                    <TextField margin="dense" label="Name" fullWidth value={editRow?.name || ""} onChange={(e) => onEditChange("name", e.target.value)} />
-                    <TextField margin="dense" label="Email" fullWidth value={editRow?.email || ""} onChange={(e) => onEditChange("email", e.target.value)} />
-                    <TextField select margin="dense" label="Role" fullWidth value={editRow?.role || "user"} onChange={(e) => onEditChange("role", e.target.value)}>
+                    <TextField margin="dense" label="Name" variant="standard" fullWidth value={editRow?.name || ""} onChange={(e) => onEditChange("name", e.target.value)} />
+                    <TextField margin="dense" label="Email" variant="standard" fullWidth value={editRow?.email || ""} onChange={(e) => onEditChange("email", e.target.value)} />
+                    <TextField select margin="dense" label="Role" variant="standard" fullWidth value={editRow?.role || "user"} onChange={(e) => onEditChange("role", e.target.value)}>
                         <MenuItem value="admin">Admin</MenuItem>
                         <MenuItem value="faculty">Faculty</MenuItem>
                         <MenuItem value="student">Student</MenuItem>
                         <MenuItem value="user">User</MenuItem>
                     </TextField>
-                    <TextField margin="dense" label="University" fullWidth value={editRow?.university || ""} onChange={(e) => onEditChange("university", e.target.value)} />
+                    <TextField margin="dense" label="University" variant="standard" fullWidth value={editRow?.university || ""} onChange={(e) => onEditChange("university", e.target.value)} />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setEditOpen(false)}>Cancel</Button>
