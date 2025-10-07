@@ -77,7 +77,7 @@ export default function AdminProfile() {
     const handleFileChange = (e) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        const maxSizeMB = 2; // simple guard
+        const maxSizeMB = 2; // 2 mb upload limit
         if (file.size > maxSizeMB * 1024 * 1024) {
             toast.error(`Image too large. Max ${maxSizeMB}MB`);
             return;
@@ -94,7 +94,7 @@ export default function AdminProfile() {
     return (
         <Box sx={{ p: 3 }}>
             <Typography variant="h5" fontWeight={700} mb={2}>Admin Profile</Typography>
-            <Grid  sx={{ p: 3 }}>
+            <Grid sx={{ p: 3 }}>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} alignItems={{ xs: 'flex-start', sm: 'center' }}>
                     <Avatar src={form.avatarUrl || undefined} sx={{ width: 96, height: 96 }}>
                         {form.name?.charAt(0)?.toUpperCase() || 'A'}

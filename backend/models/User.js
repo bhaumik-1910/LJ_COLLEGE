@@ -15,6 +15,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  //profile picture
+  avatarUrl: {
+    type: String,
+    default: undefined
+  },
   designation: {
     type: String
   },
@@ -25,7 +30,7 @@ const userSchema = new mongoose.Schema({
   },
   university: {
     type: String
-  },
+  },  
   //Forgot password
   otp: { type: String, default: undefined },
   otpExpires: { type: Date, default: undefined },
