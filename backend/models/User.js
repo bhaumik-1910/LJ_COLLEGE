@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
   },
   university: {
     type: String
-  },  
+  },
   //Forgot password
   otp: { type: String, default: undefined },
   otpExpires: { type: Date, default: undefined },

@@ -47,7 +47,7 @@ export default function Dashboard() {
         //     if (res.ok) setUsers(Array.isArray(data) ? data : []);
         // } catch { }
     };
-    
+
     useEffect(() => {
         fetchUniversities();
         fetchUsers();

@@ -1,6 +1,7 @@
 import express from "express";
 import Student from "../models/Student.js";
 import { authRequired, requireRole } from "../middleware/auth.js";
+import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -125,6 +126,56 @@ router.delete("/students/:id", authRequired, requireRole("faculty"), async (req,
     } catch (e) {
         console.error(e);
         res.status(500).json({ message: "Server error" });
+    }
+});
+
+// // PATCH /api/users/me - Update the profile of the currently logged-in user
+router.patch("/me", authRequired, requireRole("faculty"), async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const updates = req.body;
+
+        // Define which fields are allowed to be updated for security
+        const allowedUpdates = ["name", "email", "university", "avatarUrl"];
+        const filteredUpdates = {};
+        for (const key of allowedUpdates) {
+            if (updates[key] !== undefined) {
+                filteredUpdates[key] = updates[key];
+            }
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(userId, filteredUpdates, {
+            new: true,
+            runValidators: true,
+            projection: { password: 0 }, // Exclude password from being returned
+        });
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        res.json(updatedUser);
+    } catch (error) {
+        console.error("Error updating profile:", error);
+        res.status(500).json({ message: "An internal server error occurred." });
+    }
+});
+
+
+// GET /api/users/me - Fetch the profile of the currently logged-in user
+router.get("/me", authRequired, requireRole("faculty"), async (req, res) => {
+    try {
+        // req.user.id is set by your authentication middleware
+        const user = await User.findById(req.user.id).select('-password');
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        res.json(user);
+    } catch (error) {
+        console.error("Error fetching user profile:", error);
+        res.status(500).json({ message: "An internal server error occurred." });
     }
 });
 
