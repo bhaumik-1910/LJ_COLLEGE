@@ -1,26 +1,37 @@
 import express from "express";
 import Student from "../models/Student.js";
 import { authRequired, requireRole } from "../middleware/auth.js";
+import bcrypt from "bcrypt";
 
 const router = express.Router();
 
+//STUDENT REGISTER
 router.post("/students", authRequired, requireRole("faculty"), async (req, res) => {
     try {
-        // You can add more detailed validation here if needed
-        const { enrolno, fullName, email, course, contact, gender, address } = req.body;
+        const { enrolno, fullName, email, password, course, contact, gender, university, address } = req.body;
+
+        if (!password) {
+            return res.status(400).json({ message: "Password is required" });
+        }
 
         const existingStudent = await Student.findOne({ $or: [{ enrolno }, { email }] });
         if (existingStudent) {
             return res.status(400).json({ message: "Student with this enrollment number or email already exists." });
         }
 
+        // Generate a salt and hash the password
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
         const newStudent = await Student.create({
             enrolno,
             fullName,
             email,
-            course,
+            password: hashedPassword,
             contact,
             gender,
+            course,
+            university,
             address,
             addedBy: req.user.id, // req.user.id is from your auth middleware
         });
@@ -36,6 +47,7 @@ router.post("/students", authRequired, requireRole("faculty"), async (req, res) 
     }
 });
 
+//STUDENT LIST
 router.get("/students", authRequired, requireRole("faculty"), async (req, res) => {
     try {
         // You can add a check for the user's role here

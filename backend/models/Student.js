@@ -1,26 +1,3 @@
-// import mongoose from "mongoose";
-
-// const studentSchema = new mongoose.Schema(
-//   {
-//     enrolno: { type: String, required: true, unique: true, trim: true },
-//     fullName: { type: String, required: true, trim: true },
-//     email: {
-//       type: String,
-//       required: true,
-//       trim: true,
-//       lowercase: true,
-//       match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-//     },
-//     course: { type: String, required: true, trim: true },
-//     contact: { type: String, required: true, trim: true, match: /^\d{10}$/ },
-//     gender: { type: String, required: true, enum: ["male", "female", "other"] },
-//     address: { type: String, required: true, trim: true }
-//   },
-//   { timestamps: true }
-// );
-
-// export const Student = mongoose.model("Student", studentSchema);
-
 import mongoose from "mongoose";
 
 const studentSchema = new mongoose.Schema({
@@ -40,6 +17,7 @@ const studentSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  password: { type: String, required: true },
   course: {
     type: String,
     required: true,
@@ -54,6 +32,11 @@ const studentSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: ["male", "female"]
+  },
+  university: {
+    type: String,
+    required: true,
+    trim: true
   },
   address: {
     type: String,

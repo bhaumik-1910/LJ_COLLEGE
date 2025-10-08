@@ -18,6 +18,7 @@ import {
     TextField,
     MenuItem,
     TablePagination,
+    CircularProgress, // Added CircularProgress for a better loading indicator
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -172,24 +173,33 @@ export default function AdminList() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-
-                        {pagedRows.map((r) => (
-                            <TableRow key={r._id} hover>
-                                <TableCell>{r.name}</TableCell>
-                                <TableCell>{r.email}</TableCell>
-                                <TableCell sx={{ textTransform: "capitalize" }}>{r.role}</TableCell>
-                                <TableCell>{r.university || "-"}</TableCell>
-                                <TableCell>{r.createdAt ? new Date(r.createdAt).toLocaleString() : "-"}</TableCell>
-                                <TableCell align="right">
-                                    <IconButton size="small" onClick={() => onEdit(r)}><EditIcon /></IconButton>
-                                    <IconButton size="small" color="error" onClick={() => onDelete(r)}><DeleteIcon /></IconButton>
+                        {loading ? (
+                            <TableRow>
+                                <TableCell colSpan={6} align="center">
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 2 }}>
+                                        <CircularProgress size={24} sx={{ mb: 1 }} />
+                                        <Typography variant="body2" color="text.secondary">Loading...</Typography>
+                                    </Box>
                                 </TableCell>
                             </TableRow>
-                        ))}
-                        {filteredRows.length === 0 && !loading && (
+                        ) : pagedRows.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={6} align="center">No admins</TableCell>
+                                <TableCell colSpan={6} align="center">No admins found</TableCell>
                             </TableRow>
+                        ) : (
+                            pagedRows.map((r) => (
+                                <TableRow key={r._id} hover>
+                                    <TableCell>{r.name}</TableCell>
+                                    <TableCell>{r.email}</TableCell>
+                                    <TableCell sx={{ textTransform: "capitalize" }}>{r.role}</TableCell>
+                                    <TableCell>{r.university || "-"}</TableCell>
+                                    <TableCell>{r.createdAt ? new Date(r.createdAt).toLocaleString() : "-"}</TableCell>
+                                    <TableCell align="right">
+                                        <IconButton size="small" onClick={() => onEdit(r)}><EditIcon /></IconButton>
+                                        <IconButton size="small" color="error" onClick={() => onDelete(r)}><DeleteIcon /></IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))
                         )}
                     </TableBody>
                 </Table>

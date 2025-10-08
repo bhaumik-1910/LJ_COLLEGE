@@ -9,12 +9,12 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import SchoolIcon from '@mui/icons-material/School';
 
-import { Doughnut } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+// import { Doughnut } from "react-chartjs-2";
+// import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+// ChartJS.register(ArcElement, Tooltip, Legend);
 
-const API_BASE = "http://localhost:5000/api";
+// const API_BASE = "http://localhost:5000/api";
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -33,11 +33,11 @@ export default function Dashboard() {
     }, [navigate]);
 
     const fetchUniversities = async () => {
-        try {
-            const res = await fetch(`${API_BASE}/universities`);
-            const data = await res.json();
-            if (res.ok) setUniversities(Array.isArray(data) ? data : []);
-        } catch { }
+        // try {
+        //     const res = await fetch(`${API_BASE}/universities`);
+        //     const data = await res.json();
+        //     if (res.ok) setUniversities(Array.isArray(data) ? data : []);
+        // } catch { }
     };
 
     const fetchUsers = async () => {
@@ -81,34 +81,34 @@ export default function Dashboard() {
     };
 
     // In a real-world scenario, you might want to show more data for universities, but here we'll just show the total
-    const universityChartData = {
-        labels: ["Universities"],
-        datasets: [{
-            data: [totalUniversities],
-            backgroundColor: ["rgba(75, 192, 192, 0.6)"],
-            borderColor: ["rgba(75, 192, 192, 1)"],
-            borderWidth: 1,
-        }],
-    };
+    // const universityChartData = {
+    //     labels: ["Universities"],
+    //     datasets: [{
+    //         data: [totalUniversities],
+    //         backgroundColor: ["rgba(75, 192, 192, 0.6)"],
+    //         borderColor: ["rgba(75, 192, 192, 1)"],
+    //         borderWidth: 1,
+    //     }],
+    // };
 
     // Chart options to make them look better and display text inside the center
-    const chartOptions = {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'top',
-            },
-            tooltip: {
-                callbacks: {
-                    label: (context) => {
-                        const label = context.label || '';
-                        const value = context.parsed;
-                        return `${label}: ${value}`;
-                    },
-                },
-            },
-        },
-    };
+    // const chartOptions = {
+    //     responsive: true,
+    //     plugins: {
+    //         legend: {
+    //             position: 'top',
+    //         },
+    //         tooltip: {
+    //             callbacks: {
+    //                 label: (context) => {
+    //                     const label = context.label || '';
+    //                     const value = context.parsed;
+    //                     return `${label}: ${value}`;
+    //                 },
+    //             },
+    //         },
+    //     },
+    // };
 
     // Common styles for the cards
     const cardStyles = {
@@ -129,44 +129,44 @@ export default function Dashboard() {
             {/* Top summary boxes */}
             <Grid container spacing={4} mb={4}>
                 {/* Total Admins Card */}
-                <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
+                {/* <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
                     <Paper sx={{ ...cardStyles, bgcolor: '#4e73df' }}>
                         <AdminPanelSettingsIcon sx={{ fontSize: '3rem', mb: 1 }} />
                         <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Student</Typography>
                         <Typography variant="h5" fontWeight={700}>{totalAdmins}</Typography>
                     </Paper>
-                </Grid>
+                </Grid> */}
 
                 {/* Total Faculty Card */}
-                <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
+                {/* <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
                     <Paper sx={{ ...cardStyles, bgcolor: '#1cc88a' }}>
                         <PeopleAltIcon sx={{ fontSize: '3rem', mb: 1 }} />
                         <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Faculty</Typography>
                         <Typography variant="h5" fontWeight={700}>{totalFaculty}</Typography>
                     </Paper>
-                </Grid>
+                </Grid> */}
 
                 {/* Total Users Card */}
-                <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
+                {/* <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
                     <Paper sx={{ ...cardStyles, bgcolor: '#f6c23e' }}>
                         <PersonIcon sx={{ fontSize: '3rem', mb: 1 }} />
                         <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Users</Typography>
                         <Typography variant="h5" fontWeight={700}>{totalUsers}</Typography>
                     </Paper>
-                </Grid>
+                </Grid> */}
 
                 {/* Total Universities Card */}
-                <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
+                {/* <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
                     <Paper sx={{ ...cardStyles, bgcolor: '#e74a3b' }}>
                         <SchoolIcon sx={{ fontSize: '3rem', mb: 1 }} />
                         <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Universities</Typography>
                         <Typography variant="h5" fontWeight={700}>{totalUniversities}</Typography>
                     </Paper>
-                </Grid>
+                </Grid> */}
             </Grid>
 
             {/* Charts Section */}
-            <Grid container spacing={3} mb={4}>
+            {/* <Grid container spacing={3} mb={4}>
                 <Grid item xs={12} md={6} sx={{ width: '450px', height: '450px' }}>
                     <Paper sx={{ p: 2 }}>
                         <Typography variant="h6" mb={2} textAlign="center">User Distribution by Role</Typography>
@@ -180,13 +180,13 @@ export default function Dashboard() {
                         <Typography variant="h6" mb={2} textAlign="center">University Count</Typography>
                         <Box sx={{ width: '80%', margin: 'auto' }}>
                             <Doughnut data={universityChartData} options={chartOptions} />
-                            {/* <Typography variant="h4" sx={{ textAlign: 'center', mt: 2 }}>
+                            <Typography variant="h4" sx={{ textAlign: 'center', mt: 2 }}>
                                 {totalUniversities}
-                            </Typography> */}
+                            </Typography>
                         </Box>
                     </Paper>
                 </Grid>
-            </Grid>
+            </Grid> */}
         </Box>
     );
 }

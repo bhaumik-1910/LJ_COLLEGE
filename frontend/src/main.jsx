@@ -1,10 +1,10 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider } from '@mui/material/styles'
 import getTheme, { ThemeModeContext } from './theme.js'
-import { AuthProvider } from './context/AuthContext.jsx'
+import { AuthProvider, AuthContext } from './context/AuthContext.jsx'
 import './index.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from './pages/Login.jsx'
@@ -35,6 +35,9 @@ function Root() {
   const theme = useMemo(() => getTheme(mode), [mode])
   const toggle = useCallback(() => setMode((m) => (m === 'light' ? 'dark' : 'light')), [])
 
+  const { token } = useContext(AuthContext);
+  const isLoggedIn = !!token;
+
   return (
     <React.StrictMode>
       <ThemeModeContext.Provider value={{ mode, toggle }}>
@@ -53,7 +56,7 @@ function Root() {
                 <Route
                   path="/admin-dashboard"
                   element={
-                    <PrivateRoute role="admin">
+                    <PrivateRoute role="admin" isLoggedIn={isLoggedIn}>
                       <SidebarProvider>
                         <AdminLayout />
                       </SidebarProvider>
@@ -72,7 +75,7 @@ function Root() {
                 <Route
                   path="/faculty-dashboard"
                   element={
-                    <PrivateRoute role="faculty">
+                    <PrivateRoute role="faculty" isLoggedIn={isLoggedIn}>
                       <SidebarProvider>
                         <FacultyLayout />
                       </SidebarProvider>
@@ -89,7 +92,7 @@ function Root() {
                 <Route
                   path="/student-dashboard"
                   element={
-                    <PrivateRoute role="student">
+                    <PrivateRoute role="student" isLoggedIn={isLoggedIn}>
                       <StudentDashboard />
                     </PrivateRoute>
                   }

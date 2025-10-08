@@ -18,6 +18,7 @@ import {
     TextField,
     MenuItem,
     TablePagination,
+    CircularProgress, // Added for a visual loading spinner
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -68,7 +69,6 @@ export default function AdminUsers() {
         setRowsPerPage(parseInt(evt.target.value, 10));
         setPage(0);
     };
-
 
     const fetchUsers = async () => {
         setLoading(true);
@@ -152,7 +152,7 @@ export default function AdminUsers() {
 
                 <TextField
                     size="small"
-                    placeholder="Search admins..."
+                    placeholder="Search users..." // Changed placeholder for clarity
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     sx={{ maxWidth: 360 }}
@@ -172,23 +172,35 @@ export default function AdminUsers() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {pagedRows.map((r) => (
-                            <TableRow key={r._id} hover>
-                                <TableCell>{r.name}</TableCell>
-                                <TableCell>{r.email}</TableCell>
-                                <TableCell sx={{ textTransform: "capitalize" }}>{r.role}</TableCell>
-                                <TableCell>{r.university || "-"}</TableCell>
-                                <TableCell>{r.createdAt ? new Date(r.createdAt).toLocaleString() : "-"}</TableCell>
-                                <TableCell align="right">
-                                    <IconButton size="small" onClick={() => onEdit(r)}><EditIcon /></IconButton>
-                                    <IconButton size="small" color="error" onClick={() => onDelete(r)}><DeleteIcon /></IconButton>
+                        {loading ? (
+                            // Display a loading indicator when data is being fetched
+                            <TableRow>
+                                <TableCell colSpan={6} align="center">
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 2 }}>
+                                        <CircularProgress size={24} sx={{ mb: 1 }} />
+                                        <Typography variant="body2" color="text.secondary">Loading...</Typography>
+                                    </Box>
                                 </TableCell>
                             </TableRow>
-                        ))}
-                        {filteredRows.length === 0 && !loading && (
+                        ) : pagedRows.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={6} align="center">No users</TableCell>
+                                <TableCell colSpan={6} align="center">No users found</TableCell>
                             </TableRow>
+                        ) : (
+                            // Map and display the paged rows
+                            pagedRows.map((r) => (
+                                <TableRow key={r._id} hover>
+                                    <TableCell>{r.name}</TableCell>
+                                    <TableCell>{r.email}</TableCell>
+                                    <TableCell sx={{ textTransform: "capitalize" }}>{r.role}</TableCell>
+                                    <TableCell>{r.university || "-"}</TableCell>
+                                    <TableCell>{r.createdAt ? new Date(r.createdAt).toLocaleString() : "-"}</TableCell>
+                                    <TableCell align="right">
+                                        <IconButton size="small" onClick={() => onEdit(r)}><EditIcon /></IconButton>
+                                        <IconButton size="small" color="error" onClick={() => onDelete(r)}><DeleteIcon /></IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))
                         )}
                     </TableBody>
                 </Table>

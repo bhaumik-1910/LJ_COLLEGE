@@ -30,16 +30,46 @@ router.post("/verify-otp", async (req, res) => {
 });
 
 // POST /api/universities { name, email }
+// router.post("/", async (req, res) => {
+//     try {
+//         const { name, email } = req.body || {};
+//         if (!name || !email) return res.status(400).json({ message: "Name and email required" });
+//         if (!isVerified(email)) return res.status(400).json({ message: "Email not verified via OTP" });
+
+//         const exists = await University.findOne({ $or: [{ name }, { email: email.toLowerCase() }] });
+//         if (exists) return res.status(400).json({ message: "University with same name or email exists" });
+
+//         const uni = await University.create({ name, email });
+//         clearVerification(email);
+//         res.status(201).json(uni);
+//     } catch (e) {
+//         console.error(e);
+//         res.status(500).json({ message: "Server error" });
+//     }
+// });
 router.post("/", async (req, res) => {
     try {
-        const { name, email } = req.body || {};
-        if (!name || !email) return res.status(400).json({ message: "Name and email required" });
-        if (!isVerified(email)) return res.status(400).json({ message: "Email not verified via OTP" });
+        const { name, email, courses } = req.body || {}; // Destructure the new 'courses' field
+
+        if (!name || !email) {
+            return res.status(400).json({ message: "Name and email required" });
+        }
+
+        if (!isVerified(email)) {
+            return res.status(400).json({ message: "Email not verified via OTP" });
+        }
 
         const exists = await University.findOne({ $or: [{ name }, { email: email.toLowerCase() }] });
-        if (exists) return res.status(400).json({ message: "University with same name or email exists" });
+        if (exists) {
+            return res.status(400).json({ message: "University with same name or email exists" });
+        }
 
-        const uni = await University.create({ name, email });
+        // Validate if 'courses' is an array before creating the document
+        const newCourses = (Array.isArray(courses) && courses.length > 0) ? courses : [];
+
+        // Create the new University document, including the courses array
+        const uni = await University.create({ name, email, courses: newCourses });
+
         clearVerification(email);
         res.status(201).json(uni);
     } catch (e) {

@@ -18,6 +18,7 @@ import {
     TextField,
     MenuItem,
     Stack,
+    CircularProgress, // Added CircularProgress for a better loading indicator
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -155,23 +156,33 @@ export default function UniversityUsers() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((r) => (
-                            <TableRow key={r._id} hover>
-                                <TableCell>{r.name}</TableCell>
-                                <TableCell>{r.email}</TableCell>
-                                <TableCell sx={{ textTransform: "capitalize" }}>{r.role}</TableCell>
-                                <TableCell>{r.university || "-"}</TableCell>
-                                <TableCell>{r.createdAt ? new Date(r.createdAt).toLocaleString() : "-"}</TableCell>
-                                <TableCell align="right">
-                                    <IconButton size="small" onClick={() => onEdit(r)}><EditIcon /></IconButton>
-                                    <IconButton size="small" color="error" onClick={() => onDelete(r)}><DeleteIcon /></IconButton>
+                        {loading ? (
+                            <TableRow>
+                                <TableCell colSpan={6} align="center">
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 2 }}>
+                                        <CircularProgress size={24} sx={{ mb: 1 }} />
+                                        <Typography variant="body2" color="text.secondary">Loading...</Typography>
+                                    </Box>
                                 </TableCell>
                             </TableRow>
-                        ))}
-                        {rows.length === 0 && !loading && (
+                        ) : rows.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={6} align="center">No users</TableCell>
                             </TableRow>
+                        ) : (
+                            rows.map((r) => (
+                                <TableRow key={r._id} hover>
+                                    <TableCell>{r.name}</TableCell>
+                                    <TableCell>{r.email}</TableCell>
+                                    <TableCell sx={{ textTransform: "capitalize" }}>{r.role}</TableCell>
+                                    <TableCell>{r.university || "-"}</TableCell>
+                                    <TableCell>{r.createdAt ? new Date(r.createdAt).toLocaleString() : "-"}</TableCell>
+                                    <TableCell align="right">
+                                        <IconButton size="small" onClick={() => onEdit(r)}><EditIcon /></IconButton>
+                                        <IconButton size="small" color="error" onClick={() => onDelete(r)}><DeleteIcon /></IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))
                         )}
                     </TableBody>
                 </Table>
@@ -189,7 +200,11 @@ export default function UniversityUsers() {
                         <MenuItem value="student">Student</MenuItem>
                         <MenuItem value="user">User</MenuItem>
                     </TextField>
-                    <TextField margin="dense" label="University" variant="standard" fullWidth value={editRow?.university || ""} onChange={(e) => onEditChange("university", e.target.value)} />
+                    <TextField select margin="dense" label="University" variant="standard" fullWidth value={editRow?.university || ""} onChange={(e) => onEditChange("university", e.target.value)}>
+                        {universities.map((u) => (
+                            <MenuItem key={u._id} value={u.name}>{u.name}</MenuItem>
+                        ))}
+                    </TextField>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setEditOpen(false)}>Cancel</Button>
