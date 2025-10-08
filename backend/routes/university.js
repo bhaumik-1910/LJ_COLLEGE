@@ -29,23 +29,7 @@ router.post("/verify-otp", async (req, res) => {
     res.json({ message: "Verified" });
 });
 
-// POST /api/universities { name, email }
-// router.post("/", async (req, res) => {
-//     try {
-//         const { name, email } = req.body || {};
-//         if (!name || !email) return res.status(400).json({ message: "Name and email required" });
-//         if (!isVerified(email)) return res.status(400).json({ message: "Email not verified via OTP" });
-
-//         const exists = await University.findOne({ $or: [{ name }, { email: email.toLowerCase() }] });
-//         if (exists) return res.status(400).json({ message: "University with same name or email exists" });
-
-//         const uni = await University.create({ name, email });
-//         clearVerification(email);
-//         res.status(201).json(uni);
-//     } catch (e) {
-//         console.error(e);
-//         res.status(500).json({ message: "Server error" });
-//     }
+// POST /api/universities
 // });
 router.post("/", async (req, res) => {
     try {

@@ -2,6 +2,7 @@ import express from "express";
 import Student from "../models/Student.js";
 import { authRequired, requireRole } from "../middleware/auth.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -61,6 +62,69 @@ router.get("/students", authRequired, requireRole("faculty"), async (req, res) =
     } catch (error) {
         console.error("Error fetching students:", error);
         res.status(500).json({ message: "An internal server error occurred." });
+    }
+});
+
+
+// PATCH /api/faculty/students/:id - Update student details
+router.patch("/students/:id", authRequired, requireRole("faculty"), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updates = req.body;
+
+        // Whitelist of fields allowed for an update
+        const allowedUpdates = [
+            "enrolno",
+            "fullName",
+            "email",
+            "password",
+            "course",
+            "contact",
+            "gender",
+            "address",
+            "university"
+        ];
+
+        // Create an object with only the allowed updates
+        const filteredUpdates = {};
+        for (const key of allowedUpdates) {
+            if (updates[key] !== undefined) {
+                filteredUpdates[key] = updates[key];
+            }
+        }
+
+        // Find the student and update their details
+        const updatedStudent = await Student.findByIdAndUpdate(id, filteredUpdates, {
+            new: true, // Return the updated document
+            runValidators: true, // Run schema validators on the update
+        });
+
+        if (!updatedStudent) {
+            return res.status(404).json({ message: "Student not found." });
+        }
+
+        res.json({
+            message: "Student updated successfully.",
+            student: updatedStudent,
+        });
+
+    } catch (error) {
+        console.error("Error updating student:", error);
+        res.status(500).json({ message: "An internal server error occurred." });
+    }
+});
+
+
+// DELETE /api/faculty/students/:id - Delete a student
+router.delete("/students/:id", authRequired, requireRole("faculty"), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const del = await Student.findByIdAndDelete(id);
+        if (!del) return res.status(404).json({ message: "User not found" });
+        res.json({ success: true });
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ message: "Server error" });
     }
 });
 
