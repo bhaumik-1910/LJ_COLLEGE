@@ -302,10 +302,10 @@ const Login = () => {
                             {loading ? 'Signing in...' : 'Sign in'}
                         </Button>
 
-                        <Typography sx={{ mt: 2, fontSize: '13px' }}>
+                        {/* <Typography sx={{ mt: 2, fontSize: '13px' }}>
                             Don't have an account?
                             <Button component={RouterLink} to="/register">Register</Button>
-                        </Typography>
+                        </Typography> */}
 
                     </StyledForm>
                 </SignInContainer>

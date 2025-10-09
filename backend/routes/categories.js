@@ -42,11 +42,13 @@ router.post("/", authRequired, requireRole("faculty"), async (req, res) => {
         const base = path.resolve("uploads", "categories", safe);
         ensureDir(path.join(base, "files"));
         ensureDir(path.join(base, "images"));
-        
+
         res.status(201).json(cat);
     } catch (e) {
         res.status(500).json({ message: "Failed to create category" });
     }
 });
+
+
 
 export default router;

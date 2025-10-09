@@ -60,6 +60,7 @@ export default function Document_list() {
     };
 
     useEffect(() => {
+        if (!token) return;
         fetchCategories();
         fetchDocs("");
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -68,8 +69,20 @@ export default function Document_list() {
     const handleCategoryChange = (e) => {
         const val = e.target.value;
         setSelectedCat(val);
+        if (!token) return;
         if (!val) fetchDocs("");
         else fetchDocs(`id:${val}`);
+    };
+
+    const getFileName = (doc) => {
+        if (doc?.fileOriginalName) return doc.fileOriginalName;
+        try {
+            const u = doc?.fileUrl || "";
+            const parts = u.split("/");
+            return parts[parts.length - 1] || "Open";
+        } catch {
+            return "Open";
+        }
     };
 
     const openDeleteDialog = (id) => { setTargetId(id); setConfirmOpen(true); };
@@ -141,7 +154,9 @@ export default function Document_list() {
                                         <TableCell>{d.category?.name || d.categoryName}</TableCell>
                                         <TableCell>{new Date(d.date).toLocaleDateString()}</TableCell>
                                         <TableCell>
-                                            <Link href={toBackendUrl(d.fileUrl)} target="_blank" rel="noopener" underline="hover">Open</Link>
+                                            <Link href={toBackendUrl(d.fileUrl)} target="_blank" rel="noopener" underline="hover">
+                                                {getFileName(d)}
+                                            </Link>
                                         </TableCell>
                                         <TableCell>
                                             <Box display="flex" gap={0.5} flexWrap="wrap">

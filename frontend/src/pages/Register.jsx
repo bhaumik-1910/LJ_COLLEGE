@@ -280,7 +280,7 @@ const RegisterPage = () => {
         {/* Sign In Form */}
         <SignInContainer >
           {/* active={isSignUp} */}
-          <Button
+          {/* <Button
             startIcon={<ArrowBack />}
             onClick={() => navigate("/")}
             className="!absolute !top-6 !left-6 !text-purple-700 !font-medium hover:!bg-purple-100"
@@ -288,7 +288,7 @@ const RegisterPage = () => {
             sx={{ p: 3 }}
           >
             Back
-          </Button>
+          </Button> */}
           <StyledForm onSubmit={handleSubmit}>
             <Box component="img" src={logo} alt="Logo" sx={{ width: 80, height: 80, borderRadius: "50%", mb: 1 }} />
             <h1 style={{ fontSize: '24px', fontWeight: 700, margin: '10px 0 5px' }}>REGISTER ACCOUNT</h1>
@@ -438,11 +438,11 @@ const RegisterPage = () => {
             >
               {loading ? 'Registering...' : 'Register'}
             </Button>
-
+            {/* 
             <Typography sx={{ mt: 2, fontSize: '13px' }}>
               Don't have an account?
               <Button component={RouterLink} to="/login">Login</Button>
-            </Typography>
+            </Typography> */}
 
           </StyledForm>
         </SignInContainer>

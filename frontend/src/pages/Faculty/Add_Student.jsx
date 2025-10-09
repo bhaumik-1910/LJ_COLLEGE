@@ -80,6 +80,42 @@ export default function Add_Student() {
         }
     }, [form.university, universities]);
 
+    // const onSubmit = async (e) => {
+    //     e.preventDefault();
+    //     const err = validate();
+    //     if (err) return;
+
+    //     setLoading(true);
+    //     try {
+    //         const res = await fetch(`${API_BASE}/faculty/students`, {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //                 ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    //             },
+    //             body: JSON.stringify(form),
+    //         });
+    //         const data = await res.json().catch(() => ({}));
+    //         if (!res.ok) throw new Error(data.message || "Failed to add student");
+    //         toast.success("Student added successfully");
+    //         setForm({
+    //             enrolno: "",
+    //             fullName: "",
+    //             email: "",
+    //             course: "",
+    //             contact: "",
+    //             gender: "",
+    //             address: "",
+    //             university: ""
+    //         });
+    //         // navigate("/faculty-dashboard/student-list");
+    //     } catch (error) {
+    //         toast.error(error.message || "Something went wrong");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
     const onSubmit = async (e) => {
         e.preventDefault();
         const err = validate();
@@ -87,16 +123,29 @@ export default function Add_Student() {
 
         setLoading(true);
         try {
+            // Build safe payload: backend controls university, normalize gender
+            const payload = {
+                enrolno: String(form.enrolno || "").trim(),
+                fullName: String(form.fullName || "").trim(),
+                email: String(form.email || "").trim(),
+                course: String(form.course || "").trim(),
+                contact: String(form.contact || "").trim(),
+                gender: String(form.gender || "").toLowerCase(),
+                address: String(form.address || "").trim(),
+                // do NOT send form.university; server sets it from faculty
+            };
+
             const res = await fetch(`${API_BASE}/faculty/students`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     ...(token ? { Authorization: `Bearer ${token}` } : {}),
                 },
-                body: JSON.stringify(form),
+                body: JSON.stringify(payload),
             });
             const data = await res.json().catch(() => ({}));
             if (!res.ok) throw new Error(data.message || "Failed to add student");
+
             toast.success("Student added successfully");
             setForm({
                 enrolno: "",
@@ -106,7 +155,7 @@ export default function Add_Student() {
                 contact: "",
                 gender: "",
                 address: "",
-                university: ""
+                // remove university reset; it’s not required to send
             });
             // navigate("/faculty-dashboard/student-list");
         } catch (error) {

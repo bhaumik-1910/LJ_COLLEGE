@@ -7,10 +7,33 @@ import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
-//STUDENT REGISTER
+// Resolve faculty university from JWT payload or DB fallback
+const resolveUniversity = async (req) => {
+    if (req?.user?.university) return req.user.university;
+    try {
+        const u = await User.findById(req.user.id).select("university");
+        return u?.university || null;
+    } catch {
+        return null;
+    }
+};
+
+// STUDENT REGISTER: force student's university to the faculty's university
 router.post("/students", authRequired, requireRole("faculty"), async (req, res) => {
     try {
-        const { enrolno, fullName, email, course, contact, gender, university, address } = req.body;
+        const { enrolno, fullName, email, course, contact, gender, address } = req.body;
+
+        // Basic validation
+        if (!enrolno || !fullName || !email || !course || !contact || !gender || !address) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+        const normalizedGender = String(gender).toLowerCase();
+        if (!["male", "female"].includes(normalizedGender)) {
+            return res.status(400).json({ message: "Invalid gender. Allowed: male, female" });
+        }
+
+        const uni = await resolveUniversity(req);
+        if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
 
         const existingStudent = await Student.findOne({ $or: [{ enrolno }, { email }] });
         if (existingStudent) {
@@ -22,19 +45,18 @@ router.post("/students", authRequired, requireRole("faculty"), async (req, res) 
             fullName,
             email,
             contact,
-            gender,
+            gender: normalizedGender,
             course,
-            university,
+            university: uni, // critical: scope to faculty's university
             address,
-            addedBy: req.user.id, // req.user.id is from your auth middleware
+            addedBy: req.user.id,
         });
 
-        res.status(201).json({
-            message: "Student added successfully",
-            student: newStudent,
-        });
-
+        res.status(201).json({ message: "Student added successfully", student: newStudent });
     } catch (error) {
+        if (error?.name === "ValidationError") {
+            return res.status(400).json({ message: error.message });
+        }
         console.error("Error adding student:", error);
         res.status(500).json({ message: "An internal server error occurred." });
     }
@@ -43,13 +65,9 @@ router.post("/students", authRequired, requireRole("faculty"), async (req, res) 
 //STUDENT LIST
 router.get("/students", authRequired, requireRole("faculty"), async (req, res) => {
     try {
-        // You can add a check for the user's role here
-        if (req.user.role !== 'faculty' && req.user.role !== 'admin') {
-            return res.status(403).json({ message: "Forbidden: You do not have permission to view this list." });
-        }
-
-        const students = await Student.find({}); // Fetch all students
-
+        const uni = await resolveUniversity(req);
+        if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
+        const students = await Student.find({ university: uni });
         res.status(200).json(students);
     } catch (error) {
         console.error("Error fetching students:", error);
@@ -57,60 +75,47 @@ router.get("/students", authRequired, requireRole("faculty"), async (req, res) =
     }
 });
 
-
-// PATCH /api/faculty/students/:id - Update student details
+// UPDATE (cannot change university)
 router.patch("/students/:id", authRequired, requireRole("faculty"), async (req, res) => {
     try {
         const { id } = req.params;
         const updates = req.body;
-
-        // Whitelist of fields allowed for an update
-        const allowedUpdates = [
-            "enrolno",
-            "fullName",
-            "email",
-            "course",
-            "contact",
-            "gender",
-            "address",
-            "university"
-        ];
-
-        // Create an object with only the allowed updates
-        const filteredUpdates = {};
-        for (const key of allowedUpdates) {
-            if (updates[key] !== undefined) {
-                filteredUpdates[key] = updates[key];
-            }
+        const allowed = ["enrolno", "fullName", "email", "course", "contact", "gender", "address"];
+        const filtered = {};
+        for (const k of allowed) {
+            if (updates[k] !== undefined) filtered[k] = k === "gender" ? String(updates[k]).toLowerCase() : updates[k];
+        }
+        if (filtered.gender && !["male", "female"].includes(filtered.gender)) {
+            return res.status(400).json({ message: "Invalid gender. Allowed: male, female" });
         }
 
-        // Find the student and update their details
-        const updatedStudent = await Student.findByIdAndUpdate(id, filteredUpdates, {
-            new: true, // Return the updated document
-            runValidators: true, // Run schema validators on the update
-        });
+        const uni = await resolveUniversity(req);
+        if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
 
-        if (!updatedStudent) {
-            return res.status(404).json({ message: "Student not found." });
-        }
+        const updatedStudent = await Student.findOneAndUpdate(
+            { _id: id, university: uni },
+            filtered,
+            { new: true, runValidators: true }
+        );
+        if (!updatedStudent) return res.status(404).json({ message: "Student not found." });
 
-        res.json({
-            message: "Student updated successfully.",
-            student: updatedStudent,
-        });
-
+        res.json({ message: "Student updated successfully.", student: updatedStudent });
     } catch (error) {
+        if (error?.name === "ValidationError") {
+            return res.status(400).json({ message: error.message });
+        }
         console.error("Error updating student:", error);
         res.status(500).json({ message: "An internal server error occurred." });
     }
 });
 
-
-// DELETE /api/faculty/students/:id - Delete a student
+// DELETE
 router.delete("/students/:id", authRequired, requireRole("faculty"), async (req, res) => {
     try {
         const { id } = req.params;
-        const del = await Student.findByIdAndDelete(id);
+        const uni = await resolveUniversity(req);
+        if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
+        const del = await Student.findOneAndDelete({ _id: id, university: uni });
         if (!del) return res.status(404).json({ message: "User not found" });
         res.json({ success: true });
     } catch (e) {
@@ -119,7 +124,19 @@ router.delete("/students/:id", authRequired, requireRole("faculty"), async (req,
     }
 });
 
-// // PATCH /api/users/me - Update the profile of the currently logged-in user
+// COUNT
+router.get("/students/count", authRequired, requireRole("faculty"), async (req, res) => {
+    try {
+        const uni = await resolveUniversity(req);
+        if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
+        const count = await Student.countDocuments({ university: uni });
+        res.json({ count });
+    } catch (error) {
+        res.status(500).json({ message: "An internal server error occurred." });
+    }
+});
+
+// PATCH /api/users/me - Update the profile of the currently logged-in user
 router.patch("/me", authRequired, requireRole("faculty"), async (req, res) => {
     try {
         const userId = req.user.id;
@@ -168,5 +185,6 @@ router.get("/me", authRequired, requireRole("faculty"), async (req, res) => {
         res.status(500).json({ message: "An internal server error occurred." });
     }
 });
+
 
 export default router;

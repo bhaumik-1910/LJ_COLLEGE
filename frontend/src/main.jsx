@@ -51,7 +51,7 @@ function Root() {
                 <Route path="/" element={<App />} />
                 {/* Public auth routes */}
                 <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
-                <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+                {/* <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} /> */}
                 <Route path="/forgot" element={<PublicRoute><Forget /></PublicRoute>} />
 
                 {/* Admin area: nested under /admin-dashboard/* with Outlet in AdminLayout */}
@@ -66,6 +66,7 @@ function Root() {
                   }
                 >
                   <Route index element={<AdminDashboard />} />
+                  <Route path="register" element={<Register />} />
                   <Route path="university-register" element={<U_Register />} />
                   <Route path="users" element={<AdminUsers />} />
                   <Route path="university-users" element={<UniversityUsers />} />

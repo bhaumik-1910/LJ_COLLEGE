@@ -4,6 +4,7 @@ import { upload } from "../utils/upload.js";
 import Student from "../models/Student.js";
 import Category from "../models/Category.js";
 import Document from "../models/Document.js";
+import User from "../models/User.js";
 
 import fs from "fs";
 import path from "path";
@@ -21,35 +22,45 @@ const ensureDir = (dir) => {
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 };
 
-// GET /api/documents - List documents with optional category filter
-router.get(
-    "/",
-    authRequired,
-    requireRole("faculty"),
-    async (req, res) => {
-        try {
-            const { categoryId, categoryName } = req.query;
-            const filter = {};
-            if (categoryId) filter.category = categoryId;
-            else if (categoryName) filter.categoryName = categoryName;
-
-            const docs = await Document.find(filter)
-                .sort({ createdAt: -1 })
-                .populate({ path: "student", select: "enrolno fullName" })
-                .populate({ path: "category", select: "name" });
-            res.json(docs);
-        } catch (e) {
-            console.error(e);
-            res.status(500).json({ message: "Failed to fetch documents" });
-        }
+// Resolve faculty university from JWT payload or DB fallback
+const resolveUniversity = async (req) => {
+    if (req?.user?.university) return req.user.university;
+    try {
+        const u = await User.findById(req.user.id).select("university");
+        return u?.university || null;
+    } catch {
+        return null;
     }
-);
+};
 
-// POST /api/documents - Create a document record
-router.post(
-    "/",
-    authRequired,
-    requireRole("faculty"),
+
+// GET /api/documents 
+router.get("/", authRequired, requireRole("faculty"), async (req, res) => {
+    try {
+        const { categoryId, categoryName } = req.query;
+        const uni = await resolveUniversity(req);
+        if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
+
+        const studentIds = await Student.find({ university: uni }).select("_id");
+        const filter = { student: { $in: studentIds.map(s => s._id) } };
+
+        if (categoryId) filter.category = categoryId;
+        else if (categoryName) filter.categoryName = categoryName;
+
+        const docs = await Document.find(filter)
+            .sort({ createdAt: -1 })
+            .populate({ path: "student", select: "enrolno fullName" })
+            .populate({ path: "category", select: "name" });
+
+        res.json(docs);
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ message: "Failed to fetch documents" });
+    }
+});
+
+// POST /api/documents — verify student's university
+router.post("/", authRequired, requireRole("faculty"),
     upload.fields([
         { name: "file", maxCount: 1 },
         { name: "images", maxCount: 4 },
@@ -128,93 +139,107 @@ router.post(
     }
 );
 
-// DELETE /api/documents/:id - Delete a document
-// router.delete(
-//     "/:id",
-//     authRequired,
-//     requireRole("faculty"),
-//     async (req, res) => {
-//         try {
-//             const { id } = req.params;
-//             const doc = await Document.findById(id);
-//             if (!doc) return res.status(404).json({ message: "Document not found" });
+// DELETE /api/documents/:id — verify university before delete
+router.delete("/:id", authRequired, requireRole("faculty"), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const doc = await Document.findById(id).populate({ path: "student", select: "university" });
+        if (!doc) return res.status(404).json({ message: "Document not found" });
 
-//             // Try to remove files from disk (best-effort)
-//             const removeIfExists = (p) => {
-//                 try {
-//                     if (!p) return;
-//                     const diskPath = p.startsWith("/uploads") ? path.resolve(p.replace("/uploads", "uploads")) : path.resolve(p);
-//                     if (fs.existsSync(diskPath)) fs.unlinkSync(diskPath);
-//                 } catch { }
-//             };
+        const uni = await resolveUniversity(req);
+        if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
 
-//             removeIfExists(doc.fileUrl);
-//             (doc.images || []).forEach((img) => removeIfExists(img));
-
-//             await Document.findByIdAndDelete(id);
-//             res.json({ success: true });
-//         } catch (e) {
-//             console.error(e);
-//             res.status(500).json({ message: "Failed to delete document" });
-//         }
-//     }
-// );
-
-// DELETE /api/documents/:id - Delete a document
-router.delete(
-    "/:id",
-    authRequired,
-    requireRole("faculty"),
-    async (req, res) => {
-        try {
-            const { id } = req.params;
-            const doc = await Document.findById(id);
-            if (!doc) return res.status(404).json({ message: "Document not found" });
-
-            // Helpers
-            const toDiskPath = (p) => (p && p.startsWith("/uploads")) ? path.resolve(p.replace("/uploads", "uploads")) : (p ? path.resolve(p) : "");
-            const removeIfExists = (absPath) => {
-                try {
-                    if (absPath && fs.existsSync(absPath)) fs.unlinkSync(absPath);
-                } catch { }
-            };
-            const removeIfEmpty = (dir) => {
-                try {
-                    const uploadsRoot = path.resolve("uploads");
-                    let current = dir;
-                    while (current && current.startsWith(uploadsRoot)) {
-                        if (!fs.existsSync(current)) break;
-                        const items = fs.readdirSync(current);
-                        if (items.length > 0) break;
-                        fs.rmdirSync(current);
-                        const parent = path.dirname(current);
-                        if (parent === current || parent.length < uploadsRoot.length) break;
-                        current = parent;
-                        // stop once we removed up to category folder or uploads root
-                        if (current === uploadsRoot) break;
-                    }
-                } catch { }
-            };
-
-            // Remove files
-            const fileDisk = toDiskPath(doc.fileUrl);
-            removeIfExists(fileDisk);
-            (doc.images || []).forEach((img) => removeIfExists(toDiskPath(img)));
-
-            // Attempt to remove empty directories (files/, images/, maybe category/)
-            const dirsToCheck = [];
-            if (fileDisk) dirsToCheck.push(path.dirname(fileDisk));
-            (doc.images || []).forEach((img) => { const d = path.dirname(toDiskPath(img)); if (d) dirsToCheck.push(d); });
-            Array.from(new Set(dirsToCheck)).forEach((d) => removeIfEmpty(d));
-
-            // Delete DB record
-            await Document.findByIdAndDelete(id);
-            res.json({ success: true });
-        } catch (e) {
-            console.error(e);
-            res.status(500).json({ message: "Failed to delete document" });
+        if (!doc.student || doc.student.university !== uni) {
+            return res.status(403).json({ message: "Forbidden: Cannot delete other university's document" });
         }
+
+        // Helpers
+        const toDiskPath = (p) => (p && p.startsWith("/uploads")) ? path.resolve(p.replace("/uploads", "uploads")) : (p ? path.resolve(p) : "");
+        const removeIfExists = (absPath) => {
+            try {
+                if (absPath && fs.existsSync(absPath)) fs.unlinkSync(absPath);
+            } catch { }
+        };
+        const removeIfEmpty = (dir) => {
+            try {
+                const uploadsRoot = path.resolve("uploads");
+                let current = dir;
+                while (current && current.startsWith(uploadsRoot)) {
+                    if (!fs.existsSync(current)) break;
+                    const items = fs.readdirSync(current);
+                    if (items.length > 0) break;
+                    fs.rmdirSync(current);
+                    const parent = path.dirname(current);
+                    if (parent === current || parent.length < uploadsRoot.length) break;
+                    current = parent;
+                    // stop once we removed up to category folder or uploads root
+                    if (current === uploadsRoot) break;
+                }
+            } catch { }
+        };
+
+        // Remove files
+        const fileDisk = toDiskPath(doc.fileUrl);
+        removeIfExists(fileDisk);
+        (doc.images || []).forEach((img) => removeIfExists(toDiskPath(img)));
+
+        // Attempt to remove empty directories (files/, images/, maybe category/)
+        const dirsToCheck = [];
+        if (fileDisk) dirsToCheck.push(path.dirname(fileDisk));
+        (doc.images || []).forEach((img) => { const d = path.dirname(toDiskPath(img)); if (d) dirsToCheck.push(d); });
+        Array.from(new Set(dirsToCheck)).forEach((d) => removeIfEmpty(d));
+
+        // Delete DB record
+        await Document.findByIdAndDelete(id);
+        res.json({ success: true });
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ message: "Failed to delete document" });
     }
+}
 );
+
+// GET /api/documents/count — scoped to university
+router.get("/count", authRequired, requireRole("faculty"), async (req, res) => {
+    try {
+        const uni = await resolveUniversity(req);
+        if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
+
+        const studentIds = await Student.find({ university: uni }).select("_id");
+        const count = await Document.countDocuments({ student: { $in: studentIds.map(s => s._id) } });
+        res.json({ count });
+    } catch {
+        res.status(500).json({ message: "Failed to fetch document count" });
+    }
+});
+
+// GET /api/documents/stats/monthly — scoped to university
+router.get("/stats/monthly", authRequired, requireRole("faculty"), async (req, res) => {
+    try {
+        const now = new Date();
+        const year = parseInt(req.query.year, 10) || now.getFullYear();
+        const start = new Date(year, 0, 1);
+        const end = new Date(year + 1, 0, 1);
+
+        const uni = await resolveUniversity(req);
+        if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
+
+        const studentIds = await Student.find({ university: uni }).select("_id");
+        const ids = studentIds.map(s => s._id);
+
+        const agg = await Document.aggregate([
+            { $match: { date: { $gte: start, $lt: end }, student: { $in: ids } } },
+            { $group: { _id: { $month: "$date" }, count: { $sum: 1 } } },
+            { $project: { month: "$_id", count: 1, _id: 0 } },
+            { $sort: { month: 1 } },
+        ]);
+
+        const months = Array.from({ length: 12 }, (_, i) => ({ month: i + 1, count: 0 }));
+        for (const { month, count } of agg) months[month - 1].count = count;
+        res.json({ year, months });
+    } catch {
+        res.status(500).json({ message: "Failed to fetch monthly stats" });
+    }
+});
 
 export default router;

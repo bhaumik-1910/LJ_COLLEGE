@@ -1,116 +1,64 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Typography, Box, Grid, Paper } from "@mui/material";
+import { Typography, Box, Grid, Paper, CircularProgress } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
-
-// Import icons
-import PersonIcon from '@mui/icons-material/Person';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import SchoolIcon from '@mui/icons-material/School';
+import DescriptionIcon from '@mui/icons-material/Description';
 
-// import { Doughnut } from "react-chartjs-2";
-// import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+const API_BASE = "http://localhost:5000/api";
 
-// ChartJS.register(ArcElement, Tooltip, Legend);
-
-// const API_BASE = "http://localhost:5000/api";
-
-export default function Dashboard() {
+export default function FacultyDashboard() {
     const navigate = useNavigate();
     const { token } = useContext(AuthContext);
 
-    const [universities, setUniversities] = useState([]);
-    const [users, setUsers] = useState([]);
-
     const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
+
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    const [studentCount, setStudentCount] = useState(0);
+    const [documentCount, setDocumentCount] = useState(0);
+    const [monthly, setMonthly] = useState([]); // [{ month: 1..12, count }]
 
     useEffect(() => {
         const role = localStorage.getItem("role");
-        if (role !== "admin") {
+        if (role !== "faculty") {
             navigate("/login");
+            return;
         }
-    }, [navigate]);
 
-    const fetchUniversities = async () => {
-        // try {
-        //     const res = await fetch(`${API_BASE}/universities`);
-        //     const data = await res.json();
-        //     if (res.ok) setUniversities(Array.isArray(data) ? data : []);
-        // } catch { }
-    };
+        const fetchAll = async () => {
+            setLoading(true);
+            setError("");
+            try {
+                const [sRes, dRes, mRes] = await Promise.all([
+                    fetch(`${API_BASE}/faculty/students/count`, { headers: { ...authHeader } }),
+                    fetch(`${API_BASE}/documents/count`, { headers: { ...authHeader } }),
+                    fetch(`${API_BASE}/documents/stats/monthly`, { headers: { ...authHeader } }),
+                ]);
 
-    const fetchUsers = async () => {
-        // try {
-        //     const res = await fetch(`${API_BASE}/admin/users`, { headers: { ...authHeader } });
-        //     const data = await res.json();
-        //     if (res.ok) setUsers(Array.isArray(data) ? data : []);
-        // } catch { }
-    };
+                const sData = await sRes.json();
+                const dData = await dRes.json();
+                const mData = await mRes.json();
 
-    useEffect(() => {
-        fetchUniversities();
-        fetchUsers();
+                if (!sRes.ok) throw new Error(sData.message || "Failed to fetch students count");
+                if (!dRes.ok) throw new Error(dData.message || "Failed to fetch documents count");
+                if (!mRes.ok) throw new Error(mData.message || "Failed to fetch monthly stats");
+
+                setStudentCount(Number(sData.count || 0));
+                setDocumentCount(Number(dData.count || 0));
+                setMonthly(Array.isArray(mData.months) ? mData.months : []);
+            } catch (e) {
+                setError(e.message || "Failed to load dashboard");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchAll();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // Derived totals
-    const totalUsers = users.length;
-    const totalAdmins = users.filter((u) => String(u.role).toLowerCase() === "admin").length;
-    const totalFaculty = users.filter((u) => String(u.role).toLowerCase() === "faculty").length;
-    const totalUniversities = universities.length;
-    const totalOtherUsers = totalUsers - (totalAdmins + totalFaculty);
-
-    // Data for the charts
-    const usersChartData = {
-        labels: ["Admins", "Faculty", "Other Users"],
-        datasets: [{
-            data: [totalAdmins, totalFaculty, totalOtherUsers],
-            backgroundColor: [
-                "rgba(255, 99, 132, 0.6)",
-                "rgba(54, 162, 235, 0.6)",
-                "rgba(255, 206, 86, 0.6)",
-            ],
-            borderColor: [
-                "rgba(255, 99, 132, 1)",
-                "rgba(54, 162, 235, 1)",
-                "rgba(255, 206, 86, 1)",
-            ],
-            borderWidth: 1,
-        }],
-    };
-
-    // In a real-world scenario, you might want to show more data for universities, but here we'll just show the total
-    // const universityChartData = {
-    //     labels: ["Universities"],
-    //     datasets: [{
-    //         data: [totalUniversities],
-    //         backgroundColor: ["rgba(75, 192, 192, 0.6)"],
-    //         borderColor: ["rgba(75, 192, 192, 1)"],
-    //         borderWidth: 1,
-    //     }],
-    // };
-
-    // Chart options to make them look better and display text inside the center
-    // const chartOptions = {
-    //     responsive: true,
-    //     plugins: {
-    //         legend: {
-    //             position: 'top',
-    //         },
-    //         tooltip: {
-    //             callbacks: {
-    //                 label: (context) => {
-    //                     const label = context.label || '';
-    //                     const value = context.parsed;
-    //                     return `${label}: ${value}`;
-    //                 },
-    //             },
-    //         },
-    //     },
-    // };
-
-    // Common styles for the cards
     const cardStyles = {
         p: 3,
         color: 'white',
@@ -123,70 +71,87 @@ export default function Dashboard() {
         textAlign: 'center',
     };
 
+    const chart = useMemo(() => {
+        const months = Array.from({ length: 12 }, (_, i) => i + 1);
+        const map = new Map(monthly.map(m => [m.month, m.count]));
+        const values = months.map(m => map.get(m) || 0);
+        const maxVal = Math.max(1, ...values);
+        return { months, values, maxVal };
+    }, [monthly]);
+
+    const Chart = () => {
+        const width = 600;
+        const height = 260;
+        const padding = { left: 30, right: 10, top: 10, bottom: 30 };
+        const innerW = width - padding.left - padding.right;
+        const innerH = height - padding.top - padding.bottom;
+        const barGap = 8;
+        const barW = Math.max(8, Math.floor((innerW - barGap * 11) / 12));
+
+        return (
+            <svg width={width} height={height} role="img" aria-label="Monthly documents">
+                <g transform={`translate(${padding.left},${padding.top})`}>
+                    {chart.values.map((v, i) => {
+                        const h = Math.round((v / chart.maxVal) * innerH);
+                        const x = i * (barW + barGap);
+                        const y = innerH - h;
+                        return (
+                            <g key={i}>
+                                <rect x={x} y={y} width={barW} height={h} fill="#4e73df" rx="4" />
+                                <text x={x + barW / 2} y={innerH + 16} textAnchor="middle" fontSize="10" fill="#666">
+                                    {i + 1}
+                                </text>
+                                {v > 0 && (
+                                    <text x={x + barW / 2} y={y - 4} textAnchor="middle" fontSize="10" fill="#333">
+                                        {v}
+                                    </text>
+                                )}
+                            </g>
+                        );
+                    })}
+                    <line x1={0} y1={innerH} x2={innerW} y2={innerH} stroke="#ddd" />
+                </g>
+            </svg>
+        );
+    };
+
     return (
         <Box sx={{ p: 4 }}>
-            <Typography variant="h5" fontWeight={700} sx={{ mb: 2 }}>Dashboard</Typography>
-            {/* Top summary boxes */}
-            <Grid container spacing={4} mb={4}>
-                {/* Total Admins Card */}
-                {/* <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
-                    <Paper sx={{ ...cardStyles, bgcolor: '#4e73df' }}>
-                        <AdminPanelSettingsIcon sx={{ fontSize: '3rem', mb: 1 }} />
-                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Student</Typography>
-                        <Typography variant="h5" fontWeight={700}>{totalAdmins}</Typography>
-                    </Paper>
-                </Grid> */}
+            <Typography variant="h5" fontWeight={700} sx={{ mb: 2 }}>Faculty Dashboard</Typography>
 
-                {/* Total Faculty Card */}
-                {/* <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
-                    <Paper sx={{ ...cardStyles, bgcolor: '#1cc88a' }}>
-                        <PeopleAltIcon sx={{ fontSize: '3rem', mb: 1 }} />
-                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Faculty</Typography>
-                        <Typography variant="h5" fontWeight={700}>{totalFaculty}</Typography>
-                    </Paper>
-                </Grid> */}
+            {loading ? (
+                <Box display="flex" alignItems="center" gap={2}><CircularProgress size={20} /> Loading...</Box>
+            ) : error ? (
+                <Typography color="error">{error}</Typography>
+            ) : (
+                <>
+                    <Grid container spacing={4} mb={4}>
+                        <Grid item xs={12} sm={6} md={3} sx={{ minWidth: '220px' }}>
+                            <Paper sx={{ ...cardStyles, bgcolor: '#1cc88a' }}>
+                                <PeopleAltIcon sx={{ fontSize: '3rem', mb: 1 }} />
+                                <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Students</Typography>
+                                <Typography variant="h5" fontWeight={700}>{studentCount}</Typography>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={3} sx={{ minWidth: '220px' }}>
+                            <Paper sx={{ ...cardStyles, bgcolor: '#4e73df' }}>
+                                <DescriptionIcon sx={{ fontSize: '3rem', mb: 1 }} />
+                                <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Documents</Typography>
+                                <Typography variant="h5" fontWeight={700}>{documentCount}</Typography>
+                            </Paper>
+                        </Grid>
+                    </Grid>
 
-                {/* Total Users Card */}
-                {/* <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
-                    <Paper sx={{ ...cardStyles, bgcolor: '#f6c23e' }}>
-                        <PersonIcon sx={{ fontSize: '3rem', mb: 1 }} />
-                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Users</Typography>
-                        <Typography variant="h5" fontWeight={700}>{totalUsers}</Typography>
-                    </Paper>
-                </Grid> */}
-
-                {/* Total Universities Card */}
-                {/* <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
-                    <Paper sx={{ ...cardStyles, bgcolor: '#e74a3b' }}>
-                        <SchoolIcon sx={{ fontSize: '3rem', mb: 1 }} />
-                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Universities</Typography>
-                        <Typography variant="h5" fontWeight={700}>{totalUniversities}</Typography>
-                    </Paper>
-                </Grid> */}
-            </Grid>
-
-            {/* Charts Section */}
-            {/* <Grid container spacing={3} mb={4}>
-                <Grid item xs={12} md={6} sx={{ width: '450px', height: '450px' }}>
-                    <Paper sx={{ p: 2 }}>
-                        <Typography variant="h6" mb={2} textAlign="center">User Distribution by Role</Typography>
-                        <Box sx={{ width: '80%', margin: 'auto' }}>
-                            <Doughnut data={usersChartData} options={chartOptions} />
-                        </Box>
-                    </Paper>
-                </Grid>
-                <Grid item xs={12} md={6} sx={{ width: '450px', height: '450px' }}>
-                    <Paper sx={{ p: 2 }}>
-                        <Typography variant="h6" mb={2} textAlign="center">University Count</Typography>
-                        <Box sx={{ width: '80%', margin: 'auto' }}>
-                            <Doughnut data={universityChartData} options={chartOptions} />
-                            <Typography variant="h4" sx={{ textAlign: 'center', mt: 2 }}>
-                                {totalUniversities}
-                            </Typography>
-                        </Box>
-                    </Paper>
-                </Grid>
-            </Grid> */}
+                    <Grid container spacing={3}>
+                        <Grid item xs={12} md={8} lg={7}>
+                            <Paper sx={{ p: 2 }}>
+                                <Typography variant="h6" mb={2}>Monthly Documents (Year {new Date().getFullYear()})</Typography>
+                                <Chart />
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                </>
+            )}
         </Box>
     );
 }
