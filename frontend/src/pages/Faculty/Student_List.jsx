@@ -277,7 +277,6 @@ export default function Student_List() {
                     enrolno: editRow.enrolno,
                     fullName: editRow.fullName,
                     email: editRow.email,
-                    password: editRow.password,
                     course: editRow.course,
                     contact: editRow.contact,
                     gender: editRow.gender,

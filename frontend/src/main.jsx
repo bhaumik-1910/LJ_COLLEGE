@@ -11,7 +11,6 @@ import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 
 import FacultyDashboard from "./pages/Faculty/Dashboard.jsx";
-import StudentDashboard from "./pages/StudentDashboard/StudentDashboard.jsx";
 import AdminDashboard from './pages/Admin/Dashboard.jsx'
 import { SidebarProvider } from './context/Admin/sidebarContext.jsx'
 import AdminLayout from './layout/Admin/AdminLayout.jsx'
@@ -90,14 +89,6 @@ function Root() {
                   <Route path="profile" element={<FacultyProfile />} />
                 </Route>
 
-                <Route
-                  path="/student-dashboard"
-                  element={
-                    <PrivateRoute role="student" isLoggedIn={isLoggedIn}>
-                      <StudentDashboard />
-                    </PrivateRoute>
-                  }
-                />
               </Routes>
             </BrowserRouter>
 

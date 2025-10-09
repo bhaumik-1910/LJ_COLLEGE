@@ -10,26 +10,17 @@ const router = express.Router();
 //STUDENT REGISTER
 router.post("/students", authRequired, requireRole("faculty"), async (req, res) => {
     try {
-        const { enrolno, fullName, email, password, course, contact, gender, university, address } = req.body;
-
-        if (!password) {
-            return res.status(400).json({ message: "Password is required" });
-        }
+        const { enrolno, fullName, email, course, contact, gender, university, address } = req.body;
 
         const existingStudent = await Student.findOne({ $or: [{ enrolno }, { email }] });
         if (existingStudent) {
             return res.status(400).json({ message: "Student with this enrollment number or email already exists." });
         }
 
-        // Generate a salt and hash the password
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-
         const newStudent = await Student.create({
             enrolno,
             fullName,
             email,
-            password: hashedPassword,
             contact,
             gender,
             course,
@@ -78,7 +69,6 @@ router.patch("/students/:id", authRequired, requireRole("faculty"), async (req, 
             "enrolno",
             "fullName",
             "email",
-            "password",
             "course",
             "contact",
             "gender",

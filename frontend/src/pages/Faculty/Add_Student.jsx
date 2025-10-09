@@ -14,7 +14,6 @@ export default function Add_Student() {
         enrolno: "",
         fullName: "",
         email: "",
-        password: "",
         course: "",
         contact: "",
         gender: "",
@@ -103,7 +102,6 @@ export default function Add_Student() {
                 enrolno: "",
                 fullName: "",
                 email: "",
-                password: "",
                 course: "",
                 contact: "",
                 gender: "",
@@ -130,9 +128,6 @@ export default function Add_Student() {
                 </Grid>
                 <Grid item xs={12}>
                     <TextField type="email" label="Email" name="email" value={form.email} onChange={handleChange} fullWidth variant="standard" />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField type="password" label="Password" name="password" value={form.password} onChange={handleChange} fullWidth variant="standard" />
                 </Grid>
                 <Grid item xs={12}>
                     <TextField label="Contact" name="contact" value={form.contact} onChange={handleChange} fullWidth inputProps={{ maxLength: 10 }} variant="standard" />
