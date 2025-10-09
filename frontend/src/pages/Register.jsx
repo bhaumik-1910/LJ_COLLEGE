@@ -401,7 +401,7 @@ const RegisterPage = () => {
             >
               <MenuItem value="admin">Admin</MenuItem>
               <MenuItem value="faculty">Faculty</MenuItem>
-              <MenuItem value="student">Student</MenuItem>
+              {/* <MenuItem value="student">Student</MenuItem> */}
             </TextField>
 
             {/* University Dropdown */}
