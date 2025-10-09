@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { Box, Button, Chip, Grid, IconButton, Link, MenuItem, Paper, TextField, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
+import { Box, Button, Chip, Grid, IconButton, Link, MenuItem, Paper, TextField, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, CircularProgress } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { toast } from "react-toastify";
@@ -17,7 +17,6 @@ export default function Document_list() {
     const { token } = useContext(AuthContext);
     const [categories, setCategories] = useState([]);
     const [selectedCat, setSelectedCat] = useState("");
-    // const [newCat, setNewCat] = useState("");
     const [docs, setDocs] = useState([]);
     const [loading, setLoading] = useState(false);
     const [loadingCats, setLoadingCats] = useState(false);
@@ -87,29 +86,6 @@ export default function Document_list() {
         finally { setDeletingId(""); }
     };
 
-    // const addCategory = async () => {
-    //     const name = newCat.trim();
-    //     if (!name) return toast.error("Enter category name");
-    //     try {
-    //         const res = await fetch(`${API_BASE}/categories`, {
-    //             method: "POST",
-    //             headers: { "Content-Type": "application/json", ...headers },
-    //             body: JSON.stringify({ name }),
-    //         });
-    //         const data = await res.json();
-    //         if (!res.ok) throw new Error(data.message || "Failed to add category");
-    //         toast.success("Category added");
-    //         setNewCat("");
-    //         setCategories((prev) => [...prev, data].sort((a, b) => a.name.localeCompare(b.name)));
-    //         setSelectedCat(data._id);
-    //         fetchDocs(`id:${data._id}`);
-    //     } catch (e) {
-    //         toast.error(e.message || "Failed to add category");
-    //     }
-    // };
-
-
-
     return (
         <Box sx={{ p: 3 }}>
             <Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={2} mb={3}>
@@ -117,7 +93,6 @@ export default function Document_list() {
                 <Box display="flex" alignItems="center" gap={2}>
                     <TextField
                         select
-                        // variant="standard"
                         label={loadingCats ? "Loading categories..." : "Filter by Category"}
                         value={selectedCat}
                         onChange={handleCategoryChange}
@@ -129,89 +104,82 @@ export default function Document_list() {
                             <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
                         ))}
                     </TextField>
-
-                    {/* <TextField
-                        variant="standard"
-                        label="Add Category"
-                        value={newCat}
-                        onChange={(e) => setNewCat(e.target.value)}
-                        sx={{ minWidth: 220 }}
-                    /> */}
-                    {/* <IconButton color="primary" onClick={addCategory} aria-label="add category">
-                        <AddIcon />
-                    </IconButton> */}
                 </Box>
             </Box>
 
-            <>
-                <Box sx={{ p: 2 }}>
-                    {loading ? (
-                        <Typography>Loading...</Typography>
-                    ) : docs.length === 0 ? (
-                        <Typography>No documents found</Typography>
-                    ) : (
-                        <TableContainer component={Box} >
-                            <Table size="small">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Student Name</TableCell>
-                                        <TableCell>Enrolment No</TableCell>
-                                        <TableCell>Type</TableCell>
-                                        <TableCell>Category</TableCell>
-                                        <TableCell>Date</TableCell>
-                                        <TableCell>File</TableCell>
-                                        <TableCell>Images</TableCell>
-                                        <TableCell align="right">Action</TableCell>
+            <Box sx={{ p: 2 }}>
+                {loading ? (
+                    // Display loading indicator
+                    <Box display="flex" justifyContent="center" alignItems="center" py={6}>
+                        <CircularProgress />
+                    </Box>
+                ) : docs.length === 0 ? (
+                    // Display "No documents found" message
+                    <Typography>No documents found</Typography>
+                ) : (
+                    // Display the table with documents
+                    <TableContainer component={Box} >
+                        <Table size="small">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Student Name</TableCell>
+                                    <TableCell>Enrolment No</TableCell>
+                                    <TableCell>Type</TableCell>
+                                    <TableCell>Category</TableCell>
+                                    <TableCell>Date</TableCell>
+                                    <TableCell>File</TableCell>
+                                    <TableCell>Images</TableCell>
+                                    <TableCell align="right">Action</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {docs.map((d) => (
+                                    <TableRow key={d._id} hover>
+                                        <TableCell>{d.student?.fullName || d.studentName}</TableCell>
+                                        <TableCell>{d.student?.enrolno || d.studentEnrolno}</TableCell>
+                                        <TableCell>{d.type}</TableCell>
+                                        <TableCell>{d.category?.name || d.categoryName}</TableCell>
+                                        <TableCell>{new Date(d.date).toLocaleDateString()}</TableCell>
+                                        <TableCell>
+                                            <Link href={toBackendUrl(d.fileUrl)} target="_blank" rel="noopener" underline="hover">Open</Link>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Box display="flex" gap={0.5} flexWrap="wrap">
+                                                {(d.images || []).slice(0, 4).map((img, idx) => (
+                                                    <img key={idx} src={toBackendUrl(img)} alt={`img-${idx}`} style={{ width: 36, height: 36, objectFit: "cover", borderRadius: 4, border: "1px solid #ddd" }} />
+                                                ))}
+                                            </Box>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <Tooltip title="Delete">
+                                                <span>
+                                                    <IconButton color="error" size="small" onClick={() => openDeleteDialog(d._id)} disabled={deletingId === d._id}>
+                                                        <DeleteIcon fontSize="small" />
+                                                    </IconButton>
+                                                </span>
+                                            </Tooltip>
+                                        </TableCell>
                                     </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {docs.map((d) => (
-                                        <TableRow key={d._id} hover>
-                                            <TableCell>{d.student?.fullName || d.studentName}</TableCell>
-                                            <TableCell>{d.student?.enrolno || d.studentEnrolno}</TableCell>
-                                            <TableCell>{d.type}</TableCell>
-                                            <TableCell>{d.category?.name || d.categoryName}</TableCell>
-                                            <TableCell>{new Date(d.date).toLocaleDateString()}</TableCell>
-                                            <TableCell>
-                                                <Link href={toBackendUrl(d.fileUrl)} target="_blank" rel="noopener" underline="hover">Open</Link>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Box display="flex" gap={0.5} flexWrap="wrap">
-                                                    {(d.images || []).slice(0, 4).map((img, idx) => (
-                                                        <img key={idx} src={toBackendUrl(img)} alt={`img-${idx}`} style={{ width: 36, height: 36, objectFit: "cover", borderRadius: 4, border: "1px solid #ddd" }} />
-                                                    ))}
-                                                </Box>
-                                            </TableCell>
-                                            <TableCell align="right">
-                                                <Tooltip title="Delete">
-                                                    <span>
-                                                        <IconButton color="error" size="small" onClick={() => openDeleteDialog(d._id)} disabled={deletingId === d._id}>
-                                                            <DeleteIcon  fontSize="small" />
-                                                        </IconButton>
-                                                    </span>
-                                                </Tooltip>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    )}
-                </Box>
-                {/* Delete confirm dialog */}
-                <Dialog open={confirmOpen} onClose={closeDeleteDialog} maxWidth="xs" fullWidth>
-                    <DialogTitle>Delete Document</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            Are you sure you want to delete this document? This action cannot be undone.
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={closeDeleteDialog} disabled={!!deletingId}>Cancel</Button>
-                        <Button color="error" variant="contained" onClick={confirmDelete} disabled={!!deletingId}>Delete</Button>
-                    </DialogActions>
-                </Dialog>
-            </>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                )}
+            </Box>
+
+            {/* Delete confirm dialog */}
+            <Dialog open={confirmOpen} onClose={closeDeleteDialog} maxWidth="xs" fullWidth>
+                <DialogTitle>Delete Document</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to delete this document? This action cannot be undone.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closeDeleteDialog} disabled={!!deletingId}>Cancel</Button>
+                    <Button color="error" variant="contained" onClick={confirmDelete} disabled={!!deletingId}>Delete</Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 }
