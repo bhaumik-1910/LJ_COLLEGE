@@ -29,6 +29,7 @@ import FacultyLayout from './layout/Faculty/FacultyLayout.jsx'
 import Add_Student from './pages/Faculty/Add_Student.jsx'
 import Student_List from './pages/Faculty/Student_List.jsx'
 import FacultyProfile from './pages/Faculty/Profile.jsx'
+import Add_document from './pages/Faculty/Add_document.jsx'
 
 function Root() {
   const [mode, setMode] = useState('light')
@@ -84,6 +85,7 @@ function Root() {
                 >
                   <Route index element={<FacultyDashboard />} />
                   <Route path="add-student" element={<Add_Student />} />
+                  <Route path="add-document" element={<Add_document />} />
                   <Route path="student-list" element={<Student_List />} />
                   <Route path="document-list" element={<UniversityUsers />} />
                   <Route path="profile" element={<FacultyProfile />} />

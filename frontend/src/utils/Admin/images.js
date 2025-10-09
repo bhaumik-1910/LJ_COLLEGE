@@ -11,6 +11,7 @@ import list from "../../assets/icons/list.svg";
 import profile from "../../assets/icons/profile.svg";
 import logout from "../../assets/icons/logout.svg";
 import add from "../../assets/icons/add.svg";
+import add_d from "../../assets/icons/add_d.svg";
 
 // import gears from "../../assets/icons/gears.svg";
 // import menu from "../../assets/icons/menu.svg";
@@ -23,7 +24,7 @@ import add from "../../assets/icons/add.svg";
 import uni_image from "../../assets/images/uni_image.jpeg";
 
 export const iconsImgs = {
-    bills, budget, home, plane, report, wallet,document,list,profile,logout,add
+    bills, budget, home, plane, report, wallet, document, list, profile, logout, add, add_d
 }
 
 export const uniImage = {

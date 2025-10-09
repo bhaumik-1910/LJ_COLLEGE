@@ -103,10 +103,11 @@ const adminLinks = [
 const facultyLinks = [
   { id: 1, title: 'Dashboard', image: iconsImgs.home, path: '/faculty-dashboard' },
   { id: 2, title: 'Add Student', image: iconsImgs.add, path: '/faculty-dashboard/add-student' },
-  { id: 3, title: 'Student List', image: iconsImgs.list, path: '/faculty-dashboard/student-list' },
-  { id: 4, title: 'Document List', image: iconsImgs.document, path: '/faculty-dashboard/document-list' },
-  { id: 5, title: 'Profile', image: iconsImgs.profile, path: '/faculty-dashboard/profile' },
-  { id: 6, title: 'Logout', image: iconsImgs.logout, path: '/logout' },
+  { id: 3, title: 'Add Document', image: iconsImgs.add_d, path: '/faculty-dashboard/add-document' },
+  { id: 4, title: 'Student List', image: iconsImgs.list, path: '/faculty-dashboard/student-list' },
+  { id: 5, title: 'Document List', image: iconsImgs.document, path: '/faculty-dashboard/document-list' },
+  { id: 6, title: 'Profile', image: iconsImgs.profile, path: '/faculty-dashboard/profile' },
+  { id: 7, title: 'Logout', image: iconsImgs.logout, path: '/logout' },
 ];
 
 const Sidebar = () => {
