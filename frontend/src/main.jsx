@@ -31,6 +31,7 @@ import Student_List from './pages/Faculty/Student_List.jsx'
 import FacultyProfile from './pages/Faculty/Profile.jsx'
 import Add_document from './pages/Faculty/Add_document.jsx'
 import Document_list from './pages/Faculty/Document_list.jsx'
+import All_Document from './pages/Admin/All_Document.jsx'
 
 function Root() {
   const [mode, setMode] = useState('light')
@@ -70,6 +71,7 @@ function Root() {
                   <Route path="university-register" element={<U_Register />} />
                   <Route path="users" element={<AdminUsers />} />
                   <Route path="university-users" element={<UniversityUsers />} />
+                  <Route path="document" element={<All_Document />} />
                   <Route path="admins" element={<AdminList />} />
                   <Route path="profile" element={<AdminProfile />} />
                 </Route>
