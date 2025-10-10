@@ -461,8 +461,7 @@ const RegisterPage = () => {
 
             <ToggleRight sx={{ fontFamily: "Playwrite US Modern" }} >
               {/* active={isSignUp} */}
-              <h1 style={{ fontSize: '30px', fontWeight: 700 }}>Hello,</h1>
-              <p style={{ fontSize: '20px', lineHeight: '20px', letterSpacing: '0.3px', margin: '20px 0' }}>Register with your personal details to use all of site features..</p>
+              {/*  tyle={{ fontSize: '20px', lineHeight: '20px', letterSpacing: '0.3px', margin: '20px 0' }}>Register with your personal details to use all of site features..</p> */}
               {/* <StyledHiddenButton variant="outlined" onClick={() => setIsSignUp(true)}>Sign Up</StyledHiddenButton> */}
             </ToggleRight>
           </Toggle>

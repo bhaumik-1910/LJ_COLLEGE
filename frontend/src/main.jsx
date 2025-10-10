@@ -69,7 +69,7 @@ function Root() {
                   <Route index element={<AdminDashboard />} />
                   <Route path="register" element={<Register />} />
                   <Route path="university-register" element={<U_Register />} />
-                  <Route path="users" element={<AdminUsers />} />
+                  <Route path="faculty" element={<AdminUsers />} />
                   <Route path="university-users" element={<UniversityUsers />} />
                   <Route path="document" element={<All_Document />} />
                   <Route path="admins" element={<AdminList />} />

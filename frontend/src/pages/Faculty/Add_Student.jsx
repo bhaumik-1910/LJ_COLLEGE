@@ -79,8 +79,6 @@ export default function Add_Student() {
             setCourses([]);
         }
     }, [form.university, universities]);
-
-    // const onSubmit = async (e) => {
     //     e.preventDefault();
     //     const err = validate();
     //     if (err) return;

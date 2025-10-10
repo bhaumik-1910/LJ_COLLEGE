@@ -95,7 +95,7 @@ const adminLinks = [
   { id: 2, title: 'Universities', image: iconsImgs.add, path: '/admin-dashboard/university-register' },
   { id: 3, title: 'Register', image: iconsImgs.add, path: '/admin-dashboard/register' },
   { id: 4, title: 'University Users', image: iconsImgs.plane, path: '/admin-dashboard/university-users' },
-  { id: 5, title: 'Faculty', image: iconsImgs.wallet, path: '/admin-dashboard/users' },
+  { id: 5, title: 'Faculty', image: iconsImgs.wallet, path: '/admin-dashboard/faculty' },
   { id: 6, title: 'Document', image: iconsImgs.wallet, path: '/admin-dashboard/document' },
   { id: 7, title: 'Admins', image: iconsImgs.bills, path: '/admin-dashboard/admins' },
   { id: 8, title: 'Profile', image: iconsImgs.profile, path: '/admin-dashboard/profile' },
