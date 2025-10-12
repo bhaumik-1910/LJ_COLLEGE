@@ -60,7 +60,7 @@
 //     </AppBar>
 //   )
 // }
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
@@ -76,9 +76,10 @@ import { ThemeModeContext } from '../../theme.js'
 import { AuthContext } from '../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
+
 export default function AdminHeader() {
   const { mode, toggle } = React.useContext(ThemeModeContext)
-  const { logout, role } = React.useContext(AuthContext) // Get the 'role' from AuthContext
+  const { logout, role, token } = React.useContext(AuthContext) // Get the 'role' from AuthContext
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -100,13 +101,32 @@ export default function AdminHeader() {
     navigate('/login')
   }
 
+  //University So
+  const [universityName, setUniversityName] = useState('')
+
+  useEffect(() => {
+    const fetchUniversity = async () => {
+      if (role !== 'faculty' || !token) return
+      try {
+        const res = await fetch('http://localhost:5000/api/faculty/me', { headers: { Authorization: `Bearer ${token}` } })
+        const data = await res.json()
+        if (res.ok && data?.university) setUniversityName(data.university)
+      } catch { }
+    }
+    fetchUniversity()
+  }, [role, token])
+
+
   // Determine the display text based on the user's role
   const roleText = role ? role.charAt(0).toUpperCase() + role.slice(1) : 'User';
 
   return (
     <AppBar position="sticky" elevation={0} sx={{ borderBottom: '1px solid', borderColor: 'divider', bgcolor: (t) => t.palette.mode === 'light' ? 'rgba(255,255,255,0.9)' : 'rgba(8,12,30,0.6)', color: 'text.primary' }}>
       <Toolbar sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
-        <Typography variant="subtitle1" fontWeight={800}>{roleText}</Typography>
+        {/* <Typography variant="subtitle1" fontWeight={800}>{roleText}</Typography> */}
+        <Typography variant="subtitle1" fontWeight={800}>
+          {roleText}{role === 'faculty' && universityName ? ` - ${universityName}` : ''}
+        </Typography>
         <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1 }}>
           <Tooltip title={mode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}>
             <IconButton color="inherit" onClick={toggle} aria-label="Toggle theme mode">
