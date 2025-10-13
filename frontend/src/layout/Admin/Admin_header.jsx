@@ -60,7 +60,7 @@
 //     </AppBar>
 //   )
 // }
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
@@ -75,11 +75,15 @@ import DarkModeIcon from '@mui/icons-material/DarkMode'
 import { ThemeModeContext } from '../../theme.js'
 import { AuthContext } from '../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import { SidebarContext } from '../../context/Admin/sidebarContext.jsx'
+import { iconsImgs } from '../../utils/Admin/images'
 
+const API_BASE = "http://localhost:5000/api";
 
 export default function AdminHeader() {
-  const { mode, toggle } = React.useContext(ThemeModeContext)
-  const { logout, role, token } = React.useContext(AuthContext) // Get the 'role' from AuthContext
+  const { mode, toggle } = useContext(ThemeModeContext)
+  const { logout, role, token } = useContext(AuthContext) // Get the 'role' from AuthContext
+  const { toggleSidebar } = useContext(SidebarContext); // Get the 'toggleSidebar' function from SidebarContext
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -89,7 +93,7 @@ export default function AdminHeader() {
   const email = (typeof window !== 'undefined' ? localStorage.getItem('email') : '') || ''
   const avatarUrl = (typeof window !== 'undefined' ? localStorage.getItem('avatarUrl') : '') || ''
 
-  const [anchorEl, setAnchorEl] = React.useState(null)
+  const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleOpen = (e) => setAnchorEl(e.currentTarget)
   const handleClose = () => setAnchorEl(null)
@@ -101,41 +105,95 @@ export default function AdminHeader() {
     navigate('/login')
   }
 
-  //University So
+  //University So and Avtar Image So
   const [universityName, setUniversityName] = useState('')
+  const [avatar, setAvatar] = useState('')
 
+  // Fetch for faculty or subadmin
   useEffect(() => {
-    const fetchUniversity = async () => {
-      if (role !== 'faculty' || !token) return
+    const fetchUserData = async () => {
+      if (!token) return;
+
+      // Determine the API endpoint based on the user's role
+      let apiEndpoint;
+      if (role === 'admin') {
+        apiEndpoint = `${API_BASE}/admin/me`;
+      } else if (['faculty', 'subadmin'].includes(role)) {
+        apiEndpoint = `${API_BASE}/faculty/me`;
+      } else {
+        return;
+      }
+
       try {
-        const res = await fetch('http://localhost:5000/api/faculty/me', { headers: { Authorization: `Bearer ${token}` } })
-        const data = await res.json()
-        if (res.ok && data?.university) setUniversityName(data.university)
-      } catch { }
-    }
-    fetchUniversity()
-  }, [role, token])
+        const res = await fetch(apiEndpoint, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          if (data?.university) setUniversityName(data.university);
+          if (data?.avatarUrl !== undefined) {
+            setAvatar(data.avatarUrl || '');
+            try { localStorage.setItem('avatarUrl', data.avatarUrl || ''); } catch (e) { }
+          }
+        }
+      } catch (e) {
+        console.error("Failed to fetch user data:", e);
+      }
+    };
+    fetchUserData();
+  }, [token, role]);
+
+  //Direct Update Avatar
+  useEffect(() => {
+    const onProfileUpdated = (e) => {
+      const newUrl = e?.detail?.avatarUrl || '';
+      setAvatar(newUrl);
+      try { localStorage.setItem('avatarUrl', newUrl) } catch { }
+    };
+    window.addEventListener('profile:updated', onProfileUpdated);
+    return () => window.removeEventListener('profile:updated', onProfileUpdated);
+  }, []);
+
 
 
   // Determine the display text based on the user's role
-  const roleText = role ? role.charAt(0).toUpperCase() + role.slice(1) : 'User';
+  // const roleText = role ? role.charAt(0).toUpperCase() + role.slice(1) : 'User';
+  const roleText = role === 'subadmin' ? 'Sub Admin' : role ? role.charAt(0).toUpperCase() + role.slice(1) : 'User';
 
   return (
     <AppBar position="sticky" elevation={0} sx={{ borderBottom: '1px solid', borderColor: 'divider', bgcolor: (t) => t.palette.mode === 'light' ? 'rgba(255,255,255,0.9)' : 'rgba(8,12,30,0.6)', color: 'text.primary' }}>
       <Toolbar sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
-        {/* <Typography variant="subtitle1" fontWeight={800}>{roleText}</Typography> */}
-        <Typography variant="subtitle1" fontWeight={800}>
-          {roleText}{role === 'faculty' && universityName ? ` - ${universityName}` : ''}
-        </Typography>
+
+        {/* Left Side: Group the icon and typography */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <IconButton onClick={() => toggleSidebar()}>
+            <img src={iconsImgs.menuIcon} alt="menu icon" style={{ width: '20px' }} />
+          </IconButton>
+          <Typography variant="subtitle1" fontWeight={800}>
+            {roleText}{['faculty', 'subadmin'].includes(role) && universityName ? ` - ${universityName}` : ''}
+          </Typography>
+        </Box>
+
+        {/* Right Side: Keep the existing buttons */}
         <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1 }}>
-          <Tooltip title={mode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}>
+          <Tooltip title={mode === 'light' ? 'dark mode' : 'light mode'}>
             <IconButton color="inherit" onClick={toggle} aria-label="Toggle theme mode">
               {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
             </IconButton>
           </Tooltip>
           <IconButton color="inherit" onClick={handleOpen} aria-label="Account menu" size="small">
-            <Avatar sx={{ width: 32, height: 32 }} src={avatarUrl || undefined}>{(email || 'U').charAt(0).toUpperCase()}</Avatar>
+            <Avatar
+              sx={{ width: 32, height: 32 }}
+              src={(avatar || avatarUrl) || undefined}
+              alt={email || 'User'}
+            >
+              {(email || 'U').charAt(0).toUpperCase()}
+            </Avatar>
           </IconButton>
+
           <Menu anchorEl={anchorEl} open={open} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} transformOrigin={{ vertical: 'top', horizontal: 'right' }}>
             <MenuItem disabled>{email || 'No email'}</MenuItem>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
@@ -144,4 +202,4 @@ export default function AdminHeader() {
       </Toolbar>
     </AppBar>
   )
-}
+} 

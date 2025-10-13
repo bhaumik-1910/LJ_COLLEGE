@@ -114,4 +114,21 @@ router.get("/documents/stats/monthly", authRequired, requireRole("admin"), async
     }
 });
 
+// GET /api/users/me - Fetches the profile of the currently logged-in user
+router.get("/me", authRequired, requireRole("admin"), async (req, res) => {
+    try {
+        // req.user.id is set by the authRequired middleware after verifying the token
+        const user = await User.findById(req.user.id).select("-password");
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        res.json(user);
+    } catch (error) {
+        console.error("Error fetching user profile:", error);
+        res.status(500).json({ message: "An internal server error occurred." });
+    }
+});
+
 export default router;

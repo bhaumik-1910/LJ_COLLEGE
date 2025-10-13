@@ -46,3 +46,4 @@ export default function PrivateRoute({ children, role: requiredRole }) {
     // return children;
     return token ? children : null;
 }
+

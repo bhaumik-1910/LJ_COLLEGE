@@ -384,6 +384,7 @@ export default function Student_List() {
                                         <TableCell>Course</TableCell>
                                         <TableCell>Contact</TableCell>
                                         <TableCell>Gender</TableCell>
+                                        <TableCell>University</TableCell>
                                         <TableCell>Address</TableCell>
                                         <TableCell align="right">Actions</TableCell>
                                     </TableRow>
@@ -397,6 +398,7 @@ export default function Student_List() {
                                             <TableCell>{r.course}</TableCell>
                                             <TableCell>{r.contact}</TableCell>
                                             <TableCell>{r.gender}</TableCell>
+                                            <TableCell>{r.university}</TableCell>
                                             <TableCell>{r.address}</TableCell>
                                             <TableCell align="right">
                                                 <IconButton size="small" onClick={() => onEdit(r)}><EditIcon /></IconButton>

@@ -80,8 +80,8 @@ export default function All_Document() {
                         <Table size="small">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Student</TableCell>
                                     <TableCell>Enrolment No</TableCell>
+                                    <TableCell>Student Name</TableCell>
                                     <TableCell>Type</TableCell>
                                     <TableCell>Category</TableCell>
                                     <TableCell>Date</TableCell>
@@ -92,8 +92,8 @@ export default function All_Document() {
                             <TableBody>
                                 {items.map((d) => (
                                     <TableRow key={d._id} hover>
-                                        <TableCell>{d.student?.fullName || d.studentName}</TableCell>
                                         <TableCell>{d.student?.enrolno || d.studentEnrolno}</TableCell>
+                                        <TableCell>{d.student?.fullName || d.studentName}</TableCell>
                                         <TableCell>{d.type}</TableCell>
                                         <TableCell>{d.category?.name || d.categoryName}</TableCell>
                                         <TableCell>{new Date(d.date).toLocaleDateString()}</TableCell>

@@ -1,5 +1,5 @@
 import express from "express";
-import { authRequired, requireRole } from "../middleware/auth.js";
+import { authRequired, requireAnyRole, requireRole } from "../middleware/auth.js";
 import { upload } from "../utils/upload.js";
 import Student from "../models/Student.js";
 import Category from "../models/Category.js";
@@ -35,7 +35,7 @@ const resolveUniversity = async (req) => {
 
 
 // GET /api/documents 
-router.get("/", authRequired, requireRole("faculty"), async (req, res) => {
+router.get("/", authRequired, requireAnyRole(["faculty", "subadmin"]), async (req, res) => {
     try {
         const { categoryId, categoryName } = req.query;
         const uni = await resolveUniversity(req);
@@ -200,7 +200,7 @@ router.delete("/:id", authRequired, requireRole("faculty"), async (req, res) => 
 );
 
 // GET /api/documents/count — scoped to university
-router.get("/count", authRequired, requireRole("faculty"), async (req, res) => {
+router.get("/count", authRequired, requireAnyRole(["faculty", "subadmin"]), async (req, res) => {
     try {
         const uni = await resolveUniversity(req);
         if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
@@ -214,7 +214,7 @@ router.get("/count", authRequired, requireRole("faculty"), async (req, res) => {
 });
 
 // GET /api/documents/stats/monthly — scoped to university
-router.get("/stats/monthly", authRequired, requireRole("faculty"), async (req, res) => {
+router.get("/stats/monthly", authRequired, requireAnyRole(["faculty", "subadmin"]), async (req, res) => {
     try {
         const now = new Date();
         const year = parseInt(req.query.year, 10) || now.getFullYear();

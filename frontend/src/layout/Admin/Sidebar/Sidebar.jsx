@@ -94,10 +94,10 @@ const adminLinks = [
   { id: 1, title: 'Dashboard', image: iconsImgs.home, path: '/admin-dashboard' },
   { id: 2, title: 'Universities', image: iconsImgs.add, path: '/admin-dashboard/university-register' },
   { id: 3, title: 'Register', image: iconsImgs.add, path: '/admin-dashboard/register' },
-  { id: 4, title: 'University Users', image: iconsImgs.plane, path: '/admin-dashboard/university-users' },
-  { id: 5, title: 'Faculty', image: iconsImgs.wallet, path: '/admin-dashboard/faculty' },
-  { id: 6, title: 'Document', image: iconsImgs.wallet, path: '/admin-dashboard/document' },
-  { id: 7, title: 'Admins', image: iconsImgs.bills, path: '/admin-dashboard/admins' },
+  { id: 4, title: 'University Users', image: iconsImgs.users, path: '/admin-dashboard/university-users' },
+  { id: 5, title: 'Faculty', image: iconsImgs.faculty, path: '/admin-dashboard/faculty' },
+  { id: 6, title: 'Document', image: iconsImgs.document, path: '/admin-dashboard/document' },
+  { id: 7, title: 'Admins', image: iconsImgs.admin, path: '/admin-dashboard/admins' },
   { id: 8, title: 'Profile', image: iconsImgs.profile, path: '/admin-dashboard/profile' },
   { id: 9, title: 'Logout', image: iconsImgs.logout, path: '/logout' },
 ];
@@ -109,6 +109,16 @@ const facultyLinks = [
   { id: 4, title: 'Student List', image: iconsImgs.list, path: '/faculty-dashboard/student-list' },
   { id: 5, title: 'Document List', image: iconsImgs.document, path: '/faculty-dashboard/document-list' },
   { id: 6, title: 'Profile', image: iconsImgs.profile, path: '/faculty-dashboard/profile' },
+  { id: 7, title: 'Logout', image: iconsImgs.logout, path: '/logout' },
+];
+
+const subAdminLinks = [
+  { id: 1, title: 'Dashboard', image: iconsImgs.home, path: '/subadmin-dashboard' },
+  { id: 2, title: 'Add Faculty', image: iconsImgs.add, path: '/subadmin-dashboard/add-faculty' },
+  { id: 3, title: 'Student List', image: iconsImgs.list, path: '/subadmin-dashboard/student-list' },
+  { id: 4, title: 'Document List', image: iconsImgs.document, path: '/subadmin-dashboard/document-list' },
+  { id: 5, title: 'Faculty List', image: iconsImgs.faculty, path: '/subadmin-dashboard/faculty-list' },
+  { id: 6, title: 'Profile', image: iconsImgs.profile, path: '/subadmin-dashboard/profile' },
   { id: 7, title: 'Logout', image: iconsImgs.logout, path: '/logout' },
 ];
 
@@ -127,7 +137,11 @@ const Sidebar = () => {
   const links = useMemo(() => {
     if (role === 'admin') {
       return adminLinks;
-    } else if (role === 'faculty') {
+    }
+    else if (role === 'subadmin') {
+      return subAdminLinks;
+    }
+    else if (role === 'faculty') {
       return facultyLinks;
     }
     return [];
@@ -170,8 +184,11 @@ const Sidebar = () => {
         <div className="info-img img-fit-cover">
           <img src={uniImage.uni_image} alt="profile image" />
         </div>
-        <span className="info-name">
+        {/* <span className="info-name">
           {role === 'admin' ? 'Admin' : 'Faculty'}
+        </span> */}
+        <span className="info-name">
+          {role === 'admin' ? 'Super Admin' : role === 'subadmin' ? 'Admin' : 'Faculty'}
         </span>
       </div>
 

@@ -1,6 +1,6 @@
 import express from "express";
 import Student from "../models/Student.js";
-import { authRequired, requireRole } from "../middleware/auth.js";
+import { authRequired, requireAnyRole, requireRole } from "../middleware/auth.js";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -63,7 +63,7 @@ router.post("/students", authRequired, requireRole("faculty"), async (req, res) 
 });
 
 //STUDENT LIST
-router.get("/students", authRequired, requireRole("faculty"), async (req, res) => {
+router.get("/students", authRequired, requireAnyRole(["faculty", "subadmin"]), async (req, res) => {
     try {
         const uni = await resolveUniversity(req);
         if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
@@ -125,7 +125,7 @@ router.delete("/students/:id", authRequired, requireRole("faculty"), async (req,
 });
 
 // COUNT
-router.get("/students/count", authRequired, requireRole("faculty"), async (req, res) => {
+router.get("/students/count", authRequired, requireAnyRole(["faculty", "subadmin"]), async (req, res) => {
     try {
         const uni = await resolveUniversity(req);
         if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
@@ -136,8 +136,34 @@ router.get("/students/count", authRequired, requireRole("faculty"), async (req, 
     }
 });
 
+// LIST faculties in same university (subadmin)
+router.get("/", authRequired, requireAnyRole(["subadmin"]), async (req, res) => {
+    try {
+        const uni = await resolveUniversity(req);
+        if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
+        const users = await User.find({ role: "faculty", university: uni }).select("-password").sort({ name: 1 });
+        res.json(users);
+    } catch (error) {
+        console.error("Error fetching faculties:", error);
+        res.status(500).json({ message: "An internal server error occurred." });
+    }
+});
+
+// COUNT faculties in same university (subadmin)
+router.get("/count", authRequired, requireAnyRole(["subadmin"]), async (req, res) => {
+    try {
+        const uni = await resolveUniversity(req);
+        if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
+        const count = await User.countDocuments({ role: "faculty", university: uni });
+        res.json({ count });
+    } catch (error) {
+        console.error("Error counting faculties:", error);
+        res.status(500).json({ message: "An internal server error occurred." });
+    }
+});
+
 // PATCH /api/users/me - Update the profile of the currently logged-in user
-router.patch("/me", authRequired, requireRole("faculty"), async (req, res) => {
+router.patch("/me", authRequired, requireAnyRole(["faculty", "subadmin"]), async (req, res) => {
     try {
         const userId = req.user.id;
         const updates = req.body;
@@ -170,7 +196,7 @@ router.patch("/me", authRequired, requireRole("faculty"), async (req, res) => {
 
 
 // GET /api/users/me - Fetch the profile of the currently logged-in user
-router.get("/me", authRequired, requireRole("faculty"), async (req, res) => {
+router.get("/me", authRequired, requireAnyRole(["faculty", "subadmin"]), async (req, res) => {
     try {
         // req.user.id is set by your authentication middleware
         const user = await User.findById(req.user.id).select('-password');

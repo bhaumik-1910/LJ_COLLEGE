@@ -174,7 +174,7 @@ export default function AdminDashboard() {
 
     return (
         <Box sx={{ p: 4 }}>
-            <Typography variant="h5" fontWeight={700} sx={{ mb: 2 }}>Dashboard</Typography>
+            <Typography variant="h5" fontWeight={700} sx={{ mb: 2 }}>Super Dashboard</Typography>
             {/* Top summary boxes */}
             <Grid container spacing={4} mb={4}>
                 {/* Total Admins Card */}
@@ -222,10 +222,14 @@ export default function AdminDashboard() {
                     </Paper>
                 </Grid>
 
-                <Grid item xs={12} md={12}>
+            </Grid>
+
+            {/* Monthly Documents */}
+            <Grid container spacing={3} mb={4}>
+                <Grid item xs={12} md={6} sx={{ width: '300px', height: '200px' }}>
                     <Paper sx={{ p: 2 }}>
                         <Typography variant="h6" mb={2} textAlign="center">Monthly Documents</Typography>
-                        <Box sx={{ width: '95%', margin: 'auto' }}>
+                        <Box sx={{ width: '100%', margin: 'auto' }}>
                             <Line data={monthlyChartData} options={lineOptions} />
                         </Box>
                     </Paper>

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { Box, Typography, Grid, Stack, Avatar, TextField, Button, Divider, Input } from "@mui/material";
+import { Box, Typography, Grid, Stack, Avatar, TextField, Button, Divider, Input, CircularProgress } from "@mui/material";
 import { toast } from "react-toastify";
 
 const API_BASE = "http://localhost:5000/api";
@@ -10,11 +10,13 @@ export default function FacultyProfile() {
     const authHeader = useMemo(() => (token ? { Authorization: `Bearer ${token}` } : {}), [token]);
 
     const [me, setMe] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [editing, setEditing] = useState(false);
     const [form, setForm] = useState({ name: "", email: "", role: "", university: "", avatarUrl: "" });
     const fileInputRef = useRef(null);
 
     const fetchMe = async () => {
+        // setLoading(true);
         try {
             const res = await fetch(`${API_BASE}/faculty/me`, { headers: { ...authHeader } });
             const data = await res.json();
@@ -51,6 +53,7 @@ export default function FacultyProfile() {
             if (!res.ok) throw new Error(data.message || "Update failed");
             toast.success("Profile updated");
             setEditing(false);
+            window.dispatchEvent(new CustomEvent('profile:updated', { detail: { avatarUrl: form.avatarUrl || '' } }));
             await fetchMe();
         } catch (e) {
             toast.error(e.message);
@@ -75,6 +78,14 @@ export default function FacultyProfile() {
         reader.readAsDataURL(file);
     };
 
+    // if (loading) {
+    //     return (
+    //         <Box sx={{ p: 3, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 240 }}>
+    //             <CircularProgress />
+    //         </Box>
+    //     );
+    // }
+
     return (
         <Box sx={{ p: 3 }}>
             <Typography variant="h5" fontWeight={700} mb={2}>Faculty Profile</Typography>
@@ -93,8 +104,19 @@ export default function FacultyProfile() {
                             sx={{ minWidth: 260 }}
                             disabled={!editing}
                         />
-                        <Input ref={fileInputRef} type="file" accept="image/*" hidden onChange={handleFileChange} />
-                        <Button variant="outlined" onClick={onPickFile}>Upload</Button>
+                        {/* <Input ref={fileInputRef} type="file" accept="image/*" hidden onChange={handleFileChange} /> */}
+                        <div className="d-flex align-items-center">
+                            <label htmlFor="avatar-upload" className="btn btn-outline-primary">Upload Image</label>
+                            <input
+                                ref={fileInputRef}
+                                id="avatar-upload"
+                                type="file"
+                                accept="image/*"
+                                hidden
+                                onChange={handleFileChange}
+                            />
+                        </div>
+                        {/* <Button variant="outlined" onClick={onPickFile}>Upload</Button> */}
                         {!editing ? (
                             <Button variant="contained" onClick={() => setEditing(true)}>Edit</Button>
                         ) : (

@@ -1,5 +1,5 @@
 import express from "express";
-import { authRequired, requireRole } from "../middleware/auth.js";
+import { authRequired, requireAnyRole, requireRole } from "../middleware/auth.js";
 import Category from "../models/Category.js";
 import fs from "fs";
 import path from "path";
@@ -18,7 +18,7 @@ const ensureDir = (dir) => {
 const router = express.Router();
 
 // GET /api/categories
-router.get("/", authRequired, requireRole("faculty"), async (req, res) => {
+router.get("/", authRequired, requireAnyRole(["faculty", "subadmin"]), async (req, res) => {
     try {
         const cats = await Category.find({ active: true }).sort({ name: 1 });
         res.json(cats);

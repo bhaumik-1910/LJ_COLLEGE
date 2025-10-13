@@ -1,18 +1,19 @@
 /* sidebar */
+
+
 .sidebar {
   background-color: #000000;
   border-right: 1px solid #eee;
-  width: 260px;
-  padding: 36px 20px;
+  width: 250px;
+  padding: 36px 0px;
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;
-  /* horizontal padding = 20px */
   transition: var(--transition-default);
 }
 
 .user-info {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   column-gap: 16px;
 }
@@ -32,17 +33,23 @@
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
-/* Hide scrollbar but keep scrolling */
 .navigation {
   margin-top: 28px;
   height: 600px;
-  overflow-y: auto;
-  /* keep scroll */
-}
 
-.navigation::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 18px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--clr-pumpkin);
+    border-radius: 18px;
+  }
 }
 
 .sidebar-change {
@@ -52,31 +59,27 @@
 .nav-item {
   margin-bottom: 10px;
   margin-right: 0;
-  /* no right gap */
 }
 
 .nav-link {
-  display: flex;
+  display: block;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: flex;
+  display: flex;
   height: 44px;
   border-radius: 8px;
   column-gap: 12px;
   letter-spacing: 0.03em;
   border: 1px solid transparent;
   transition: var(--transition-default);
-  /* Make the row span full sidebar width (bleed over 20px padding on both sides) */
-  width: calc(100% + 40px);
-  /* margin-left: -20px; */
-  /* margin-right: -20px; */
-  padding: 6px 34px;
+  width: calc(100% + 0px);
+  padding: 5px 10px;
 }
 
 .nav-link:hover {
   border: 1px solid var(--clr-primar-light);
 }
 
-/* ACTIVE: change to yellow and cover full row */
 .nav-link.active {
   background-color: #3756B2;
   color: #e7e7e6;
@@ -84,9 +87,6 @@
     rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
 }
 
-.nav-link.active .nav-link-text {
-  color: #000000;
-}
 
 .nav-link-icon {
   width: 22px;
@@ -101,57 +101,73 @@
   .sidebar {
     padding: 24px 16px;
   }
-
-  .nav-link {
-    width: calc(100% + 32px);
-    margin-left: -16px;
-    margin-right: -16px;
-    padding: 6px 28px;
-  }
 }
 
 @media screen and (max-width: 1200px) {
   .sidebar {
     width: 72px;
-    padding-left: 12px;
-    padding-right: 12px;
+    padding: 0;
+    align-items: center;
   }
 
   .sidebar-change {
     margin-left: -72px;
   }
 
+  .user-info {
+    justify-content: center;
+    padding-top: 1rem;
+  }
+
   .info-name {
     display: none;
   }
 
+  .info-img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .navigation {
+    width: 100%;
+  }
+
+  .nav-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+  }
+
   .nav-item {
+    width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
   }
 
   .nav-link {
-    padding: 0;
-    display: flex;
-    align-items: center;
+    padding: 8px;
+    width: 44px;
+    height: 44px;
     justify-content: center;
-    width: 32px;
-    height: 32px;
-    margin: 0;
-    /* reset bleed on collapsed sidebar */
+    align-items: center;
+    gap: 0;
   }
 
-  .nav-link.active {
-    border-radius: 100%;
-  }
-
+  .nav-link.active,
   .nav-link:hover {
-    border-radius: 100%;
+    border-radius: 50%;
+    background-color: #3756B2;
   }
 
   .nav-link-text {
     display: none;
+  }
+
+  .nav-link-icon {
+    width: 24px;
+    height: 24px;
   }
 }
 

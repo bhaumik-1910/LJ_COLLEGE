@@ -163,7 +163,7 @@ const RegisterPage = () => {
 
   const navigate = useNavigate();
 
-  const { register, loading } = useContext(AuthContext);
+  const { register, loading, role: currentRole } = useContext(AuthContext);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -236,6 +236,29 @@ const RegisterPage = () => {
       toast.error(res.message || "Error registering user");
     }
   };
+
+  //Role Display
+  const roleOptions = useMemo(() => {
+    if (currentRole === 'admin') return [
+      { value: 'admin', label: 'Admin' },
+      { value: 'subadmin', label: 'Sub Admin' },
+    ];
+    if (currentRole === 'subadmin') return [
+      { value: 'faculty', label: 'Faculty' },
+    ];
+    return [
+      { value: 'admin', label: 'Admin' },
+      { value: 'subadmin', label: 'Sub Admin' },
+      { value: 'faculty', label: 'Faculty' },
+    ];
+  }, [currentRole]);
+
+  useEffect(() => {
+    const values = roleOptions.map(r => r.value);
+    if (!values.includes(form.role)) {
+      setForm(f => ({ ...f, role: roleOptions[0]?.value || '' }));
+    }
+  }, [roleOptions]);
 
   // Dynamic content based on screen size for mobile toggles
   // const MobileToggle = useMemo(() => (
@@ -399,9 +422,12 @@ const RegisterPage = () => {
               variant="standard"
               sx={{ marginTop: "8px" }}
             >
-              <MenuItem value="admin">Admin</MenuItem>
-              <MenuItem value="faculty">Faculty</MenuItem>
-              {/* <MenuItem value="student">Student</MenuItem> */}
+              {roleOptions.map(opt => (
+                <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+              ))}
+              {/* <MenuItem value="admin">Admin</MenuItem>
+              <MenuItem value="subadmin">Sub Admin</MenuItem>
+              <MenuItem value="faculty">Faculty</MenuItem> */}
             </TextField>
 
             {/* University Dropdown */}

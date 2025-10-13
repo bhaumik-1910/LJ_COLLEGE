@@ -20,8 +20,8 @@ import UniversityUsers from './pages/Admin/University_Users.jsx'
 import AdminList from './pages/Admin/Admin_List.jsx'
 import AdminProfile from './pages/Admin/Profile.jsx'
 
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 import PrivateRoute from './routes/PrivateRoute.jsx'
 import PublicRoute from './routes/PublicRoute.jsx'
 import Forget from './pages/Forget.jsx'
@@ -32,6 +32,12 @@ import FacultyProfile from './pages/Faculty/Profile.jsx'
 import Add_document from './pages/Faculty/Add_document.jsx'
 import Document_list from './pages/Faculty/Document_list.jsx'
 import All_Document from './pages/Admin/All_Document.jsx'
+import SubadminLayout from './layout/SubAdmin/SubadminLayout.jsx'
+import SubAdminDashboard from './pages/SubAdmin/Dashboard.jsx'
+import SubAdminStudentList from './pages/SubAdmin/Student_List.jsx'
+import SubAdminDocumentList from './pages/SubAdmin/Document_List.jsx'
+import SubAdminProfile from './pages/SubAdmin/Profile.jsx'
+import FacultyList from './pages/SubAdmin/Faculty_List.jsx'
 
 function Root() {
   const [mode, setMode] = useState('light')
@@ -74,6 +80,25 @@ function Root() {
                   <Route path="document" element={<All_Document />} />
                   <Route path="admins" element={<AdminList />} />
                   <Route path="profile" element={<AdminProfile />} />
+                </Route>
+
+                {/* SubAdmin area: nested under /subadmin-dashboard/* with Outlet in SubadminLayout */}
+                <Route
+                  path="/subadmin-dashboard"
+                  element={
+                    <PrivateRoute role="subadmin" isLoggedIn={isLoggedIn}>
+                      <SidebarProvider>
+                        <SubadminLayout />
+                      </SidebarProvider>
+                    </PrivateRoute>
+                  }
+                >
+                  <Route index element={<SubAdminDashboard />} />
+                  <Route path="add-faculty" element={<Register />} />
+                  <Route path="student-list" element={<SubAdminStudentList />} />
+                  <Route path="document-list" element={<SubAdminDocumentList />} />
+                  <Route path="faculty-list" element={<FacultyList />} />
+                  <Route path="profile" element={<SubAdminProfile />} />
                 </Route>
 
                 {/* Faculty dashboards */}
