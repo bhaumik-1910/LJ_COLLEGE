@@ -16,7 +16,9 @@ import LightModeIcon from '@mui/icons-material/LightMode'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import { ThemeModeContext } from '../theme.js'
 import { Link as RouterLink } from 'react-router-dom'
-import logo from '../assets/images/uni_image.jpeg'
+
+// import logo from '../assets/images/uni_image.jpeg' //Universal Logo
+import logo from '../assets/C_logo.jpeg' //LJ University Logo
 
 const Header = () => {
     const [open, setOpen] = React.useState(false)

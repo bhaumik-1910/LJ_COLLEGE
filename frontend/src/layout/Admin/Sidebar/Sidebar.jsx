@@ -182,7 +182,8 @@ const Sidebar = () => {
     <div className={`sidebar ${sidebarClass}`}>
       <div className="user-info">
         <div className="info-img img-fit-cover">
-          <img src={uniImage.uni_image} alt="profile image" />
+          {/* <img src={uniImage.uni_image} alt="profile image" /> */}
+          <img src={uniImage.C_Logo} alt="profile image" />
         </div>
         {/* <span className="info-name">
           {role === 'admin' ? 'Admin' : 'Faculty'}

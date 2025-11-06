@@ -13,13 +13,14 @@ import add_d from "../../assets/icons/add_d.svg";
 import menuIcon from "../../assets/icons/menu.svg";
 
 
-import uni_image from "../../assets/images/uni_image.jpeg";
+import uni_image from "../../assets/images/uni_image.jpeg"; //Universal Logo
+import C_Logo from "../../assets/C_logo.jpeg"; //LJ University Logo
 
 export const iconsImgs = {
     home, users, document, list, profile, logout, add, add_d, admin, faculty, menuIcon
 }
 
 export const uniImage = {
-    uni_image
+    uni_image, C_Logo
 };
 
