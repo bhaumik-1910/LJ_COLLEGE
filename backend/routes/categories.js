@@ -18,7 +18,7 @@ const ensureDir = (dir) => {
 const router = express.Router();
 
 // GET /api/categories
-router.get("/", authRequired, requireAnyRole(["faculty", "subadmin"]), async (req, res) => {
+router.get("/", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
     try {
         const cats = await Category.find({ active: true }).sort({ name: 1 });
         res.json(cats);

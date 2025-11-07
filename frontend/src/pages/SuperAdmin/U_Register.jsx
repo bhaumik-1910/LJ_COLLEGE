@@ -89,7 +89,7 @@
 //         <Box sx={{ p: 3 }}>
 //             <Grid container spacing={2} sx={{ p: 2, maxWidth: 500, mx: "auto" }}>
 //                 <Typography variant="h5" fontWeight={600} mb={2}>
-//                     University Registration (Admin)
+//                     University Registration (Super Admin)
 //                 </Typography>
 
 //                 <TextField
@@ -165,7 +165,7 @@ export default function U_Register() {
 
     useEffect(() => {
         const role = localStorage.getItem("role");
-        if (role !== "admin") navigate("/login");
+        if (role !== "superadmin") navigate("/login");
     }, [navigate]);
 
     const loadUniversities = async () => {
@@ -257,7 +257,7 @@ export default function U_Register() {
         <Box sx={{ p: 3 }}>
             <Grid container spacing={2} sx={{ p: 2, maxWidth: 500, mx: "auto" }}>
                 <Typography variant="h5" fontWeight={600} mb={2}>
-                    University Registration (Admin)
+                    University Registration (Super Admin)
                 </Typography>
 
                 <TextField

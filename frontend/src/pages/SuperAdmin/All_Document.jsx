@@ -27,7 +27,7 @@ export default function All_Document() {
         if (!token) return;
         setLoading(true);
         try {
-            const res = await fetch(`${API_BASE}/admin/documents?page=${p + 1}&limit=${limit}`, { headers });
+            const res = await fetch(`${API_BASE}/superadmin/documents?page=${p + 1}&limit=${limit}`, { headers });
             const data = await res.json();
             if (res.ok) {
                 setItems(Array.isArray(data.items) ? data.items : []);

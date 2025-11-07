@@ -239,16 +239,16 @@ const RegisterPage = () => {
 
   //Role Display
   const roleOptions = useMemo(() => {
-    if (currentRole === 'admin') return [
+    if (currentRole === 'superadmin') return [
+      { value: 'superadmin', label: 'Super Admin' },
       { value: 'admin', label: 'Admin' },
-      { value: 'subadmin', label: 'Sub Admin' },
     ];
-    if (currentRole === 'subadmin') return [
+    if (currentRole === 'admin') return [
       { value: 'faculty', label: 'Faculty' },
     ];
     return [
+      { value: 'superadmin', label: 'Super Admin' },
       { value: 'admin', label: 'Admin' },
-      { value: 'subadmin', label: 'Sub Admin' },
       { value: 'faculty', label: 'Faculty' },
     ];
   }, [currentRole]);
@@ -425,8 +425,8 @@ const RegisterPage = () => {
               {roleOptions.map(opt => (
                 <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
               ))}
-              {/* <MenuItem value="admin">Admin</MenuItem>
-              <MenuItem value="subadmin">Sub Admin</MenuItem>
+              {/* <MenuItem value="superadmin">Super Admin</MenuItem>
+              <MenuItem value="admin">Admin</MenuItem>
               <MenuItem value="faculty">Faculty</MenuItem> */}
             </TextField>
 

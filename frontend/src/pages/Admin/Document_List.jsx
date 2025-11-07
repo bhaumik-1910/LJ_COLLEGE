@@ -24,7 +24,7 @@ const toBackendUrl = (p) => {
     return p.startsWith("/uploads") ? `${BACKEND_BASE}${p}` : p;
 };
 
-export default function SubAdminDocumentList() {
+export default function AdminDocumentList() {
     const { token } = useContext(AuthContext);
 
     const [categories, setCategories] = useState([]);

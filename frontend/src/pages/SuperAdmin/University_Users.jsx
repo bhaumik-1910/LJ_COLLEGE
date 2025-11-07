@@ -44,7 +44,7 @@ export default function UniversityUsers() {
     const fetchUsers = async () => {
         setLoading(true);
         try {
-            const res = await fetch(`${API_BASE}/admin/users`, { headers: { ...authHeader } });
+            const res = await fetch(`${API_BASE}/superadmin/users`, { headers: { ...authHeader } });
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || "Failed to load users");
             setAllUsers(Array.isArray(data) ? data : []);
@@ -57,7 +57,7 @@ export default function UniversityUsers() {
 
     const fetchUniversities = async () => {
         try {
-            const res = await fetch(`${API_BASE}/admin/universities`, { headers: { ...authHeader } });
+            const res = await fetch(`${API_BASE}/superadmin/universities`, { headers: { ...authHeader } });
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || "Failed to load universities");
             setUniversities(Array.isArray(data) ? data : []);
@@ -88,7 +88,7 @@ export default function UniversityUsers() {
     const saveEdit = async () => {
         if (!editRow?._id) return;
         try {
-            const res = await fetch(`${API_BASE}/admin/users/${editRow._id}`, {
+            const res = await fetch(`${API_BASE}/superadmin/users/${editRow._id}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json", ...authHeader },
                 body: JSON.stringify({
@@ -117,7 +117,7 @@ export default function UniversityUsers() {
     const confirmDelete = async () => {
         if (!delRow?._id) return;
         try {
-            const res = await fetch(`${API_BASE}/admin/users/${delRow._id}`, {
+            const res = await fetch(`${API_BASE}/superadmin/users/${delRow._id}`, {
                 method: "DELETE",
                 headers: { ...authHeader },
             });

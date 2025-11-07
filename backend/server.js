@@ -5,7 +5,7 @@ import connectDB from "./config/db.js";
 
 import userRoutes from "./routes/user.js";
 import universityRoutes from "./routes/university.js";
-import adminRoutes from "./routes/admin.js";
+import superadminRoutes from "./routes/superadmin.js";
 import studentRoutes from "./routes/students.js";
 import categoriesRoutes from "./routes/categories.js";
 import documentsRoutes from "./routes/documents.js";
@@ -14,7 +14,7 @@ dotenv.config();
 
 const app = express();
 
-//Admin profile image upload limit
+//Super Admin profile image upload limit
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ limit: '5mb', extended: true }));
 
@@ -34,7 +34,7 @@ connectDB();
 
 app.use("/api/users", userRoutes)
 app.use("/api/universities", universityRoutes)
-app.use("/api/admin", adminRoutes)
+app.use("/api/superadmin", superadminRoutes)
 app.use('/api/faculty', studentRoutes);
 app.use('/api/categories', categoriesRoutes);
 app.use('/api/documents', documentsRoutes);

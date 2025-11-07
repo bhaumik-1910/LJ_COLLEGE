@@ -18,7 +18,7 @@ import {
     TextField,
     MenuItem,
     TablePagination,
-    CircularProgress, // Added CircularProgress for a better loading indicator
+    CircularProgress, // Added for a visual loading spinner
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -26,7 +26,7 @@ import { toast } from "react-toastify";
 
 const API_BASE = "http://localhost:5000/api";
 
-export default function AdminList() {
+export default function AdminUsers() {
     const { token } = useContext(AuthContext);
     const authHeader = useMemo(() => (token ? { Authorization: `Bearer ${token}` } : {}), [token]);
 
@@ -73,11 +73,10 @@ export default function AdminList() {
     const fetchUsers = async () => {
         setLoading(true);
         try {
-            const res = await fetch(`${API_BASE}/admin/users`, { headers: { ...authHeader } });
+            const res = await fetch(`${API_BASE}/superadmin/users`, { headers: { ...authHeader } });
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || "Failed to load users");
-            const onlyAdmins = (Array.isArray(data) ? data : []).filter((u) => String(u.role).toLowerCase() === "admin");
-            setRows(onlyAdmins);
+            setRows(Array.isArray(data) ? data : []);
         } catch (e) {
             toast.error(e.message);
         } finally {
@@ -100,7 +99,7 @@ export default function AdminList() {
     const saveEdit = async () => {
         if (!editRow?._id) return;
         try {
-            const res = await fetch(`${API_BASE}/admin/users/${editRow._id}`, {
+            const res = await fetch(`${API_BASE}/superadmin/users/${editRow._id}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json", ...authHeader },
                 body: JSON.stringify({
@@ -112,7 +111,7 @@ export default function AdminList() {
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || "Update failed");
-            toast.success("Admin updated");
+            toast.success("User updated");
             setEditOpen(false);
             setEditRow(null);
             await fetchUsers();
@@ -129,13 +128,13 @@ export default function AdminList() {
     const confirmDelete = async () => {
         if (!delRow?._id) return;
         try {
-            const res = await fetch(`${API_BASE}/admin/users/${delRow._id}`, {
+            const res = await fetch(`${API_BASE}/superadmin/users/${delRow._id}`, {
                 method: "DELETE",
                 headers: { ...authHeader },
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || "Delete failed");
-            toast.success("Admin deleted");
+            toast.success("User deleted");
             setDelOpen(false);
             setDelRow(null);
             await fetchUsers();
@@ -148,12 +147,12 @@ export default function AdminList() {
         <Box sx={{ p: 3 }}>
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
                 <Typography variant="h5" fontWeight={700}>
-                    Admins
+                    Users
                 </Typography>
 
                 <TextField
                     size="small"
-                    placeholder="Search admins..."
+                    placeholder="Search users..." // Changed placeholder for clarity
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     sx={{ maxWidth: 360 }}
@@ -174,6 +173,7 @@ export default function AdminList() {
                     </TableHead>
                     <TableBody>
                         {loading ? (
+                            // Display a loading indicator when data is being fetched
                             <TableRow>
                                 <TableCell colSpan={6} align="center">
                                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 2 }}>
@@ -184,9 +184,10 @@ export default function AdminList() {
                             </TableRow>
                         ) : pagedRows.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={6} align="center">No admins found</TableCell>
+                                <TableCell colSpan={6} align="center">No users found</TableCell>
                             </TableRow>
                         ) : (
+                            // Map and display the paged rows
                             pagedRows.map((r) => (
                                 <TableRow key={r._id} hover>
                                     <TableCell>{r.name}</TableCell>
@@ -220,17 +221,46 @@ export default function AdminList() {
 
             {/* Edit dialog */}
             <Dialog open={editOpen} onClose={() => setEditOpen(false)} fullWidth maxWidth="sm">
-                <DialogTitle>Edit Admin</DialogTitle>
+                <DialogTitle>Edit User</DialogTitle>
                 <DialogContent dividers>
-                    <TextField margin="dense" label="Name" variant="standard" fullWidth value={editRow?.name || ""} onChange={(e) => onEditChange("name", e.target.value)} />
-                    <TextField margin="dense" label="Email" variant="standard" fullWidth value={editRow?.email || ""} onChange={(e) => onEditChange("email", e.target.value)} />
-                    <TextField select margin="dense" label="Role" variant="standard" fullWidth value={editRow?.role || "admin"} onChange={(e) => onEditChange("role", e.target.value)}>
+                    <TextField
+                        margin="dense"
+                        label="Name"
+                        fullWidth
+                        value={editRow?.name || ""}
+                        variant="standard"
+                        onChange={(e) => onEditChange("name", e.target.value)}
+                    />
+                    <TextField
+                        margin="dense"
+                        label="Email"
+                        fullWidth
+                        value={editRow?.email || ""}
+                        variant="standard"
+                        onChange={(e) => onEditChange("email", e.target.value)}
+                    />
+                    <TextField
+                        select
+                        margin="dense"
+                        label="Role"
+                        fullWidth
+                        value={editRow?.role || "user"}
+                        variant="standard"
+                        onChange={(e) => onEditChange("role", e.target.value)}
+                    >
                         <MenuItem value="admin">Admin</MenuItem>
                         <MenuItem value="faculty">Faculty</MenuItem>
                         <MenuItem value="student">Student</MenuItem>
                         <MenuItem value="user">User</MenuItem>
                     </TextField>
-                    <TextField margin="dense" label="University" variant="standard" fullWidth value={editRow?.university || ""} onChange={(e) => onEditChange("university", e.target.value)} />
+                    <TextField
+                        margin="dense"
+                        label="University"
+                        fullWidth
+                        value={editRow?.university || ""}
+                        variant="standard"
+                        onChange={(e) => onEditChange("university", e.target.value)}
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setEditOpen(false)}>Cancel</Button>
@@ -240,7 +270,7 @@ export default function AdminList() {
 
             {/* Delete confirm */}
             <Dialog open={delOpen} onClose={() => setDelOpen(false)}>
-                <DialogTitle>Delete admin?</DialogTitle>
+                <DialogTitle>Delete user?</DialogTitle>
                 <DialogContent dividers>
                     <Typography>Are you sure you want to delete {delRow?.email}?</Typography>
                 </DialogContent>

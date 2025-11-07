@@ -6,8 +6,8 @@ import Document from "../models/Document.js";
 
 const router = express.Router();
 
-// GET /api/admin/users
-router.get("/users", authRequired, requireRole("admin"), async (_req, res) => {
+// GET /api/superadmin/users
+router.get("/users", authRequired, requireRole("superadmin"), async (_req, res) => {
     try {
         const users = await User.find({}, { password: 0 }).sort({ createdAt: -1 });
         res.json(users);
@@ -17,8 +17,8 @@ router.get("/users", authRequired, requireRole("admin"), async (_req, res) => {
     }
 });
 
-// PATCH /api/admin/users/:id
-router.patch("/users/:id", authRequired, requireRole("admin"), async (req, res) => {
+// PATCH /api/superadmin/users/:id
+router.patch("/users/:id", authRequired, requireRole("superadmin"), async (req, res) => {
     try {
         const { id } = req.params;
         const allowed = ["name", "email", "role", "university", "avatarUrl"];
@@ -35,8 +35,8 @@ router.patch("/users/:id", authRequired, requireRole("admin"), async (req, res) 
     }
 });
 
-// DELETE /api/admin/users/:id
-router.delete("/users/:id", authRequired, requireRole("admin"), async (req, res) => {
+// DELETE /api/superadmin/users/:id
+router.delete("/users/:id", authRequired, requireRole("superadmin"), async (req, res) => {
     try {
         const { id } = req.params;
         const del = await User.findByIdAndDelete(id);
@@ -48,8 +48,8 @@ router.delete("/users/:id", authRequired, requireRole("admin"), async (req, res)
     }
 });
 
-// GET /api/admin/universities
-router.get("/universities", authRequired, requireRole("admin"), async (_req, res) => {
+// GET /api/superadmin/universities
+router.get("/universities", authRequired, requireRole("superadmin"), async (_req, res) => {
     try {
         const unis = await University.find({}).sort({ name: 1 });
         res.json(unis);
@@ -59,8 +59,8 @@ router.get("/universities", authRequired, requireRole("admin"), async (_req, res
     }
 });
 
-// GET /api/admin/documents — list all documents (admin only)
-router.get("/documents", authRequired, requireRole("admin"), async (req, res) => {
+// GET /api/superadmin/documents — list all documents (admin only)
+router.get("/documents", authRequired, requireRole("superadmin"), async (req, res) => {
     try {
         const { limit = 100, page = 1 } = req.query;
         const l = Math.min(parseInt(limit, 10) || 100, 500);
@@ -79,8 +79,8 @@ router.get("/documents", authRequired, requireRole("admin"), async (req, res) =>
     }
 });
 
-// GET /api/admin/documents/count — total documents across all universities
-router.get("/documents/count", authRequired, requireRole("admin"), async (_req, res) => {
+// GET /api/superadmin/documents/count — total documents across all universities
+router.get("/documents/count", authRequired, requireRole("superadmin"), async (_req, res) => {
     try {
         const count = await Document.countDocuments({});
         res.json({ count });
@@ -90,8 +90,8 @@ router.get("/documents/count", authRequired, requireRole("admin"), async (_req, 
     }
 });
 
-// GET /api/admin/documents/stats/monthly — monthly counts for a given year
-router.get("/documents/stats/monthly", authRequired, requireRole("admin"), async (req, res) => {
+// GET /api/superadmin/documents/stats/monthly — monthly counts for a given year
+router.get("/documents/stats/monthly", authRequired, requireRole("superadmin"), async (req, res) => {
     try {
         const now = new Date();
         const year = parseInt(req.query.year, 10) || now.getFullYear();
@@ -115,7 +115,7 @@ router.get("/documents/stats/monthly", authRequired, requireRole("admin"), async
 });
 
 // GET /api/users/me - Fetches the profile of the currently logged-in user
-router.get("/me", authRequired, requireRole("admin"), async (req, res) => {
+router.get("/me", authRequired, requireRole("superadmin"), async (req, res) => {
     try {
         // req.user.id is set by the authRequired middleware after verifying the token
         const user = await User.findById(req.user.id).select("-password");

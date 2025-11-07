@@ -1,14 +1,13 @@
-import React from 'react'
-import Sidebar from './Sidebar/Sidebar'
 import { Outlet } from 'react-router-dom'
-import AdminHeader from './Admin_header.jsx'
+import Sidebar from '../SuperAdmin/Sidebar/Sidebar.jsx'
+import SuperAdminHeader from '../SuperAdmin/SuperAdmin_header.jsx'
 
 export default function AdminLayout() {
     return (
         <div className="app">
             <Sidebar />
             <div style={{ flex: 1, minWidth: 0 }}>
-                <AdminHeader />
+                <SuperAdminHeader />
                 <Outlet />
             </div>
         </div>

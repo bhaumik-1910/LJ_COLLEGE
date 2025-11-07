@@ -1,43 +1,48 @@
 import React, { useCallback, useContext, useMemo, useState } from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import CssBaseline from '@mui/material/CssBaseline'
-import { ThemeProvider } from '@mui/material/styles'
-import getTheme, { ThemeModeContext } from './theme.js'
-import { AuthProvider, AuthContext } from './context/AuthContext.jsx'
 import './index.css'
+import App from './App.jsx'
+import ReactDOM from 'react-dom/client'
+import CssBaseline from '@mui/material/CssBaseline'
+import getTheme, { ThemeModeContext } from './theme.js'
+import { ThemeProvider } from '@mui/material/styles'
+import { AuthProvider, AuthContext } from './context/AuthContext.jsx'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Login from './pages/Login.jsx'
-import Register from './pages/Register.jsx'
-
-import FacultyDashboard from "./pages/Faculty/Dashboard.jsx";
-import AdminDashboard from './pages/Admin/Dashboard.jsx'
-import { SidebarProvider } from './context/Admin/sidebarContext.jsx'
-import AdminLayout from './layout/Admin/AdminLayout.jsx'
-import U_Register from './pages/Admin/U_Register.jsx'
-import AdminUsers from './pages/Admin/Users.jsx'
-import UniversityUsers from './pages/Admin/University_Users.jsx'
-import AdminList from './pages/Admin/Admin_List.jsx'
-import AdminProfile from './pages/Admin/Profile.jsx'
-
-import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import { SidebarProvider } from './context/SuperAdmin/sidebarContext.jsx'
+
+import SuperAdminLayout from './layout/SuperAdmin/SuperAdminLayout.jsx'
+import AdminLayout from './layout/Admin/AdminLayout.jsx'
+import FacultyLayout from './layout/Faculty/FacultyLayout.jsx'
+
 import PrivateRoute from './routes/PrivateRoute.jsx'
 import PublicRoute from './routes/PublicRoute.jsx'
+
+import Login from './pages/Login.jsx'
+import Register from './pages/Register.jsx'
 import Forget from './pages/Forget.jsx'
-import FacultyLayout from './layout/Faculty/FacultyLayout.jsx'
+
+import SuperAdminDashboard from './pages/SuperAdmin/Dashboard.jsx'
+import SuperU_Register from './pages/SuperAdmin/U_Register.jsx'
+import SuperAdminUsers from './pages/SuperAdmin/Users.jsx'
+import SuperUniversityUsers from './pages/SuperAdmin/University_Users.jsx'
+import SuperAdminList from './pages/SuperAdmin/Super_Admin_List.jsx'
+import SuperAdminProfile from './pages/SuperAdmin/Profile.jsx'
+import SuperAll_Document from './pages/SuperAdmin/All_Document.jsx'
+
+import FacultyDashboard from "./pages/Faculty/Dashboard.jsx";
 import Add_Student from './pages/Faculty/Add_Student.jsx'
 import Student_List from './pages/Faculty/Student_List.jsx'
 import FacultyProfile from './pages/Faculty/Profile.jsx'
 import Add_document from './pages/Faculty/Add_document.jsx'
 import Document_list from './pages/Faculty/Document_list.jsx'
-import All_Document from './pages/Admin/All_Document.jsx'
-import SubadminLayout from './layout/SubAdmin/SubadminLayout.jsx'
-import SubAdminDashboard from './pages/SubAdmin/Dashboard.jsx'
-import SubAdminStudentList from './pages/SubAdmin/Student_List.jsx'
-import SubAdminDocumentList from './pages/SubAdmin/Document_List.jsx'
-import SubAdminProfile from './pages/SubAdmin/Profile.jsx'
-import FacultyList from './pages/SubAdmin/Faculty_List.jsx'
+
+import AdminDashboard from './pages/Admin/Dashboard.jsx'
+import AdminStudentList from './pages/Admin/Student_List.jsx'
+import AdminDocumentList from './pages/Admin/Document_List.jsx'
+import AdminProfile from './pages/Admin/Profile.jsx'
+import AdminFacultyList from './pages/Admin/Faculty_List.jsx'
 
 function Root() {
   const [mode, setMode] = useState('light')
@@ -61,7 +66,28 @@ function Root() {
                 {/* <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} /> */}
                 <Route path="/forgot" element={<PublicRoute><Forget /></PublicRoute>} />
 
-                {/* Admin area: nested under /admin-dashboard/* with Outlet in AdminLayout */}
+                {/* Super Admin area: nested under /superadmin-dashboard/* with Outlet in Super AdminLayout */}
+                <Route
+                  path="/superadmin-dashboard"
+                  element={
+                    <PrivateRoute role="superadmin" isLoggedIn={isLoggedIn}>
+                      <SidebarProvider>
+                        <SuperAdminLayout />
+                      </SidebarProvider>
+                    </PrivateRoute>
+                  }
+                >
+                  <Route index element={<SuperAdminDashboard />} />
+                  <Route path="register" element={<Register />} />
+                  <Route path="university-register" element={<SuperU_Register />} />
+                  <Route path="faculty" element={<SuperAdminUsers />} />
+                  <Route path="university-users" element={<SuperUniversityUsers />} />
+                  <Route path="document" element={<SuperAll_Document />} />
+                  <Route path="admins" element={<SuperAdminList />} />
+                  <Route path="profile" element={<SuperAdminProfile />} />
+                </Route>
+
+                {/* Admin area: nested under /admin-dashboard/* with Outlet in adminLayout */}
                 <Route
                   path="/admin-dashboard"
                   element={
@@ -73,32 +99,11 @@ function Root() {
                   }
                 >
                   <Route index element={<AdminDashboard />} />
-                  <Route path="register" element={<Register />} />
-                  <Route path="university-register" element={<U_Register />} />
-                  <Route path="faculty" element={<AdminUsers />} />
-                  <Route path="university-users" element={<UniversityUsers />} />
-                  <Route path="document" element={<All_Document />} />
-                  <Route path="admins" element={<AdminList />} />
-                  <Route path="profile" element={<AdminProfile />} />
-                </Route>
-
-                {/* SubAdmin area: nested under /subadmin-dashboard/* with Outlet in SubadminLayout */}
-                <Route
-                  path="/subadmin-dashboard"
-                  element={
-                    <PrivateRoute role="subadmin" isLoggedIn={isLoggedIn}>
-                      <SidebarProvider>
-                        <SubadminLayout />
-                      </SidebarProvider>
-                    </PrivateRoute>
-                  }
-                >
-                  <Route index element={<SubAdminDashboard />} />
                   <Route path="add-faculty" element={<Register />} />
-                  <Route path="student-list" element={<SubAdminStudentList />} />
-                  <Route path="document-list" element={<SubAdminDocumentList />} />
-                  <Route path="faculty-list" element={<FacultyList />} />
-                  <Route path="profile" element={<SubAdminProfile />} />
+                  <Route path="student-list" element={<AdminStudentList />} />
+                  <Route path="document-list" element={<AdminDocumentList />} />
+                  <Route path="faculty-list" element={<AdminFacultyList />} />
+                  <Route path="profile" element={<AdminProfile />} />
                 </Route>
 
                 {/* Faculty dashboards */}

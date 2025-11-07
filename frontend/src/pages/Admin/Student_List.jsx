@@ -16,7 +16,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 const API_BASE = "http://localhost:5000/api";
 
-export default function SubAdminStudentList() {
+export default function AdminStudentList() {
     const { token } = useContext(AuthContext);
     const [rows, setRows] = useState([]);
     const [loading, setLoading] = useState(true);

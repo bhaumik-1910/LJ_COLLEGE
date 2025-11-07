@@ -63,7 +63,7 @@ router.post("/students", authRequired, requireRole("faculty"), async (req, res) 
 });
 
 //STUDENT LIST
-router.get("/students", authRequired, requireAnyRole(["faculty", "subadmin"]), async (req, res) => {
+router.get("/students", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
     try {
         const uni = await resolveUniversity(req);
         if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
@@ -125,7 +125,7 @@ router.delete("/students/:id", authRequired, requireRole("faculty"), async (req,
 });
 
 // COUNT
-router.get("/students/count", authRequired, requireAnyRole(["faculty", "subadmin"]), async (req, res) => {
+router.get("/students/count", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
     try {
         const uni = await resolveUniversity(req);
         if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
@@ -136,8 +136,8 @@ router.get("/students/count", authRequired, requireAnyRole(["faculty", "subadmin
     }
 });
 
-// LIST faculties in same university (subadmin)
-router.get("/", authRequired, requireAnyRole(["subadmin"]), async (req, res) => {
+// LIST faculties in same university (admin)
+router.get("/", authRequired, requireAnyRole(["admin"]), async (req, res) => {
     try {
         const uni = await resolveUniversity(req);
         if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
@@ -149,8 +149,8 @@ router.get("/", authRequired, requireAnyRole(["subadmin"]), async (req, res) => 
     }
 });
 
-// COUNT faculties in same university (subadmin)
-router.get("/count", authRequired, requireAnyRole(["subadmin"]), async (req, res) => {
+// COUNT faculties in same university (admin)
+router.get("/count", authRequired, requireAnyRole(["admin"]), async (req, res) => {
     try {
         const uni = await resolveUniversity(req);
         if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
@@ -163,7 +163,7 @@ router.get("/count", authRequired, requireAnyRole(["subadmin"]), async (req, res
 });
 
 // PATCH /api/users/me - Update the profile of the currently logged-in user
-router.patch("/me", authRequired, requireAnyRole(["faculty", "subadmin"]), async (req, res) => {
+router.patch("/me", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
     try {
         const userId = req.user.id;
         const updates = req.body;
@@ -196,7 +196,7 @@ router.patch("/me", authRequired, requireAnyRole(["faculty", "subadmin"]), async
 
 
 // GET /api/users/me - Fetch the profile of the currently logged-in user
-router.get("/me", authRequired, requireAnyRole(["faculty", "subadmin"]), async (req, res) => {
+router.get("/me", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
     try {
         // req.user.id is set by your authentication middleware
         const user = await User.findById(req.user.id).select('-password');
