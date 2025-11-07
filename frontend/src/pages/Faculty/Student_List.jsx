@@ -191,7 +191,6 @@ const API_BASE = "http://localhost:5000/api";
 export default function Student_List() {
     const { token } = useContext(AuthContext);
     const navigate = useNavigate();
-    const [rows, setRows] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
@@ -204,6 +203,7 @@ export default function Student_List() {
     const authHeader = useMemo(() => (token ? { Authorization: `Bearer ${token}` } : {}), [token]);
 
     // Search and pagination state
+    const [rows, setRows] = useState([]);
     const [search, setSearch] = useState("");
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -409,6 +409,7 @@ export default function Student_List() {
                                 </TableBody>
                             </Table>
                         </TableContainer>
+
                         <TablePagination
                             component="div"
                             count={filteredRows.length}

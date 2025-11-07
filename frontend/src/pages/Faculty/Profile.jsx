@@ -88,25 +88,30 @@ export default function FacultyProfile() {
 
     return (
         <Box sx={{ p: 3 }}>
+
             <Typography variant="h5" fontWeight={700} mb={2}>Faculty Profile</Typography>
+
             <Grid sx={{ p: 3 }}>
+
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} alignItems={{ xs: 'flex-start', sm: 'center' }}>
+
                     <Avatar src={form.avatarUrl || undefined} sx={{ width: 96, height: 96 }}>
                         {form.name?.charAt(0)?.toUpperCase() || 'F'}
                     </Avatar>
+
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} alignItems={{ xs: 'stretch', sm: 'center' }}>
-                        <TextField
+                        {/* <TextField
                             label="Avatar URL"
                             value={form.avatarUrl}
-                            variant="standard"
+                            // variant="standard"
                             onChange={(e) => setForm((f) => ({ ...f, avatarUrl: e.target.value }))}
                             size="small"
                             sx={{ minWidth: 260 }}
                             disabled={!editing}
-                        />
+                        /> */}
                         {/* <Input ref={fileInputRef} type="file" accept="image/*" hidden onChange={handleFileChange} /> */}
                         <div className="d-flex align-items-center">
-                            <label htmlFor="avatar-upload" className="btn btn-outline-primary">Upload Image</label>
+                            <label htmlFor="avatar-upload" className="btn btn-outline-primary">Upload</label>
                             <input
                                 ref={fileInputRef}
                                 id="avatar-upload"
@@ -130,12 +135,51 @@ export default function FacultyProfile() {
 
                 <Divider sx={{ my: 2 }} />
 
-                <Stack spacing={2}>
-                    <TextField label="Name" variant="standard" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} disabled={!editing} />
-                    <TextField label="Email" variant="standard" value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} disabled={!editing} />
-                    <TextField label="Role" variant="standard" value={form.role} onChange={(e) => setForm((f) => ({ ...f, role: e.target.value }))} disabled />
-                    <TextField label="University" variant="standard" value={form.university} onChange={(e) => setForm((f) => ({ ...f, university: e.target.value }))} disabled={!editing} />
+                <Stack
+                    spacing={2}
+                    sx={{
+                        width: {
+                            xs: '100%',
+                            sm: '90%',
+                            md: 670,
+                            lg: 670
+                        },
+                    }}
+                >
+                    <TextField
+                        label="Name"
+                        size="small"
+                        value={form.name}
+                        onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                        disabled={!editing}
+                        fullWidth
+                    />
+                    <TextField
+                        label="Email"
+                        size="small"
+                        value={form.email}
+                        onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                        disabled={!editing}
+                        fullWidth
+                    />
+                    <TextField
+                        label="Role"
+                        size="small"
+                        value={form.role}
+                        onChange={(e) => setForm((f) => ({ ...f, role: e.target.value }))}
+                        disabled
+                        fullWidth
+                    />
+                    <TextField
+                        label="University"
+                        size="small"
+                        value={form.university}
+                        onChange={(e) => setForm((f) => ({ ...f, university: e.target.value }))}
+                        disabled={!editing}
+                        fullWidth
+                    />
                 </Stack>
+
             </Grid>
         </Box>
     );
