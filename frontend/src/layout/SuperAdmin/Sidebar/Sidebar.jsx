@@ -71,7 +71,7 @@ const Sidebar = () => {
     links.forEach(link => {
       map[link.title] = link.path;
     });
-    return map;
+    return map; 
   }, [links]);
 
   const currentActiveTitle = useMemo(() => {
