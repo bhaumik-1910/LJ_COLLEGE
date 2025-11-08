@@ -20,6 +20,8 @@ import {
     MenuItem,
     InputAdornment,
     Paper,
+    useMediaQuery,
+    useTheme,
 } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -45,6 +47,10 @@ export default function Student_List() {
 
     const [delOpen, setDelOpen] = useState(false);
     const [delRow, setDelRow] = useState(null);
+
+    // Responsive Add Student
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
     const authHeader = useMemo(() => (token ? { Authorization: `Bearer ${token}` } : {}), [token]);
 
@@ -190,7 +196,8 @@ export default function Student_List() {
 
     return (
         <Box sx={{ p: 3 }}>
-            <Box mb={2}>
+
+            <Box display="flex" alignItems="center" justifyContent="space-between" >
                 <Typography
                     variant="h5"
                     fontWeight={700}
@@ -202,28 +209,41 @@ export default function Student_List() {
                     Students List
                     <PeopleIcon fontSize="large" />
                 </Typography>
-            </Box>
 
-            <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
-                <TextField
-                    size="small"
-                    placeholder="Search students..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    sx={{ maxWidth: 360 }}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <SearchIcon color="action" />
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-                <Button variant="contained" onClick={() => navigate("/faculty-dashboard/add-student")} sx={{ gap: 1 }}>
+                {/* <Button variant="contained" onClick={() => navigate("/faculty-dashboard/add-student")} sx={{ gap: 1 }}>
                     <PersonAddIcon fontSize="small" />
                     Add Student
+                </Button> */}
+
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate("/faculty-dashboard/add-student")}
+                    sx={{
+                        gap: 1,
+                        minWidth: isSmallScreen ? 40 : "auto",
+                        p: isSmallScreen ? 1 : "6px 16px",
+                    }}
+                >
+                    <PersonAddIcon fontSize={isSmallScreen ? "small" : "medium"} />
+                    {!isSmallScreen && "Add Student"}
                 </Button>
             </Box>
+
+            <TextField
+                size="small"
+                placeholder="Search students..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                sx={{ maxWidth: 360, mb: 2, mt: 2 }}
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <SearchIcon color="action" />
+                        </InputAdornment>
+                    ),
+                }}
+            />
 
             <Paper sx={{ p: 1 }}>
                 {loading && (
@@ -238,7 +258,7 @@ export default function Student_List() {
 
                 {!loading && !error && (
                     filteredRows.length === 0 ? (
-                        <Typography color="text.secondary" sx={{textAlign:'center'}}>No students found.</Typography>
+                        <Typography color="text.secondary" sx={{ textAlign: 'center' }}>No students found.</Typography>
                     ) : (
                         <>
                             <TableContainer component={Box}>
