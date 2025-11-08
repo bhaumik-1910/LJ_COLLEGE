@@ -89,7 +89,7 @@ export default function FacultyProfile() {
     return (
         <Box sx={{ p: 3 }}>
 
-            <Typography variant="h5" fontWeight={700} mb={2}>Faculty Profile</Typography>
+            <Typography variant="h5" fontWeight={700} color="primary.main" mb={2}>Faculty Profile</Typography>
 
             <Grid sx={{ p: 3 }}>
 

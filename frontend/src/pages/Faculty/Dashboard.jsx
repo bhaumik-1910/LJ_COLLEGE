@@ -119,7 +119,7 @@ export default function FacultyDashboard() {
 
     return (
         <Box sx={{ p: 4 }}>
-            <Typography variant="h5" fontWeight={700} sx={{ mb: 2 }}>Faculty Dashboard</Typography>
+            <Typography variant="h5" fontWeight={700} color="primary.main" sx={{ mb: 2 }}>Faculty Dashboard</Typography>
 
             {loading ? (
                 <Box display="flex" alignItems="center" gap={2}><CircularProgress size={20} /> Loading...</Box>

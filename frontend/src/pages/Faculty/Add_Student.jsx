@@ -11,10 +11,12 @@ import {
     Paper,
     IconButton,
 } from "@mui/material";
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 // *** Image import - Make sure this path is correct ***
 import studentImage from './../../assets/images/student-add.png';
@@ -456,6 +458,7 @@ export default function Add_Student() {
                                     type="submit"
                                     variant="contained"
                                     disabled={loading}
+                                    startIcon={<SaveIcon />}
                                 >
                                     {loading ? "Saving..." : "Save Student"}
                                 </Button>
@@ -463,6 +466,7 @@ export default function Add_Student() {
                                     variant="outlined"
                                     color="secondary"
                                     onClick={() => navigate(-1)}
+                                    startIcon={<CancelIcon />}
                                 >
                                     Cancel
                                 </Button>

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 import DescriptionIcon from '@mui/icons-material/Description';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 // *** Image import - Make sure this path is correct ***
 import studentImage from './../../assets/images/student-add.png';
@@ -417,10 +419,10 @@ export default function Add_document() {
 
                             {/* Buttons */}
                             <Box mt={3} display="flex" gap={2}>
-                                <Button type="submit" variant="contained" disabled={loading}>
+                                <Button type="submit" variant="contained" disabled={loading} startIcon={<SaveIcon />}>
                                     {loading ? "Saving..." : "Save"}
                                 </Button>
-                                <Button variant="outlined" color="secondary" onClick={() => navigate(-1)}>
+                                <Button variant="outlined" color="secondary" onClick={() => navigate(-1)} startIcon={<CancelIcon />}>
                                     Cancel
                                 </Button>
                             </Box>

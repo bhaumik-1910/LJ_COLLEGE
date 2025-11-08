@@ -118,7 +118,7 @@ export default function Document_list() {
     return (
         <Box sx={{ p: 3 }}>
             <Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={2} mb={3}>
-                <Typography variant="h5" fontWeight={700}>Documents</Typography>
+                <Typography variant="h5" fontWeight={700} color="primary.main">Documents List</Typography>
                 <Box display="flex" alignItems="center" gap={2}>
                     <TextField
                         select
