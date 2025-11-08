@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { Box, Button, Chip, Grid, IconButton, Link, MenuItem, Paper, TextField, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, CircularProgress } from "@mui/material";
+import { Box, Button, Chip, Grid, IconButton, Link, MenuItem, Paper, TextField, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, CircularProgress, TablePagination } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { toast } from "react-toastify";
@@ -24,7 +24,10 @@ export default function Document_list() {
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [targetId, setTargetId] = useState("");
 
-    const headers = useMemo(() => ({ ...(token ? { Authorization: `Bearer ${token}` } : {}) }), [token]);
+    // Pagination State
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+
 
     const fetchCategories = async () => {
         setLoadingCats(true);
@@ -38,6 +41,19 @@ export default function Document_list() {
         } finally {
             setLoadingCats(false);
         }
+    };
+
+    const headers = useMemo(() => ({ ...(token ? { Authorization: `Bearer ${token}` } : {}) }), [token]);
+
+    const paginatedDocs = useMemo(() => {
+        const start = page * rowsPerPage;
+        return docs.slice(start, start + rowsPerPage);
+    }, [docs, page, rowsPerPage]);
+
+    const handleChangePage = (event, newPage) => setPage(newPage);
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
     };
 
     const fetchDocs = async (categoryIdOrName = "") => {
@@ -110,6 +126,7 @@ export default function Document_list() {
                         value={selectedCat}
                         onChange={handleCategoryChange}
                         sx={{ minWidth: 240 }}
+                        size="small"
                         disabled={loadingCats}
                     >
                         <MenuItem value="">All</MenuItem>
@@ -130,55 +147,70 @@ export default function Document_list() {
                     // Display "No documents found" message
                     <Typography>No documents found</Typography>
                 ) : (
-                    // Display the table with documents
-                    <TableContainer component={Box} >
-                        <Table size="small">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Student Name</TableCell>
-                                    <TableCell>Enrolment No</TableCell>
-                                    <TableCell>Type</TableCell>
-                                    <TableCell>Category</TableCell>
-                                    <TableCell>Date</TableCell>
-                                    <TableCell>File</TableCell>
-                                    <TableCell>Images</TableCell>
-                                    <TableCell align="right">Action</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {docs.map((d) => (
-                                    <TableRow key={d._id} hover>
-                                        <TableCell>{d.student?.fullName || d.studentName}</TableCell>
-                                        <TableCell>{d.student?.enrolno || d.studentEnrolno}</TableCell>
-                                        <TableCell>{d.type}</TableCell>
-                                        <TableCell>{d.category?.name || d.categoryName}</TableCell>
-                                        <TableCell>{new Date(d.date).toLocaleDateString()}</TableCell>
-                                        <TableCell>
-                                            <Link href={toBackendUrl(d.fileUrl)} target="_blank" rel="noopener" underline="hover">
-                                                {getFileName(d)}
-                                            </Link>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Box display="flex" gap={0.5} flexWrap="wrap">
-                                                {(d.images || []).slice(0, 4).map((img, idx) => (
-                                                    <img key={idx} src={toBackendUrl(img)} alt={`img-${idx}`} style={{ width: 36, height: 36, objectFit: "cover", borderRadius: 4, border: "1px solid #ddd" }} />
-                                                ))}
-                                            </Box>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Tooltip title="Delete">
-                                                <span>
-                                                    <IconButton color="error" size="small" onClick={() => openDeleteDialog(d._id)} disabled={deletingId === d._id}>
-                                                        <DeleteIcon fontSize="small" />
-                                                    </IconButton>
-                                                </span>
-                                            </Tooltip>
-                                        </TableCell>
+                    <>
+                        {/* Display the table with documents */}
+                        <TableContainer component={Box} >
+                            <Table size="small">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Student Name</TableCell>
+                                        <TableCell>Enrolment No</TableCell>
+                                        <TableCell>Type</TableCell>
+                                        <TableCell>Category</TableCell>
+                                        <TableCell>Date</TableCell>
+                                        <TableCell>File</TableCell>
+                                        <TableCell>Images</TableCell>
+                                        <TableCell align="right">Action</TableCell>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                                </TableHead>
+                                <TableBody>
+                                    {paginatedDocs.map((d) => (
+                                        <TableRow key={d._id} hover>
+                                            <TableCell>{d.student?.fullName || d.studentName}</TableCell>
+                                            <TableCell>{d.student?.enrolno || d.studentEnrolno}</TableCell>
+                                            <TableCell>{d.type}</TableCell>
+                                            <TableCell>{d.category?.name || d.categoryName}</TableCell>
+                                            <TableCell>{new Date(d.date).toLocaleDateString()}</TableCell>
+                                            <TableCell>
+                                                <Link href={toBackendUrl(d.fileUrl)} target="_blank" rel="noopener" underline="hover">
+                                                    {getFileName(d)}
+                                                </Link>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Box display="flex" gap={0.5} flexWrap="wrap">
+                                                    {(d.images || []).slice(0, 4).map((img, idx) => (
+                                                        <img key={idx} src={toBackendUrl(img)} alt={`img-${idx}`} style={{ width: 36, height: 36, objectFit: "cover", borderRadius: 4, border: "1px solid #ddd" }} />
+                                                    ))}
+                                                </Box>
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <Tooltip title="Delete">
+                                                    <span>
+                                                        <IconButton color="error" size="small" onClick={() => openDeleteDialog(d._id)} disabled={deletingId === d._id}>
+                                                            <DeleteIcon fontSize="small" />
+                                                        </IconButton>
+                                                    </span>
+                                                </Tooltip>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+
+                        {/* 📄 Pagination */}
+                        <TablePagination
+                            component="div"
+                            count={docs.length}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            rowsPerPage={rowsPerPage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                            rowsPerPageOptions={[5, 10, 25, 50]}
+                            showFirstButton
+                            showLastButton
+                        />
+                    </>
                 )}
             </Box>
 

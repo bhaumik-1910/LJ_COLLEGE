@@ -3,6 +3,7 @@ import { Box, Button, Grid, MenuItem, Paper, TextField, Typography, useTheme } f
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
+import DescriptionIcon from '@mui/icons-material/Description';
 
 // *** Image import - Make sure this path is correct ***
 import studentImage from './../../assets/images/student-add.png';
@@ -254,8 +255,17 @@ export default function Add_document() {
                     {/* Left side — Form */}
                     <Grid item xs={12} md={6}>
 
-                        <Typography variant="h5" fontWeight={700} mb={2} color="primary.main">
+                        <Typography
+                            variant="h5"
+                            fontWeight={700}
+                            mb={{ xs: 3, md: 2 }}
+                            color="primary.main"
+                            display="flex"
+                            alignItems="center"
+                            gap={2}
+                        >
                             Add Document
+                            <DescriptionIcon fontSize="large" />
                         </Typography>
 
                         {/* Form Fields */}

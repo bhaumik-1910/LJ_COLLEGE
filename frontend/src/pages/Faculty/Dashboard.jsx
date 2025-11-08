@@ -59,6 +59,8 @@ export default function FacultyDashboard() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const currentYear = new Date().getFullYear();
+
     const cardStyles = {
         p: 3,
         color: 'white',
@@ -142,13 +144,43 @@ export default function FacultyDashboard() {
                         </Grid>
                     </Grid>
 
-                    <Grid container spacing={3}>
+                    {/* <Grid container spacing={3}>
                         <Grid item xs={12} md={8} lg={7}>
                             <Paper sx={{ p: 2 }}>
                                 <Typography variant="h6" mb={2}>Monthly Documents (Year {new Date().getFullYear()})</Typography>
                                 <Chart />
                             </Paper>
                         </Grid>
+                    </Grid> */}
+
+                    <Grid container spacing={3}>
+                        {/* Chart 1 */}
+                        <Grid item xs={12} md={6}>
+                            <Paper sx={{ p: 2 }}>
+                                <Typography
+                                    variant="h6"
+                                    mb={2}
+                                    sx={{ textAlign: { xs: "center", md: "left" } }}
+                                >
+                                    Monthly Documents (Year {currentYear})
+                                </Typography>
+                                <Chart />
+                            </Paper>
+                        </Grid>
+
+                        {/* Chart 2 */}
+                        {/* <Grid item xs={12} md={6}>
+                            <Paper sx={{ p: 2 }}>
+                                <Typography
+                                    variant="h6"
+                                    mb={2}
+                                    sx={{ textAlign: { xs: "center", md: "left" } }}
+                                >
+                                    Documents by Department (Year {currentYear})
+                                </Typography>
+                                <Chart />
+                            </Paper>
+                        </Grid> */}
                     </Grid>
                 </>
             )}
