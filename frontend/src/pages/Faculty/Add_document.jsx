@@ -253,167 +253,168 @@ export default function Add_document() {
 
                     {/* Left side — Form */}
                     <Grid item xs={12} md={6}>
-                        <Box>
-                            <Typography variant="h5" fontWeight={700} mb={2}>
-                                Add Document
-                            </Typography>
 
-                            <Grid container spacing={2} direction="column">
-                                {/* All your form fields stay here */}
-                                <Grid item xs={12}>
-                                    <TextField
-                                        select
-                                        label="Student Enrolment No"
-                                        name="enrolno"
-                                        value={form.enrolno}
-                                        onChange={handleChange}
-                                        fullWidth
-                                        size="small"
-                                    >
-                                        {students.map((s) => (
-                                            <MenuItem key={s._id} value={s.enrolno}>
-                                                {s.enrolno}
-                                            </MenuItem>
-                                        ))}
-                                    </TextField>
-                                </Grid>
+                        <Typography variant="h5" fontWeight={700} mb={2} color="primary.main">
+                            Add Document
+                        </Typography>
 
-                                <Grid item xs={12}>
-                                    <TextField
-                                        select
-                                        label="Student Name"
-                                        name="fullName"
-                                        size="small"
-                                        value={form.fullName}
-                                        onChange={(e) => {
-                                            const value = e.target.value;
-                                            const match = students.find((s) => s.fullName === value);
-                                            setForm((prev) => ({
-                                                ...prev,
-                                                fullName: value,
-                                                enrolno: match ? match.enrolno : prev.enrolno,
-                                            }));
-                                        }}
-                                        fullWidth
-                                    >
-                                        {students.map((s) => (
-                                            <MenuItem key={s._id} value={s.fullName}>
-                                                {s.fullName}
-                                            </MenuItem>
-                                        ))}
-                                    </TextField>
-                                </Grid>
-
-                                <Grid item xs={12}>
-                                    <TextField
-                                        label="Type"
-                                        name="type"
-                                        value={form.type}
-                                        size="small"
-                                        onChange={handleChange}
-                                        fullWidth
-                                        placeholder="e.g., Assignment, Report"
-                                    />
-                                </Grid>
-
-                                <Grid item xs={12}>
-                                    <TextField
-                                        select
-                                        label="Category (existing)"
-                                        name="categoryId"
-                                        size="small"
-                                        value={form.categoryId}
-                                        onChange={(e) =>
-                                            setForm((p) => ({
-                                                ...p,
-                                                categoryId: e.target.value,
-                                                categoryName: "",
-                                            }))
-                                        }
-                                        fullWidth
-                                    >
-                                        <MenuItem value="">None</MenuItem>
-                                        {categories.map((c) => (
-                                            <MenuItem key={c._id} value={c._id}>
-                                                {c.name}
-                                            </MenuItem>
-                                        ))}
-                                    </TextField>
-                                </Grid>
-
-                                <Grid item xs={12}>
-                                    <TextField
-                                        label="Or New Category"
-                                        name="categoryName"
-                                        size="small"
-                                        value={form.categoryName}
-                                        onChange={(e) =>
-                                            setForm((p) => ({
-                                                ...p,
-                                                categoryName: e.target.value,
-                                                categoryId: "",
-                                            }))
-                                        }
-                                        fullWidth
-                                    />
-                                </Grid>
-
-                                <Grid item xs={12}>
-                                    <TextField
-                                        type="date"
-                                        label="Date"
-                                        name="date"
-                                        value={form.date}
-                                        size="small"
-                                        onChange={handleChange}
-                                        fullWidth
-                                        InputLabelProps={{ shrink: true }}
-                                    />
-                                </Grid>
-
-                                <Grid item xs={12}>
-                                    <Button variant="outlined" component="label">
-                                        Upload Document (pdf/doc/ppt/xls)
-                                        <input
-                                            type="file"
-                                            hidden
-                                            accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx"
-                                            onChange={handleFile}
-                                        />
-                                    </Button>
-                                    <Typography variant="body2" sx={{ ml: 2, display: "inline-block" }}>
-                                        {form.file ? form.file.name : "No file selected"}
-                                    </Typography>
-                                </Grid>
-
-                                <Grid item xs={12}>
-                                    <Button variant="outlined" component="label">
-                                        Upload Images (max 4)
-                                        <input
-                                            type="file"
-                                            hidden
-                                            multiple
-                                            accept="image/png,image/jpeg,image/webp"
-                                            onChange={handleImages}
-                                        />
-                                    </Button>
-                                    <Typography variant="body2" sx={{ ml: 2, display: "inline-block" }}>
-                                        {form.images.length > 0
-                                            ? `${form.images.length} selected`
-                                            : "None"}
-                                    </Typography>
-                                </Grid>
-
-                                <Box mt={3} display="flex" gap={2}>
-                                    <Button type="submit" variant="contained" disabled={loading}>
-                                        {loading ? "Saving..." : "Save"}
-                                    </Button>
-                                    <Button variant="outlined" color="secondary" onClick={() => navigate(-1)}>
-                                        Cancel
-                                    </Button>
-                                </Box>
+                        {/* Form Fields */}
+                        <Grid container spacing={2} direction="column">
+                            {/* All your form fields stay here */}
+                            <Grid item xs={12}>
+                                <TextField
+                                    select
+                                    label="Student Enrolment No"
+                                    name="enrolno"
+                                    value={form.enrolno}
+                                    onChange={handleChange}
+                                    fullWidth
+                                    size="small"
+                                >
+                                    {students.map((s) => (
+                                        <MenuItem key={s._id} value={s.enrolno}>
+                                            {s.enrolno}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
                             </Grid>
-                        </Box>
+
+                            <Grid item xs={12}>
+                                <TextField
+                                    select
+                                    label="Student Name"
+                                    name="fullName"
+                                    size="small"
+                                    value={form.fullName}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        const match = students.find((s) => s.fullName === value);
+                                        setForm((prev) => ({
+                                            ...prev,
+                                            fullName: value,
+                                            enrolno: match ? match.enrolno : prev.enrolno,
+                                        }));
+                                    }}
+                                    fullWidth
+                                >
+                                    {students.map((s) => (
+                                        <MenuItem key={s._id} value={s.fullName}>
+                                            {s.fullName}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Type"
+                                    name="type"
+                                    value={form.type}
+                                    size="small"
+                                    onChange={handleChange}
+                                    fullWidth
+                                    placeholder="e.g., Assignment, Report"
+                                />
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <TextField
+                                    select
+                                    label="Category (existing)"
+                                    name="categoryId"
+                                    size="small"
+                                    value={form.categoryId}
+                                    onChange={(e) =>
+                                        setForm((p) => ({
+                                            ...p,
+                                            categoryId: e.target.value,
+                                            categoryName: "",
+                                        }))
+                                    }
+                                    fullWidth
+                                >
+                                    <MenuItem value="">None</MenuItem>
+                                    {categories.map((c) => (
+                                        <MenuItem key={c._id} value={c._id}>
+                                            {c.name}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Or New Category"
+                                    name="categoryName"
+                                    size="small"
+                                    value={form.categoryName}
+                                    onChange={(e) =>
+                                        setForm((p) => ({
+                                            ...p,
+                                            categoryName: e.target.value,
+                                            categoryId: "",
+                                        }))
+                                    }
+                                    fullWidth
+                                />
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <TextField
+                                    type="date"
+                                    label="Date"
+                                    name="date"
+                                    value={form.date}
+                                    size="small"
+                                    onChange={handleChange}
+                                    fullWidth
+                                    InputLabelProps={{ shrink: true }}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <Button variant="outlined" component="label">
+                                    Upload Document (pdf/doc/ppt/xls)
+                                    <input
+                                        type="file"
+                                        hidden
+                                        accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx"
+                                        onChange={handleFile}
+                                    />
+                                </Button>
+                                <Typography variant="body2" sx={{ ml: 2, display: "inline-block" }}>
+                                    {form.file ? form.file.name : "No file selected"}
+                                </Typography>
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <Button variant="outlined" component="label">
+                                    Upload Images (max 4)
+                                    <input
+                                        type="file"
+                                        hidden
+                                        multiple
+                                        accept="image/png,image/jpeg,image/webp"
+                                        onChange={handleImages}
+                                    />
+                                </Button>
+                                <Typography variant="body2" sx={{ ml: 2, display: "inline-block" }}>
+                                    {form.images.length > 0
+                                        ? `${form.images.length} selected`
+                                        : "None"}
+                                </Typography>
+                            </Grid>
+
+                            {/* Buttons */}
+                            <Box mt={3} display="flex" gap={2}>
+                                <Button type="submit" variant="contained" disabled={loading}>
+                                    {loading ? "Saving..." : "Save"}
+                                </Button>
+                                <Button variant="outlined" color="secondary" onClick={() => navigate(-1)}>
+                                    Cancel
+                                </Button>
+                            </Box>
+                        </Grid>
                     </Grid>
 
                     {/* Right side — Image */}
