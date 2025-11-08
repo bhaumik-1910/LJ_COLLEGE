@@ -19,6 +19,7 @@ import {
     DialogActions,
     MenuItem,
     InputAdornment,
+    Paper,
 } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +29,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PeopleIcon from '@mui/icons-material/People';
 import SearchIcon from "@mui/icons-material/Search";
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 const API_BASE = "http://localhost:5000/api";
 
@@ -222,90 +225,104 @@ export default function Student_List() {
                 </Button>
             </Box>
 
-            {loading && (
-                <Box display="flex" alignItems="center" justifyContent="center" py={6}>
-                    <CircularProgress />
-                </Box>
-            )}
+            <Paper sx={{ p: 1 }}>
+                {loading && (
+                    <Box display="flex" alignItems="center" justifyContent="center" py={6}>
+                        <CircularProgress />
+                    </Box>
+                )}
 
-            {!loading && error && (
-                <Typography color="error" mb={2}>{error}</Typography>
-            )}
+                {!loading && error && (
+                    <Typography color="error" mb={2}>{error}</Typography>
+                )}
 
-            {!loading && !error && (
-                filteredRows.length === 0 ? (
-                    <Typography color="text.secondary">No students found.</Typography>
-                ) : (
-                    <>
-                        <TableContainer component={Box}>
-                            <Table size="small">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Enrollment No</TableCell>
-                                        <TableCell>Full Name</TableCell>
-                                        <TableCell>Email</TableCell>
-                                        <TableCell>Course</TableCell>
-                                        <TableCell>Contact</TableCell>
-                                        <TableCell>Gender</TableCell>
-                                        <TableCell>University</TableCell>
-                                        <TableCell>Address</TableCell>
-                                        <TableCell align="right">Actions</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {pagedRows.map((r) => (
-                                        <TableRow key={r._id} hover>
-                                            <TableCell>{r.enrolno}</TableCell>
-                                            <TableCell>{r.fullName}</TableCell>
-                                            <TableCell>{r.email}</TableCell>
-                                            <TableCell>{r.course}</TableCell>
-                                            <TableCell>{r.contact}</TableCell>
-                                            <TableCell>{r.gender}</TableCell>
-                                            <TableCell>{r.university}</TableCell>
-                                            <TableCell>{r.address}</TableCell>
-                                            <TableCell align="right">
-                                                <IconButton size="small" onClick={() => onEdit(r)}><EditIcon /></IconButton>
-                                                <IconButton size="small" color="error" onClick={() => onDelete(r)}><DeleteIcon /></IconButton>
-                                            </TableCell>
+                {!loading && !error && (
+                    filteredRows.length === 0 ? (
+                        <Typography color="text.secondary" sx={{textAlign:'center'}}>No students found.</Typography>
+                    ) : (
+                        <>
+                            <TableContainer component={Box}>
+                                <Table size="small">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Enrollment No</TableCell>
+                                            <TableCell>Full Name</TableCell>
+                                            <TableCell>Email</TableCell>
+                                            <TableCell>Course</TableCell>
+                                            <TableCell>Contact</TableCell>
+                                            <TableCell>Gender</TableCell>
+                                            <TableCell>University</TableCell>
+                                            <TableCell>Address</TableCell>
+                                            <TableCell align="right">Actions</TableCell>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                                    </TableHead>
+                                    <TableBody>
+                                        {pagedRows.map((r) => (
+                                            <TableRow key={r._id} hover>
+                                                <TableCell>{r.enrolno}</TableCell>
+                                                <TableCell>{r.fullName}</TableCell>
+                                                <TableCell>{r.email}</TableCell>
+                                                <TableCell>{r.course}</TableCell>
+                                                <TableCell>{r.contact}</TableCell>
+                                                <TableCell>{r.gender}</TableCell>
+                                                <TableCell>{r.university}</TableCell>
+                                                <TableCell>{r.address}</TableCell>
+                                                <TableCell align="right">
+                                                    <IconButton size="small" onClick={() => onEdit(r)}><EditIcon /></IconButton>
+                                                    <IconButton size="small" color="error" onClick={() => onDelete(r)}><DeleteIcon /></IconButton>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
 
-                        <TablePagination
-                            component="div"
-                            count={filteredRows.length}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            rowsPerPage={rowsPerPage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            rowsPerPageOptions={[5, 10, 25, 50]}
-                            showFirstButton
-                            showLastButton
-                        />
-                    </>
-                )
-            )}
+                            <TablePagination
+                                component="div"
+                                count={filteredRows.length}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                rowsPerPage={rowsPerPage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                rowsPerPageOptions={[5, 10, 25, 50]}
+                                showFirstButton
+                                showLastButton
+                            />
+                        </>
+                    )
+                )}
+            </Paper>
 
             {/* Edit dialog */}
             <Dialog open={editOpen} onClose={() => setEditOpen(false)} fullWidth maxWidth="sm">
                 <DialogTitle>Edit Student</DialogTitle>
                 <DialogContent dividers>
-                    <TextField margin="dense" label="Enrollment No" name="enrolno" variant="standard" fullWidth value={editRow?.enrolno || ""} onChange={(e) => onEditChange("enrolno", e.target.value)} />
-                    <TextField margin="dense" label="Full Name" name="fullName" variant="standard" fullWidth value={editRow?.fullName || ""} onChange={(e) => onEditChange("fullName", e.target.value)} />
-                    <TextField margin="dense" label="Email" name="email" variant="standard" fullWidth value={editRow?.email || ""} onChange={(e) => onEditChange("email", e.target.value)} />
-                    <TextField margin="dense" label="Course" name="course" variant="standard" fullWidth value={editRow?.course || ""} onChange={(e) => onEditChange("course", e.target.value)} />
-                    <TextField margin="dense" label="Contact" name="contact" variant="standard" fullWidth value={editRow?.contact || ""} onChange={(e) => onEditChange("contact", e.target.value)} />
-                    <TextField select margin="dense" label="Gender" name="gender" variant="standard" fullWidth value={editRow?.gender || ""} onChange={(e) => onEditChange("gender", e.target.value)}>
+                    <TextField margin="dense" label="Enrollment No" name="enrolno" size="small" fullWidth value={editRow?.enrolno || ""} onChange={(e) => onEditChange("enrolno", e.target.value)} />
+                    <TextField margin="dense" label="Full Name" name="fullName" size="small" fullWidth value={editRow?.fullName || ""} onChange={(e) => onEditChange("fullName", e.target.value)} />
+                    <TextField margin="dense" label="Email" name="email" size="small" fullWidth value={editRow?.email || ""} onChange={(e) => onEditChange("email", e.target.value)} />
+                    <TextField margin="dense" label="Course" name="course" size="small" fullWidth value={editRow?.course || ""} onChange={(e) => onEditChange("course", e.target.value)} />
+                    <TextField margin="dense" label="Contact" name="contact" size="small" fullWidth value={editRow?.contact || ""} onChange={(e) => onEditChange("contact", e.target.value)} />
+                    <TextField select margin="dense" label="Gender" name="gender" size="small" fullWidth value={editRow?.gender || ""} onChange={(e) => onEditChange("gender", e.target.value)}>
                         <MenuItem value="male">Male</MenuItem>
                         <MenuItem value="female">Female</MenuItem>
                     </TextField>
-                    <TextField margin="dense" label="Address" name="address" variant="standard" fullWidth value={editRow?.address || ""} onChange={(e) => onEditChange("address", e.target.value)} />
+                    <TextField margin="dense" label="Address" name="address" size="small" fullWidth value={editRow?.address || ""} onChange={(e) => onEditChange("address", e.target.value)} />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setEditOpen(false)}>Cancel</Button>
-                    <Button variant="contained" onClick={saveEdit}>Save</Button>
+                    <Button
+                        onClick={() => setEditOpen(false)}
+                        variant="outlined"
+                        startIcon={<CancelIcon />}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="contained"
+                        startIcon={<SaveIcon />}
+                        onClick={saveEdit}
+                    >
+                        Save
+                    </Button>
                 </DialogActions>
             </Dialog>
 
@@ -316,8 +333,21 @@ export default function Student_List() {
                     <Typography>Are you sure you want to delete {delRow?.fullName} ({delRow?.enrolno})?</Typography>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setDelOpen(false)}>Cancel</Button>
-                    <Button color="error" variant="contained" onClick={confirmDelete}>Delete</Button>
+                    <Button
+                        onClick={() => setDelOpen(false)}
+                        variant="outlined"
+                        startIcon={<CancelIcon />}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        color="error"
+                        variant="contained"
+                        onClick={confirmDelete}
+                        startIcon={<DeleteIcon />}
+                    >
+                        Delete
+                    </Button>
                 </DialogActions>
             </Dialog>
         </Box >

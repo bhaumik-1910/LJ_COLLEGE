@@ -3,6 +3,7 @@ import { Box, Button, Chip, Grid, IconButton, Link, MenuItem, Paper, TextField, 
 import { AuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CancelIcon from '@mui/icons-material/Cancel';
 import DescriptionIcon from '@mui/icons-material/Description';
 
 const API_BASE = "http://localhost:5000/api";
@@ -151,7 +152,7 @@ export default function Document_list() {
                 </Box>
             </Box>
 
-            <Box sx={{ p: 2 }}>
+            <Paper sx={{ p: 1 }}>
                 {loading ? (
                     // Display loading indicator
                     <Box display="flex" justifyContent="center" alignItems="center" py={6}>
@@ -226,7 +227,7 @@ export default function Document_list() {
                         />
                     </>
                 )}
-            </Box>
+            </Paper>
 
             {/* Delete confirm dialog */}
             <Dialog open={confirmOpen} onClose={closeDeleteDialog} maxWidth="xs" fullWidth>
@@ -237,8 +238,23 @@ export default function Document_list() {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={closeDeleteDialog} disabled={!!deletingId}>Cancel</Button>
-                    <Button color="error" variant="contained" onClick={confirmDelete} disabled={!!deletingId}>Delete</Button>
+                    <Button
+                        onClick={closeDeleteDialog}
+                        disabled={!!deletingId}
+                        variant="outlined"
+                        startIcon={<CancelIcon />}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        color="error"
+                        variant="contained"
+                        onClick={confirmDelete}
+                        disabled={!!deletingId}
+                        startIcon={<DeleteIcon />}
+                    >
+                        Delete
+                    </Button>
                 </DialogActions>
             </Dialog>
         </Box>
