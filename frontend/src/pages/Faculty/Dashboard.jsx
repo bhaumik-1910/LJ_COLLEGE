@@ -4,6 +4,7 @@ import { Typography, Box, Grid, Paper, CircularProgress } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import DescriptionIcon from '@mui/icons-material/Description';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 
 const API_BASE = "http://localhost:5000/api";
 
@@ -119,7 +120,18 @@ export default function FacultyDashboard() {
 
     return (
         <Box sx={{ p: 4 }}>
-            <Typography variant="h5" fontWeight={700} color="primary.main" sx={{ mb: 2 }}>Faculty Dashboard</Typography>
+            <Typography
+                variant="h5"
+                fontWeight={700}
+                color="primary.main"
+                sx={{ mb: 2 }}
+                display="flex"
+                alignItems="center"
+                gap={1}
+            >
+                Faculty Dashboard
+                <DashboardIcon fontSize="large" />
+            </Typography>
 
             {loading ? (
                 <Box display="flex" alignItems="center" gap={2}><CircularProgress size={20} /> Loading...</Box>

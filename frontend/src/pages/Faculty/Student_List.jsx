@@ -18,6 +18,7 @@ import {
     DialogContent,
     DialogActions,
     MenuItem,
+    InputAdornment,
 } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +26,8 @@ import { toast } from "react-toastify";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PeopleIcon from '@mui/icons-material/People';
+import SearchIcon from "@mui/icons-material/Search";
 
 const API_BASE = "http://localhost:5000/api";
 
@@ -185,7 +188,17 @@ export default function Student_List() {
     return (
         <Box sx={{ p: 3 }}>
             <Box mb={2}>
-                <Typography variant="h5" fontWeight={700} color="primary.main">Students List</Typography>
+                <Typography
+                    variant="h5"
+                    fontWeight={700}
+                    color="primary.main"
+                    display="flex"
+                    alignItems="center"
+                    gap={1}
+                >
+                    Students List
+                    <PeopleIcon fontSize="large" />
+                </Typography>
             </Box>
 
             <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
@@ -195,6 +208,13 @@ export default function Student_List() {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     sx={{ maxWidth: 360 }}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon color="action" />
+                            </InputAdornment>
+                        ),
+                    }}
                 />
                 <Button variant="contained" onClick={() => navigate("/faculty-dashboard/add-student")} sx={{ gap: 1 }}>
                     <PersonAddIcon fontSize="small" />

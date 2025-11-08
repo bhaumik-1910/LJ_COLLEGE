@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Box, Button, Chip, Grid, IconButton, Link, MenuItem, Paper, TextField, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, CircularProgress, TablePagination } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { toast } from "react-toastify";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DescriptionIcon from '@mui/icons-material/Description';
 
 const API_BASE = "http://localhost:5000/api";
 const BACKEND_BASE = "http://localhost:5000";
@@ -117,8 +118,21 @@ export default function Document_list() {
 
     return (
         <Box sx={{ p: 3 }}>
+
             <Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={2} mb={3}>
-                <Typography variant="h5" fontWeight={700} color="primary.main">Documents List</Typography>
+
+                <Typography
+                    variant="h5"
+                    fontWeight={700}
+                    color="primary.main"
+                    display="flex"
+                    alignItems="center"
+                    gap={1}
+                >
+                    Documents List
+                    <DescriptionIcon fontSize="large" />
+                </Typography>
+
                 <Box display="flex" alignItems="center" gap={2}>
                     <TextField
                         select

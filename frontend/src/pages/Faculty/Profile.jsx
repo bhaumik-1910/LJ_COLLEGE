@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { Box, Typography, Grid, Stack, Avatar, TextField, Button, Divider, Input, CircularProgress } from "@mui/material";
 import { toast } from "react-toastify";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
 
 const API_BASE = "http://localhost:5000/api";
 
@@ -89,7 +91,18 @@ export default function FacultyProfile() {
     return (
         <Box sx={{ p: 3 }}>
 
-            <Typography variant="h5" fontWeight={700} color="primary.main" mb={2}>Faculty Profile</Typography>
+            <Typography
+                variant="h5"
+                fontWeight={700}
+                color="primary.main"
+                mb={2}
+                display="flex"
+                alignItems="center"
+                gap={1}
+            >
+                Faculty Profile
+                <AccountCircleIcon fontSize="large" />
+            </Typography>
 
             <Grid sx={{ p: 3 }}>
 
