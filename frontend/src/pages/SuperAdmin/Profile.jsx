@@ -1,161 +1,502 @@
+// import React, { useContext, useEffect, useMemo, useState, useRef } from "react";
+// import { AuthContext } from "../../context/AuthContext";
+// import {
+//     Box,
+//     Paper,
+//     Typography,
+//     Avatar,
+//     Stack,
+//     TextField,
+//     Button,
+//     Divider,
+//     Input,
+//     Grid,
+//     CircularProgress,
+// } from "@mui/material";
+// import { toast } from "react-toastify";
+
+// const API_BASE = "http://localhost:5000/api";
+
+// export default function SuperAdminProfile() {
+//     const { token } = useContext(AuthContext);
+//     const authHeader = useMemo(() => (token ? { Authorization: `Bearer ${token}` } : {}), [token]);
+
+//     const [me, setMe] = useState(null);
+//     // const [loading, setLoading] = useState(true);
+//     const [editing, setEditing] = useState(false);
+//     const fileInputRef = useRef(null);
+
+//     const fetchMe = async () => {
+//         // setLoading(true);
+//         try {
+//             const res = await fetch(`${API_BASE}/superadmin/users`, { headers: { ...authHeader } });
+//             const data = await res.json();
+//             if (!res.ok) throw new Error(data.message || "Failed to load users");
+//             const email = (typeof window !== 'undefined' ? localStorage.getItem('email') : '') || '';
+//             const self = (Array.isArray(data) ? data : []).find((u) => String(u.email).toLowerCase() === String(email).toLowerCase());
+//             setMe(self || null);
+//         } catch (e) {
+//             toast.error(e.message);
+//         }
+//     };
+
+//     useEffect(() => {
+//         fetchMe();
+//         // eslint-disable-next-line react-hooks/exhaustive-deps
+//     }, [token]);
+
+//     const [form, setForm] = useState({ name: "", email: "", role: "", university: "", avatarUrl: "" });
+
+//     useEffect(() => {
+//         if (me) setForm({
+//             name: me.name || "",
+//             email: me.email || "",
+//             role: me.role || "",
+//             university: me.university || "",
+//             avatarUrl: me.avatarUrl || "",
+//         });
+//     }, [me]);
+
+//     const handleSave = async () => {
+//         if (!me?._id) return;
+//         try {
+//             const res = await fetch(`${API_BASE}/superadmin/users/${me._id}`, {
+//                 method: "PATCH",
+//                 headers: { "Content-Type": "application/json", ...authHeader },
+//                 body: JSON.stringify(form),
+//             });
+//             const data = await res.json();
+//             if (!res.ok) throw new Error(data.message || "Update failed");
+//             toast.success("Profile updated");
+//             setEditing(false);
+//             window.dispatchEvent(new CustomEvent('profile:updated', { detail: { avatarUrl: form.avatarUrl || '' } }));
+//             await fetchMe();
+//         } catch (e) {
+//             toast.error(e.message);
+//         }
+//     };
+
+//     const onPickFile = () => fileInputRef.current?.click();
+
+//     const handleFileChange = (e) => {
+//         const file = e.target.files?.[0];
+//         if (!file) return;
+//         const maxSizeMB = 2; // 2 mb upload limit
+//         if (file.size > maxSizeMB * 1024 * 1024) {
+//             toast.error(`Image too large. Max ${maxSizeMB}MB`);
+//             return;
+//         }
+//         const reader = new FileReader();
+//         reader.onload = () => {
+//             const dataUrl = reader.result;
+//             setForm((f) => ({ ...f, avatarUrl: String(dataUrl) }));
+//             if (!editing) setEditing(true);
+//         };
+//         reader.readAsDataURL(file);
+//     };
+
+//     // if (loading) {
+//     //     return (
+//     //         <Box sx={{ p: 3, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 240 }}>
+//     //             <CircularProgress />
+//     //         </Box>
+//     //     );
+//     // }
+
+//     return (
+//         <Box sx={{ p: 3 }}>
+//             <Typography variant="h5" fontWeight={700} mb={2}>Admin Profile</Typography>
+//             <Grid sx={{ p: 3 }}>
+//                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} alignItems={{ xs: 'flex-start', sm: 'center' }}>
+//                     <Avatar src={form.avatarUrl || undefined} sx={{ width: 96, height: 96 }}>
+//                         {form.name?.charAt(0)?.toUpperCase() || 'A'}
+//                     </Avatar>
+//                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} alignItems={{ xs: 'stretch', sm: 'center' }}>
+//                         <TextField
+//                             label="Avatar URL"
+//                             value={form.avatarUrl}
+//                             variant="standard"
+//                             onChange={(e) => setForm((f) => ({ ...f, avatarUrl: e.target.value }))}
+//                             size="small"
+//                             sx={{ minWidth: 260 }}
+//                             disabled={!editing}
+//                         />
+//                         {/* <Input ref={fileInputRef} type="file" accept="image/*" hidden onChange={handleFileChange} /> */}
+
+//                         <div className="d-flex align-items-center">
+//                             <label htmlFor="avatar-upload" className="btn btn-outline-primary">Upload Image</label>
+//                             <input
+//                                 ref={fileInputRef}
+//                                 id="avatar-upload"
+//                                 type="file"
+//                                 accept="image/*"
+//                                 hidden
+//                                 onChange={handleFileChange}
+//                             />
+//                         </div>
+//                         {/* <Button variant="outlined" onClick={onPickFile}>Upload</Button> */}
+
+//                         {!editing ? (
+//                             <Button variant="contained" onClick={() => setEditing(true)}>Edit</Button>
+//                         ) : (
+//                             <Stack direction="row" spacing={1}>
+//                                 <Button variant="outlined" onClick={() => { setEditing(false); setForm({ name: me?.name || '', email: me?.email || '', role: me?.role || '', university: me?.university || '', avatarUrl: me?.avatarUrl || '' }); }}>Cancel</Button>
+//                                 <Button variant="contained" onClick={handleSave}>Save</Button>
+//                             </Stack>
+//                         )}
+//                     </Stack>
+//                 </Stack>
+
+//                 <Divider sx={{ my: 2 }} />
+
+//                 <Stack spacing={2}>
+//                     <TextField label="Name" variant="standard" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} disabled={!editing} />
+//                     <TextField label="Email" variant="standard" value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} disabled={!editing} />
+//                     <TextField label="Role" variant="standard" value={form.role} onChange={(e) => setForm((f) => ({ ...f, role: e.target.value }))} disabled={!editing} />
+//                     <TextField label="University" variant="standard" value={form.university} onChange={(e) => setForm((f) => ({ ...f, university: e.target.value }))} disabled={!editing} />
+//                 </Stack>
+//             </Grid>
+//         </Box>
+//     );
+// }
 import React, { useContext, useEffect, useMemo, useState, useRef } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import {
-    Box,
-    Paper,
-    Typography,
-    Avatar,
-    Stack,
-    TextField,
-    Button,
-    Divider,
-    Input,
-    Grid,
-    CircularProgress,
+  Box,
+  Paper,
+  Typography,
+  Avatar,
+  Stack,
+  TextField,
+  Button,
+  Divider,
+  Grid,
+  CircularProgress,
+  IconButton,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Cancel";
 import { toast } from "react-toastify";
 
 const API_BASE = "http://localhost:5000/api";
 
 export default function SuperAdminProfile() {
-    const { token } = useContext(AuthContext);
-    const authHeader = useMemo(() => (token ? { Authorization: `Bearer ${token}` } : {}), [token]);
+  const { token } = useContext(AuthContext);
+  const authHeader = useMemo(() => (token ? { Authorization: `Bearer ${token}` } : {}), [token]);
 
-    const [me, setMe] = useState(null);
-    // const [loading, setLoading] = useState(true);
-    const [editing, setEditing] = useState(false);
-    const fileInputRef = useRef(null);
+  const [me, setMe] = useState(null);
+  // const [loading, setLoading] = useState(true);
+  const [editing, setEditing] = useState(false);
+  const fileInputRef = useRef(null);
 
-    const fetchMe = async () => {
-        // setLoading(true);
-        try {
-            const res = await fetch(`${API_BASE}/superadmin/users`, { headers: { ...authHeader } });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.message || "Failed to load users");
-            const email = (typeof window !== 'undefined' ? localStorage.getItem('email') : '') || '';
-            const self = (Array.isArray(data) ? data : []).find((u) => String(u.email).toLowerCase() === String(email).toLowerCase());
-            setMe(self || null);
-        } catch (e) {
-            toast.error(e.message);
-        }
+  const fetchMe = async () => {
+    // setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/superadmin/users`, { headers: { ...authHeader } });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to load users");
+      const email = (typeof window !== "undefined" ? localStorage.getItem("email") : "") || "";
+      const self = (Array.isArray(data) ? data : []).find(
+        (u) => String(u.email).toLowerCase() === String(email).toLowerCase()
+      );
+      setMe(self || null);
+    } catch (e) {
+      toast.error(e.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchMe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
+
+  const [form, setForm] = useState({ name: "", email: "", role: "", university: "", avatarUrl: "" });
+
+  useEffect(() => {
+    if (me)
+      setForm({
+        name: me.name || "",
+        email: me.email || "",
+        role: me.role || "",
+        university: me.university || "",
+        avatarUrl: me.avatarUrl || "",
+      });
+  }, [me]);
+
+  const handleSave = async () => {
+    if (!me?._id) return;
+    try {
+      const res = await fetch(`${API_BASE}/superadmin/users/${me._id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", ...authHeader },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Update failed");
+      toast.success("Profile updated");
+      setEditing(false);
+      window.dispatchEvent(new CustomEvent("profile:updated", { detail: { avatarUrl: form.avatarUrl || "" } }));
+      await fetchMe();
+    } catch (e) {
+      toast.error(e.message);
+    }
+  };
+
+  const onPickFile = () => fileInputRef.current?.click();
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const maxSizeMB = 2; // 2 mb upload limit
+    if (file.size > maxSizeMB * 1024 * 1024) {
+      toast.error(`Image too large. Max ${maxSizeMB}MB`);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = reader.result;
+      setForm((f) => ({ ...f, avatarUrl: String(dataUrl) }));
+      if (!editing) setEditing(true);
     };
+    reader.readAsDataURL(file);
+  };
 
-    useEffect(() => {
-        fetchMe();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [token]);
+  return (
+    <Box sx={{ p: { xs: 2, md: 3 } }}>
+      <Paper
+        elevation={6}
+        sx={{
+          borderRadius: 3,
+          overflow: "hidden",
+        }}
+      >
+        {/* Top gradient header */}
+        <Box
+          sx={{
+            background: "linear-gradient(90deg,#4d73ff 0%, #6bb8ff 100%)",
+            color: "#fff",
+            px: { xs: 3, md: 6 },
+            py: { xs: 3, md: 4 },
+          }}
+        >
+          <Stack direction={{ xs: "column", sm: "row" }} alignItems="center" justifyContent="space-between" spacing={2}>
+            <Box>
+              <Typography variant="h5" sx={{ fontWeight: 800 }}>
+                Admin Profile
+              </Typography>
+              <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                Manage your account details
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", gap: 1 }}>
+              {!editing ? (
+                <Button
+                  variant="contained"
+                  size="small"
+                  startIcon={<EditIcon />}
+                  onClick={() => setEditing(true)}
+                  sx={{ textTransform: "none", borderRadius: 2, background: "rgba(255,255,255,0.12)" }}
+                >
+                  Edit Profile
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<CancelIcon />}
+                    onClick={() => {
+                      setEditing(false);
+                      setForm({
+                        name: me?.name || "",
+                        email: me?.email || "",
+                        role: me?.role || "",
+                        university: me?.university || "",
+                        avatarUrl: me?.avatarUrl || "",
+                      });
+                    }}
+                    sx={{
+                      textTransform: "none",
+                      color: "#fff",
+                      borderColor: "rgba(255,255,255,0.18)",
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    startIcon={<SaveIcon />}
+                    onClick={handleSave}
+                    sx={{ textTransform: "none", ml: 1 }}
+                  >
+                    Save
+                  </Button>
+                </>
+              )}
+            </Box>
+          </Stack>
+        </Box>
 
-    const [form, setForm] = useState({ name: "", email: "", role: "", university: "", avatarUrl: "" });
+        {/* Body */}
+        <Box sx={{ p: { xs: 3, md: 4 } }}>
+          <Grid container spacing={3}>
+            {/* Left: avatar + quick actions */}
+            <Grid item xs={12} md={4}>
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 3,
+                  borderRadius: 2,
+                  textAlign: "center",
+                  bgcolor: "background.paper",
+                  boxShadow: (theme) => `0 8px 24px ${theme.palette.mode === "light" ? "rgba(20,40,80,0.04)" : "rgba(0,0,0,0.4)"}`,
+                }}
+              >
+                <Box sx={{ position: "relative", display: "inline-block", mb: 2 }}>
+                  <Avatar
+                    src={form.avatarUrl || undefined}
+                    sx={{
+                      width: 120,
+                      height: 120,
+                      boxShadow: 6,
+                      border: "4px solid rgba(255,255,255,0.6)",
+                    }}
+                  >
+                    {form.name?.charAt(0)?.toUpperCase() || "A"}
+                  </Avatar>
 
-    useEffect(() => {
-        if (me) setForm({
-            name: me.name || "",
-            email: me.email || "",
-            role: me.role || "",
-            university: me.university || "",
-            avatarUrl: me.avatarUrl || "",
-        });
-    }, [me]);
+                  {/* camera overlay */}
+                  <IconButton
+                    onClick={onPickFile}
+                    size="small"
+                    sx={{
+                      position: "absolute",
+                      right: -6,
+                      bottom: -6,
+                      bgcolor: "background.paper",
+                      border: "2px solid",
+                      borderColor: "divider",
+                      boxShadow: 3,
+                      "&:hover": { transform: "scale(1.06)" },
+                    }}
+                    aria-label="upload"
+                  >
+                    <CameraAltIcon fontSize="small" />
+                  </IconButton>
 
-    const handleSave = async () => {
-        if (!me?._id) return;
-        try {
-            const res = await fetch(`${API_BASE}/superadmin/users/${me._id}`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json", ...authHeader },
-                body: JSON.stringify(form),
-            });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.message || "Update failed");
-            toast.success("Profile updated");
-            setEditing(false);
-            window.dispatchEvent(new CustomEvent('profile:updated', { detail: { avatarUrl: form.avatarUrl || '' } }));
-            await fetchMe();
-        } catch (e) {
-            toast.error(e.message);
-        }
-    };
+                  <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={handleFileChange} />
+                </Box>
 
-    const onPickFile = () => fileInputRef.current?.click();
-
-    const handleFileChange = (e) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        const maxSizeMB = 2; // 2 mb upload limit
-        if (file.size > maxSizeMB * 1024 * 1024) {
-            toast.error(`Image too large. Max ${maxSizeMB}MB`);
-            return;
-        }
-        const reader = new FileReader();
-        reader.onload = () => {
-            const dataUrl = reader.result;
-            setForm((f) => ({ ...f, avatarUrl: String(dataUrl) }));
-            if (!editing) setEditing(true);
-        };
-        reader.readAsDataURL(file);
-    };
-
-    // if (loading) {
-    //     return (
-    //         <Box sx={{ p: 3, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 240 }}>
-    //             <CircularProgress />
-    //         </Box>
-    //     );
-    // }
-
-    return (
-        <Box sx={{ p: 3 }}>
-            <Typography variant="h5" fontWeight={700} mb={2}>Admin Profile</Typography>
-            <Grid sx={{ p: 3 }}>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} alignItems={{ xs: 'flex-start', sm: 'center' }}>
-                    <Avatar src={form.avatarUrl || undefined} sx={{ width: 96, height: 96 }}>
-                        {form.name?.charAt(0)?.toUpperCase() || 'A'}
-                    </Avatar>
-                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} alignItems={{ xs: 'stretch', sm: 'center' }}>
-                        <TextField
-                            label="Avatar URL"
-                            value={form.avatarUrl}
-                            variant="standard"
-                            onChange={(e) => setForm((f) => ({ ...f, avatarUrl: e.target.value }))}
-                            size="small"
-                            sx={{ minWidth: 260 }}
-                            disabled={!editing}
-                        />
-                        {/* <Input ref={fileInputRef} type="file" accept="image/*" hidden onChange={handleFileChange} /> */}
-
-                        <div className="d-flex align-items-center">
-                            <label htmlFor="avatar-upload" className="btn btn-outline-primary">Upload Image</label>
-                            <input
-                                ref={fileInputRef}
-                                id="avatar-upload"
-                                type="file"
-                                accept="image/*"
-                                hidden
-                                onChange={handleFileChange}
-                            />
-                        </div>
-                        {/* <Button variant="outlined" onClick={onPickFile}>Upload</Button> */}
-
-                        {!editing ? (
-                            <Button variant="contained" onClick={() => setEditing(true)}>Edit</Button>
-                        ) : (
-                            <Stack direction="row" spacing={1}>
-                                <Button variant="outlined" onClick={() => { setEditing(false); setForm({ name: me?.name || '', email: me?.email || '', role: me?.role || '', university: me?.university || '', avatarUrl: me?.avatarUrl || '' }); }}>Cancel</Button>
-                                <Button variant="contained" onClick={handleSave}>Save</Button>
-                            </Stack>
-                        )}
-                    </Stack>
-                </Stack>
+                <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                  {form.name || "—"}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                  {form.role || "—"}
+                </Typography>
 
                 <Divider sx={{ my: 2 }} />
 
-                <Stack spacing={2}>
-                    <TextField label="Name" variant="standard" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} disabled={!editing} />
-                    <TextField label="Email" variant="standard" value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} disabled={!editing} />
-                    <TextField label="Role" variant="standard" value={form.role} onChange={(e) => setForm((f) => ({ ...f, role: e.target.value }))} disabled={!editing} />
-                    <TextField label="University" variant="standard" value={form.university} onChange={(e) => setForm((f) => ({ ...f, university: e.target.value }))} disabled={!editing} />
-                </Stack>
+                <Button
+                  variant="contained"
+                  fullWidth
+                  onClick={() => navigator.clipboard?.writeText(form.email || "")}
+                  sx={{
+                    textTransform: "none",
+                    mb: 1,
+                    background: "linear-gradient(90deg,#6bb8ff,#4d73ff)",
+                    boxShadow: "0 6px 18px rgba(77,115,255,0.18)",
+                  }}
+                >
+                  Copy Email
+                </Button>
+
+                <Button
+                  variant="outlined"
+                  fullWidth
+                  onClick={() => {
+                    setForm((f) => ({ ...f, avatarUrl: "" }));
+                    setEditing(true);
+                  }}
+                  sx={{ textTransform: "none" }}
+                >
+                  Remove Avatar
+                </Button>
+              </Paper>
             </Grid>
+
+            {/* Right: form fields */}
+            <Grid item xs={12} md={8}>
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 3,
+                  borderRadius: 2,
+                  bgcolor: "background.paper",
+                  border: (theme) => `1px solid ${theme.palette.mode === "light" ? "#f0f3ff" : "#23304a"}`,
+                }}
+              >
+                <Stack spacing={2}>
+                  <TextField
+                    label="Name"
+                    variant="outlined"
+                    value={form.name}
+                    onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                    disabled={!editing}
+                    fullWidth
+                    InputProps={{ sx: { borderRadius: 2 } }}
+                  />
+
+                  <TextField
+                    label="Email"
+                    variant="outlined"
+                    value={form.email}
+                    onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                    disabled={!editing}
+                    fullWidth
+                    InputProps={{ sx: { borderRadius: 2 } }}
+                  />
+
+                  <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                    <TextField
+                      label="Role"
+                      variant="outlined"
+                      value={form.role}
+                      onChange={(e) => setForm((f) => ({ ...f, role: e.target.value }))}
+                      disabled={!editing}
+                      fullWidth
+                      InputProps={{ sx: { borderRadius: 2 } }}
+                    />
+                    <TextField
+                      label="University"
+                      variant="outlined"
+                      value={form.university}
+                      onChange={(e) => setForm((f) => ({ ...f, university: e.target.value }))}
+                      disabled={!editing}
+                      fullWidth
+                      InputProps={{ sx: { borderRadius: 2 } }}
+                    />
+                  </Stack>
+
+                  <TextField
+                    label="Avatar URL"
+                    variant="outlined"
+                    value={form.avatarUrl}
+                    onChange={(e) => setForm((f) => ({ ...f, avatarUrl: e.target.value }))}
+                    disabled={!editing}
+                    fullWidth
+                    helperText="Paste a public image URL or upload using camera icon"
+                  />
+                </Stack>
+              </Paper>
+            </Grid>
+          </Grid>
         </Box>
-    );
+      </Paper>
+    </Box>
+  );
 }
+
+
