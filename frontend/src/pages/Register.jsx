@@ -177,7 +177,7 @@ const RegisterPage = () => {
         <LeftCard>
           <StyledForm onSubmit={handleSubmit}>
 
-            {/* ⭐ ICON JUST BESIDE THE TEXT ⭐ */}
+            {/*  ICON JUST BESIDE THE TEXT */}
             <Box
               sx={{
                 display: "flex",
@@ -206,31 +206,6 @@ const RegisterPage = () => {
             {/* Subtitle */}
             <Typography sx={{ fontSize: 13, color: "#6b7280", mb: 2 }}>
               Create your account to access the portal
-            </Typography>
-
-            {/* Social icons */}
-            <Box sx={{ display: 'flex', gap: 1.5, mb: 2 }}>
-              <Box sx={{
-                border: '1px solid #e0e0e0',
-                borderRadius: '50%',
-                width: 40, height: 40,
-                display: 'flex', justifyContent: 'center', alignItems: 'center'
-              }}>
-                <GoogleIcon color="primary" />
-              </Box>
-
-              <Box sx={{
-                border: '1px solid #e0e0e0',
-                borderRadius: '50%',
-                width: 40, height: 40,
-                display: 'flex', justifyContent: 'center', alignItems: 'center'
-              }}>
-                <FacebookIcon color="primary" />
-              </Box>
-            </Box>
-
-            <Typography sx={{ fontSize: 12, color: '#6b7280', mb: 1 }}>
-              or use your email password
             </Typography>
 
             {/* Input Fields */}
