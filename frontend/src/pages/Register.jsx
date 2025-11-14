@@ -501,7 +501,6 @@
 // };
 
 // export default RegisterPage;
-
 import React, { useState, useMemo, useContext, useEffect } from "react";
 import {
   Button,
@@ -522,6 +521,7 @@ import { toast } from "react-toastify";
 import { AuthContext } from "../context/AuthContext";
 import logo from "../assets/Register-logo.jpg";
 import studentimg from "../assets/images/student-add.png";
+
 /* ---------- Styled components (responsive) ---------- */
 
 const Container = styled('div')(({ theme }) => ({
@@ -537,7 +537,6 @@ const Container = styled('div')(({ theme }) => ({
   alignItems: 'stretch',
   transition: 'all 0.35s ease-in-out',
   margin: '24px',
-  // Desktop padding
   padding: '26px',
   [theme.breakpoints.down('md')]: {
     flexDirection: 'column',
@@ -567,7 +566,6 @@ const RightCard = styled('div')(({ theme }) => ({
   justifyContent: 'center',
   padding: 20,
   boxSizing: 'border-box',
-  // show illustration centered and contained
   '& img': {
     maxWidth: '100%',
     height: 'auto',
@@ -575,7 +573,7 @@ const RightCard = styled('div')(({ theme }) => ({
     borderRadius: 18,
   },
   [theme.breakpoints.down('md')]: {
-    display: 'none', // hide on mobile to keep form full-width
+    display: 'none',
   },
 }));
 
@@ -610,6 +608,29 @@ const SocialIconLink = styled('a')({
   transition: 'all 0.2s',
   ':hover': {
     backgroundColor: '#fafafa',
+  },
+});
+
+/* ---------- Rounded / outlined TextField to match screenshot ---------- */
+
+const RoundedInput = styled(TextField)({
+  "& .MuiOutlinedInput-root": {
+    borderRadius: 12,
+    backgroundColor: "#fff",
+    height: 48,
+    "& fieldset": {
+      borderColor: "#e1e7f0",
+    },
+    "&:hover fieldset": {
+      borderColor: "#a7c2ff",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#5c6bc0",
+      borderWidth: "2px",
+    },
+  },
+  "& .MuiInputBase-input": {
+    padding: "12px 14px",
   },
 });
 
@@ -712,6 +733,7 @@ const RegisterPage = () => {
     if (!values.includes(form.role)) {
       setForm(f => ({ ...f, role: roleOptions[0]?.value || '' }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roleOptions]);
 
   return (
@@ -730,13 +752,24 @@ const RegisterPage = () => {
       <Container>
         <LeftCard>
           <StyledForm onSubmit={handleSubmit}>
-            <Box component="img" src={logo} alt="Logo" sx={{ width: 72, height: 72, borderRadius: "50%", mb: 1 }} />
-            <Typography variant="h5" sx={{ fontWeight: 700, color: '#2b3a67', mb: 0.5 }}>
-              REGISTER ACCOUNT
-            </Typography>
-            <Typography sx={{ fontSize: 13, color: '#6b7280', mb: 1.5 }}>
-              Create your account to access the portal
-            </Typography>
+            {/* header: logo + title side-by-side */}
+            <Box sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+              width: '100%',
+              mb: 1
+            }}>
+              <Box component="img" src={logo} alt="Logo" sx={{ width: 80, height: 80, borderRadius: "50%" }} />
+              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <Typography sx={{ fontSize: 22, fontWeight: 700, color: '#2b4ddb', lineHeight: 1 }}>
+                  REGISTER ACCOUNT
+                </Typography>
+                <Typography sx={{ fontSize: 13, color: '#6b7280', mt: 0.5 }}>
+                  Create your account to access the portal
+                </Typography>
+              </Box>
+            </Box>
 
             <SocialIcons>
               <SocialIconLink href="#"><GoogleIcon color="primary" /></SocialIconLink>
@@ -745,37 +778,39 @@ const RegisterPage = () => {
 
             <Typography sx={{ fontSize: 12, color: '#6b7280', mb: 1 }}>or use your email password</Typography>
 
-            <TextField
+            {/* Full Name */}
+            <RoundedInput
               fullWidth
               label="Full Name"
               name="name"
               value={form.name}
               onChange={handleChange}
-              variant="standard"
-              sx={{ marginTop: "8px" }}
+              margin="normal"
+              variant="outlined"
             />
 
-            <TextField
+            {/* Email */}
+            <RoundedInput
               fullWidth
               label="Email"
               name="email"
               value={form.email}
               onChange={handleChange}
               autoComplete="email"
-              variant="standard"
-              sx={{ marginTop: "12px" }}
+              margin="normal"
+              variant="outlined"
             />
 
-            <TextField
+            {/* Password */}
+            <RoundedInput
               fullWidth
               label="Password"
               name="password"
               type={showPassword ? "text" : "password"}
               value={form.password}
               onChange={handleChange}
-              variant="standard"
-              autoComplete="new-password"
-              sx={{ marginTop: "12px" }}
+              margin="normal"
+              variant="outlined"
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -787,16 +822,16 @@ const RegisterPage = () => {
               }}
             />
 
-            <TextField
+            {/* Confirm Password */}
+            <RoundedInput
               fullWidth
               label="Confirm Password"
               name="confirmPassword"
               type={showConfirmPassword ? "text" : "password"}
               value={form.confirmPassword}
               onChange={handleChange}
-              variant="standard"
-              autoComplete="new-password"
-              sx={{ marginTop: "12px" }}
+              margin="normal"
+              variant="outlined"
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -808,47 +843,50 @@ const RegisterPage = () => {
               }}
             />
 
-            <TextField
+            {/* Designation */}
+            <RoundedInput
               fullWidth
               label="Designation"
               name="designation"
               value={form.designation}
               onChange={handleChange}
-              variant="standard"
-              sx={{ marginTop: "12px" }}
+              margin="normal"
+              variant="outlined"
             />
 
-            <TextField
+            {/* Role Dropdown */}
+            <RoundedInput
               select
               fullWidth
               label="Role"
               name="role"
               value={form.role}
               onChange={handleChange}
-              variant="standard"
-              sx={{ marginTop: "12px" }}
+              margin="normal"
+              variant="outlined"
             >
               {roleOptions.map(opt => (
                 <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
               ))}
-            </TextField>
+            </RoundedInput>
 
-            <TextField
+            {/* University Dropdown */}
+            <RoundedInput
               select
               fullWidth
               label={fetchingUnis ? "Loading universities..." : "University"}
               name="university"
               value={form.university}
               onChange={handleChange}
-              variant="standard"
-              sx={{ marginTop: "12px" }}
+              margin="normal"
+              variant="outlined"
               disabled={fetchingUnis || universities.length === 0}
               helperText={universities.length === 0 ? "Ask admin to register your university first" : ""}
             >
               {universities.map((u) => (
                 <MenuItem key={u._id} value={u.name}>{u.name}</MenuItem>
               ))}
-            </TextField>
+            </RoundedInput>
 
             <Button
               type="submit"
@@ -870,8 +908,6 @@ const RegisterPage = () => {
         </LeftCard>
 
         <RightCard>
-          {/* Big illustration on the right (hidden on small screens) */}
-          {/* If you don't have 'illustration' image, keep using `logo` or remove this */}
           <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
             <img src={studentimg || logo} alt="illustration" />
           </Box>
@@ -882,3 +918,5 @@ const RegisterPage = () => {
 };
 
 export default RegisterPage;
+
+
