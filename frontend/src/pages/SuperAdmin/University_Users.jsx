@@ -257,17 +257,22 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 import { toast } from "react-toastify";
+import CancelIcon from "@mui/icons-material/Cancel";
+import SaveIcon from "@mui/icons-material/Save";
 
 const API_BASE = "http://localhost:5000/api";
 
 export default function UniversityUsers() {
   const { token } = useContext(AuthContext);
-  const authHeader = useMemo(() => (token ? { Authorization: `Bearer ${token}` } : {}), [token]);
+  const authHeader = useMemo(
+    () => (token ? { Authorization: `Bearer ${token}` } : {}),
+    [token]
+  );
 
   // original states preserved
   const [allUsers, setAllUsers] = useState([]);
   const [universities, setUniversities] = useState([]); // kept but not shown in UI
-  const [selectedUni, setSelectedUni] = useState("");    // kept for compatibility
+  const [selectedUni, setSelectedUni] = useState(""); // kept for compatibility
   const [loading, setLoading] = useState(false);
 
   const [editOpen, setEditOpen] = useState(false);
@@ -284,7 +289,9 @@ export default function UniversityUsers() {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/superadmin/users`, { headers: { ...authHeader } });
+      const res = await fetch(`${API_BASE}/superadmin/users`, {
+        headers: { ...authHeader },
+      });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to load users");
       setAllUsers(Array.isArray(data) ? data : []);
@@ -297,11 +304,15 @@ export default function UniversityUsers() {
 
   const fetchUniversities = async () => {
     try {
-      const res = await fetch(`${API_BASE}/superadmin/universities`, { headers: { ...authHeader } });
+      const res = await fetch(`${API_BASE}/superadmin/universities`, {
+        headers: { ...authHeader },
+      });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to load universities");
+      if (!res.ok)
+        throw new Error(data.message || "Failed to load universities");
       setUniversities(Array.isArray(data) ? data : []);
-      if (Array.isArray(data) && data.length && !selectedUni) setSelectedUni(data[0].name);
+      if (Array.isArray(data) && data.length && !selectedUni)
+        setSelectedUni(data[0].name);
     } catch (e) {
       toast.error(e.message);
     }
@@ -318,12 +329,18 @@ export default function UniversityUsers() {
     let list = allUsers;
     // if selectedUni is set we keep previous filtering behavior
     if (selectedUni) {
-      list = list.filter((u) => (u.university || "").toLowerCase() === selectedUni.toLowerCase());
+      list = list.filter(
+        (u) => (u.university || "").toLowerCase() === selectedUni.toLowerCase()
+      );
     }
     const q = search.trim().toLowerCase();
     if (!q) return list;
     return list.filter((r) =>
-      [r.name, r.email, r.role, r.university].some((v) => String(v || "").toLowerCase().includes(q))
+      [r.name, r.email, r.role, r.university].some((v) =>
+        String(v || "")
+          .toLowerCase()
+          .includes(q)
+      )
     );
   }, [allUsers, selectedUni, search]);
 
@@ -433,7 +450,12 @@ export default function UniversityUsers() {
             University Users
           </Typography>
 
-          <Stack direction="row" spacing={1} alignItems="center" sx={{ width: { xs: "100%", sm: "auto" } }}>
+          <Stack
+            direction="row"
+            spacing={1}
+            alignItems="center"
+            sx={{ width: { xs: "100%", sm: "auto" } }}
+          >
             <TextField
               size="small"
               placeholder="Search name / email / role"
@@ -449,7 +471,11 @@ export default function UniversityUsers() {
               }}
             />
 
-            <Button size="small" variant="outlined" onClick={() => fetchUsers()}>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => fetchUsers()}
+            >
               Refresh
             </Button>
           </Stack>
@@ -461,10 +487,16 @@ export default function UniversityUsers() {
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>Email</TableCell>
+                <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                  Email
+                </TableCell>
                 <TableCell>Role</TableCell>
-                <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>University</TableCell>
-                <TableCell sx={{ display: { xs: "none", lg: "table-cell" } }}>Created</TableCell>
+                <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
+                  University
+                </TableCell>
+                <TableCell sx={{ display: { xs: "none", lg: "table-cell" } }}>
+                  Created
+                </TableCell>
                 <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -494,35 +526,69 @@ export default function UniversityUsers() {
                   <TableRow key={r._id} hover>
                     <TableCell>
                       <Stack direction="row" spacing={2} alignItems="center">
-                        <Avatar sx={{ bgcolor: "primary.light", color: "primary.contrastText", width: 36, height: 36 }}>
+                        <Avatar
+                          sx={{
+                            bgcolor: "primary.light",
+                            color: "primary.contrastText",
+                            width: 36,
+                            height: 36,
+                          }}
+                        >
                           {initials(r.name)}
                         </Avatar>
                         <Box>
-                          <Typography sx={{ fontWeight: 600 }}>{r.name || "-"}</Typography>
-                          <Typography variant="caption" color="text.secondary" sx={{ display: { xs: "inline", sm: "none" } }}>
+                          <Typography sx={{ fontWeight: 600 }}>
+                            {r.name || "-"}
+                          </Typography>
+                          <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            sx={{ display: { xs: "inline", sm: "none" } }}
+                          >
                             {r.email}
                           </Typography>
                         </Box>
                       </Stack>
                     </TableCell>
 
-                    <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>{r.email}</TableCell>
-
-                    <TableCell>
-                      <Chip label={r.role} size="small" color={roleColor(r.role)} sx={{ textTransform: "capitalize" }} />
+                    <TableCell
+                      sx={{ display: { xs: "none", sm: "table-cell" } }}
+                    >
+                      {r.email}
                     </TableCell>
 
-                    <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>{r.university || "-"}</TableCell>
+                    <TableCell>
+                      <Chip
+                        label={r.role}
+                        size="small"
+                        color={roleColor(r.role)}
+                        sx={{ textTransform: "capitalize" }}
+                      />
+                    </TableCell>
 
-                    <TableCell sx={{ display: { xs: "none", lg: "table-cell" } }}>
-                      {r.createdAt ? new Date(r.createdAt).toLocaleString() : "-"}
+                    <TableCell
+                      sx={{ display: { xs: "none", md: "table-cell" } }}
+                    >
+                      {r.university || "-"}
+                    </TableCell>
+
+                    <TableCell
+                      sx={{ display: { xs: "none", lg: "table-cell" } }}
+                    >
+                      {r.createdAt
+                        ? new Date(r.createdAt).toLocaleString()
+                        : "-"}
                     </TableCell>
 
                     <TableCell align="right">
                       <IconButton size="small" onClick={() => onEdit(r)}>
                         <EditIcon />
                       </IconButton>
-                      <IconButton size="small" color="error" onClick={() => onDelete(r)}>
+                      <IconButton
+                        size="small"
+                        color="error"
+                        onClick={() => onDelete(r)}
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </TableCell>
@@ -547,19 +613,54 @@ export default function UniversityUsers() {
         />
 
         {/* Edit dialog */}
-        <Dialog open={editOpen} onClose={() => setEditOpen(false)} fullWidth maxWidth="sm">
+        <Dialog
+          open={editOpen}
+          onClose={() => setEditOpen(false)}
+          fullWidth
+          maxWidth="sm"
+        >
           <DialogTitle>Edit User</DialogTitle>
           <DialogContent dividers>
             <Stack spacing={2}>
-              <TextField margin="dense" label="Name" variant="outlined" fullWidth value={editRow?.name || ""} onChange={(e) => onEditChange("name", e.target.value)} />
-              <TextField margin="dense" label="Email" variant="outlined" fullWidth value={editRow?.email || ""} onChange={(e) => onEditChange("email", e.target.value)} />
-              <TextField select margin="dense" label="Role" variant="outlined" fullWidth value={editRow?.role || "user"} onChange={(e) => onEditChange("role", e.target.value)}>
+              <TextField
+                margin="dense"
+                label="Name"
+                variant="outlined"
+                fullWidth
+                value={editRow?.name || ""}
+                onChange={(e) => onEditChange("name", e.target.value)}
+              />
+              <TextField
+                margin="dense"
+                label="Email"
+                variant="outlined"
+                fullWidth
+                value={editRow?.email || ""}
+                onChange={(e) => onEditChange("email", e.target.value)}
+              />
+              <TextField
+                select
+                margin="dense"
+                label="Role"
+                variant="outlined"
+                fullWidth
+                value={editRow?.role || "user"}
+                onChange={(e) => onEditChange("role", e.target.value)}
+              >
                 <MenuItem value="admin">Admin</MenuItem>
                 <MenuItem value="faculty">Faculty</MenuItem>
                 <MenuItem value="student">Student</MenuItem>
                 <MenuItem value="user">User</MenuItem>
               </TextField>
-              <TextField select margin="dense" label="University" variant="outlined" fullWidth value={editRow?.university || ""} onChange={(e) => onEditChange("university", e.target.value)}>
+              <TextField
+                select
+                margin="dense"
+                label="University"
+                variant="outlined"
+                fullWidth
+                value={editRow?.university || ""}
+                onChange={(e) => onEditChange("university", e.target.value)}
+              >
                 <MenuItem value="">— none —</MenuItem>
                 {universities.map((u) => (
                   <MenuItem key={u._id} value={u.name}>
@@ -570,8 +671,19 @@ export default function UniversityUsers() {
             </Stack>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setEditOpen(false)}>Cancel</Button>
-            <Button variant="contained" onClick={saveEdit}>Save</Button>
+            <Button
+              onClick={() => setEditOpen(false)}
+              startIcon={<CancelIcon />}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              onClick={saveEdit}
+              startIcon={<SaveIcon />}
+            >
+              Save
+            </Button>
           </DialogActions>
         </Dialog>
 
@@ -579,11 +691,25 @@ export default function UniversityUsers() {
         <Dialog open={delOpen} onClose={() => setDelOpen(false)}>
           <DialogTitle>Delete user?</DialogTitle>
           <DialogContent dividers>
-            <Typography>Are you sure you want to delete <strong>{delRow?.email}</strong>?</Typography>
+            <Typography>
+              Are you sure you want to delete <strong>{delRow?.email}</strong>?
+            </Typography>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setDelOpen(false)}>Cancel</Button>
-            <Button color="error" variant="contained" onClick={confirmDelete}>Delete</Button>
+            <Button
+              onClick={() => setDelOpen(false)}
+              startIcon={<CancelIcon />}
+            >
+              Cancel
+            </Button>
+            <Button
+              color="error"
+              variant="contained"
+              onClick={confirmDelete}
+              startIcon={<DeleteIcon />}
+            >
+              Delete
+            </Button>
           </DialogActions>
         </Dialog>
       </Paper>
