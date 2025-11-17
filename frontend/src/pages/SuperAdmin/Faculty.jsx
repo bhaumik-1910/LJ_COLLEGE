@@ -318,7 +318,7 @@ import SaveIcon from "@mui/icons-material/Save";
 
 const API_BASE = "http://localhost:5000/api";
 
-export default function AdminUsers() {
+export default function Admin_Faculty() {
   const { token } = useContext(AuthContext);
   const authHeader = useMemo(
     () => (token ? { Authorization: `Bearer ${token}` } : {}),
@@ -377,7 +377,13 @@ export default function AdminUsers() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to load users");
-      setRows(Array.isArray(data) ? data : []);
+      // keep existing behavior: only Faculty
+      const onlyFaculty = (Array.isArray(data) ? data : []).filter(
+        (u) => String(u.role).toLowerCase() === "faculty"
+      );
+      setRows(onlyFaculty);
+
+      // setRows(Array.isArray(data) ? data : []);
     } catch (e) {
       toast.error(e.message);
     } finally {
@@ -477,7 +483,7 @@ export default function AdminUsers() {
           mb={2}
         >
           <Typography variant="h5" fontWeight={700}>
-            Users
+            Faculty
           </Typography>
 
           <Stack
@@ -537,7 +543,7 @@ export default function AdminUsers() {
                     <Stack alignItems="center" spacing={1}>
                       <CircularProgress size={28} />
                       <Typography variant="body2" color="text.secondary">
-                        Loading users...
+                        Loading Faculty...
                       </Typography>
                     </Stack>
                   </TableCell>

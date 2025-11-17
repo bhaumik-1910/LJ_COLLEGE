@@ -25,11 +25,12 @@ import Forget from './pages/Forget.jsx'
 
 import SuperAdminDashboard from './pages/SuperAdmin/Dashboard.jsx'
 import SuperU_Register from './pages/SuperAdmin/U_Register.jsx'
-import SuperAdminUsers from './pages/SuperAdmin/Users.jsx'
 import SuperUniversityUsers from './pages/SuperAdmin/University_Users.jsx'
-import SuperAdminList from './pages/SuperAdmin/Super_Admin_List.jsx'
 import SuperAdminProfile from './pages/SuperAdmin/Profile.jsx'
 import SuperAll_Document from './pages/SuperAdmin/All_Document.jsx'
+import SuperAdminList from './pages/SuperAdmin/Super_Admin_List.jsx'
+import AdminList from './pages/SuperAdmin/Admin_List.jsx'
+import Admin_Faculty from './pages/SuperAdmin/Faculty.jsx'
 
 import FacultyDashboard from "./pages/Faculty/Dashboard.jsx";
 import Add_Student from './pages/Faculty/Add_Student.jsx'
@@ -78,12 +79,13 @@ function Root() {
                   }
                 >
                   <Route index element={<SuperAdminDashboard />} />
-                  <Route path="register" element={<Register />} />
                   <Route path="university-register" element={<SuperU_Register />} />
-                  <Route path="faculty" element={<SuperAdminUsers />} />
+                  <Route path="register" element={<Register />} />
                   <Route path="university-users" element={<SuperUniversityUsers />} />
                   <Route path="document" element={<SuperAll_Document />} />
-                  <Route path="admins" element={<SuperAdminList />} />
+                  <Route path="superadmin" element={<SuperAdminList />} />
+                  <Route path="admins" element={<AdminList />} />
+                  <Route path="faculty" element={<Admin_Faculty />} />
                   <Route path="profile" element={<SuperAdminProfile />} />
                 </Route>
 

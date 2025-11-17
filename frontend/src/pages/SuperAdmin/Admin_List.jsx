@@ -288,7 +288,7 @@ import SaveIcon from "@mui/icons-material/Save";
 
 const API_BASE = "http://localhost:5000/api";
 
-export default function SuperAdminList() {
+export default function AdminList() {
   const { token } = useContext(AuthContext);
   const authHeader = useMemo(
     () => (token ? { Authorization: `Bearer ${token}` } : {}),
@@ -348,12 +348,10 @@ export default function SuperAdminList() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to load users");
       // keep existing behavior: only admins
-      const onlyS_Admins = (Array.isArray(data) ? data : []).filter(
-        (u) => String(u.role).toLowerCase() === "superadmin"
+      const onlyAdmins = (Array.isArray(data) ? data : []).filter(
+        (u) => String(u.role).toLowerCase() === "admin"
       );
-      setRows(onlyS_Admins);
-
-      // setRows(Array.isArray(data) ? data : []);
+      setRows(onlyAdmins);
     } catch (e) {
       toast.error(e.message);
     } finally {
@@ -513,7 +511,7 @@ export default function SuperAdminList() {
                     <Stack alignItems="center" spacing={1}>
                       <CircularProgress size={28} />
                       <Typography variant="body2" color="text.secondary">
-                        Loading Super Admins...
+                        Loading Admins...
                       </Typography>
                     </Stack>
                   </TableCell>

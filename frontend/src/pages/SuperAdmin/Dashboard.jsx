@@ -181,8 +181,17 @@ export default function SuperAdminDashboard() {
                 <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
                     <Paper sx={{ ...cardStyles, bgcolor: '#4e73df' }}>
                         <AdminPanelSettingsIcon sx={{ fontSize: '3rem', mb: 1 }} />
-                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Admins</Typography>
+                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Super Admins</Typography>
                         <Typography variant="h5" fontWeight={700}>{totalAdmins}</Typography>
+                    </Paper>
+                </Grid>
+
+                {/* Total Admin Card */}
+                <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
+                    <Paper sx={{ ...cardStyles, bgcolor: '#f6c23e' }}>
+                        <PersonIcon sx={{ fontSize: '3rem', mb: 1 }} />
+                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Admins</Typography>
+                        <Typography variant="h5" fontWeight={700}>{totalUsers}</Typography>
                     </Paper>
                 </Grid>
 
@@ -195,14 +204,6 @@ export default function SuperAdminDashboard() {
                     </Paper>
                 </Grid>
 
-                {/* Total Users Card */}
-                <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
-                    <Paper sx={{ ...cardStyles, bgcolor: '#f6c23e' }}>
-                        <PersonIcon sx={{ fontSize: '3rem', mb: 1 }} />
-                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Users</Typography>
-                        <Typography variant="h5" fontWeight={700}>{totalUsers}</Typography>
-                    </Paper>
-                </Grid>
 
                 {/* Total Universities Card */}
                 <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
