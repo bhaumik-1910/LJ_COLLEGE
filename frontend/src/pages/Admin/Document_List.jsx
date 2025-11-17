@@ -238,9 +238,9 @@ export default function AdminDocumentList() {
 
     const [categories, setCategories] = useState([]);
     const [selectedCat, setSelectedCat] = useState("");
+    const [loadingCats, setLoadingCats] = useState(false);
     const [docs, setDocs] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [loadingCats, setLoadingCats] = useState(false);
     const [q, setQ] = useState(''); // (kept for existing logic)
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -301,6 +301,7 @@ export default function AdminDocumentList() {
     };
 
     const handleChangePage = (_evt, newPage) => setPage(newPage);
+
     const handleChangeRowsPerPage = (evt) => {
         setRowsPerPage(parseInt(evt.target.value, 10));
         setPage(0);
@@ -330,13 +331,13 @@ export default function AdminDocumentList() {
             <Paper
                 elevation={4}
                 sx={{
-                    p:2,
+                    p: 2,
                     borderRadius: 3,
                     overflow: "hidden",
                     boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
                 }}
             >
-                
+
                 {/* Header */}
                 <Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={2} mb={3}>
                     <Typography variant="h5" fontWeight={700} sx={{ color: "#2B6EF6" }}>
