@@ -285,6 +285,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 import CancelIcon from "@mui/icons-material/Cancel";
 import SaveIcon from "@mui/icons-material/Save";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 const API_BASE = "http://localhost:5000/api";
 
@@ -453,7 +454,7 @@ export default function SuperAdminList() {
           mb={2}
         >
           <Typography variant="h5" fontWeight={700}>
-            Admins
+            Super Admins
           </Typography>
 
           <Stack
@@ -476,13 +477,16 @@ export default function SuperAdminList() {
                 ),
               }}
             />
-            <Button
+            {/* <Button
               // size="small"
               variant="outlined"
               onClick={() => fetchUsers()}
+              startIcon={<RefreshIcon />}
             >
-              Refresh
-            </Button>
+            </Button> */}
+            <IconButton onClick={() => fetchUsers()}>
+              <RefreshIcon />
+            </IconButton>
           </Stack>
         </Stack>
 

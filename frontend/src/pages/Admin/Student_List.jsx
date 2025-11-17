@@ -172,9 +172,11 @@ import {
     Button,
     Stack,
     InputAdornment,
+    IconButton,
 } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
 import SearchIcon from "@mui/icons-material/Search";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 const API_BASE = "http://localhost:5000/api";
 
@@ -281,13 +283,16 @@ export default function AdminStudentList() {
                                 ),
                             }}
                         />
-                        <Button
+                        {/* <Button
                             // size="small"
                             variant="outlined"
                             onClick={() => fetchStudents()}
                         >
                             Refresh
-                        </Button>
+                        </Button> */}
+                        <IconButton onClick={() => fetchStudents()}>
+                            <RefreshIcon />
+                        </IconButton>
                     </Stack>
                 </Stack>
 

@@ -22,6 +22,7 @@ import {
     Paper,
     useMediaQuery,
     useTheme,
+    Stack,
 } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -33,6 +34,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import SearchIcon from "@mui/icons-material/Search";
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 const API_BASE = "http://localhost:5000/api";
 
@@ -232,20 +234,29 @@ export default function Student_List() {
                     </Button>
                 </Box>
 
-                <TextField
-                    size="small"
-                    placeholder="Search students..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    sx={{ maxWidth: 360, mb: 2, mt: 2 }}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <SearchIcon color="action" />
-                            </InputAdornment>
-                        ),
-                    }}
-                />
+                <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2, mt: 2 }}>
+
+                    <TextField
+                        size="small"
+                        placeholder="Search students..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        sx={{ maxWidth: 360 }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon color="action" />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+
+                    <IconButton onClick={() => fetchStudents()}>
+                        <RefreshIcon />
+                    </IconButton>
+
+                </Stack>
+
 
                 {loading && (
                     <Box display="flex" alignItems="center" justifyContent="center" py={6}>
