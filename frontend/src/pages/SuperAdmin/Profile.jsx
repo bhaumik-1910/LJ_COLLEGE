@@ -104,105 +104,116 @@ export default function SuperAdminProfile() {
   };
 
   return (
-    <Box 
-      sx={{ 
-        p: { xs: 2, md: 3 },
-        display:"flex",
+    <Box
+      sx={{
+        p: 3,
+        display: "flex",
         justifyContent: "center",   // ⬅ centers horizontally
-        alignItems: "center", 
-        }}>
+        alignItems: "center",
+      }}>
       <Paper
         elevation={6}
         sx={{
-          width : 1000,
-          borderRadius: 3,
+          borderRadius: 4,
           overflow: "hidden",
+          bgcolor: "#fafbfd",
+          maxWidth: 900,
         }}
       >
         {/* Top gradient header */}
         <Box
           sx={{
-            background: "linear-gradient(90deg,#4d73ff 0%, #6bb8ff 100%)",
+            px: { xs: 3, md: 4 },
+            py: 3.5,
+            background: "linear-gradient(90deg, #4f73ff 0%, #7fb1ff 100%)",
             color: "#fff",
-            px: { xs: 3, md: 6 },
-            py: { xs: 3, md: 4 },
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            borderTopLeftRadius: 16,
+            borderTopRightRadius: 16,
           }}
         >
-          <Stack direction={{ xs: "column", sm: "row" }} alignItems="center" justifyContent="space-between" spacing={2}>
-            <Box>
-              <Typography variant="h5" sx={{ fontWeight: 800 }}>
-                Admin Profile
-              </Typography>
-              <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                Manage your account details
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex", gap: 1 }}>
-              {!editing ? (
+          {/* <Stack direction={{ xs: "column", sm: "row" }} alignItems="center" justifyContent="space-between" spacing={2}> */}
+          <Box>
+            <Typography variant="h5" sx={{ fontWeight: 800 }}>
+              Admin Profile
+            </Typography>
+            <Typography variant="body2" sx={{ opacity: 0.9 }}>
+              Manage your account details
+            </Typography>
+          </Box>
+
+          <Box>
+            {!editing ? (
+              <Button
+                variant="contained"
+                startIcon={<EditIcon />}
+                onClick={() => setEditing(true)}
+                sx={{
+                  textTransform: "none",
+                  bgcolor: "rgba(255,255,255,0.18)",
+                  color: "#fff",
+                  borderRadius: 3,
+                  px: 2.2,
+                }}
+              >
+                Edit Profile
+              </Button>
+            ) : (
+              <Stack direction="row" spacing={1}>
+                <Button
+                  variant="outlined"
+                  startIcon={<CancelIcon />}
+                  onClick={() => {
+                    setEditing(false);
+                    setForm({
+                      name: me?.name || "",
+                      email: me?.email || "",
+                      role: me?.role || "",
+                      university: me?.university || "",
+                      avatarUrl: me?.avatarUrl || "",
+                    });
+                  }}
+                  sx={{
+                    textTransform: "none",
+                    color: "#fff",
+                    borderColor: "rgba(255,255,255,0.18)",
+                  }}
+                >
+                  Cancel
+                </Button>
                 <Button
                   variant="contained"
-                  size="small"
-                  startIcon={<EditIcon />}
-                  onClick={() => setEditing(true)}
-                  sx={{ textTransform: "none", borderRadius: 2, background: "rgba(255,255,255,0.12)" }}
+                  startIcon={<SaveIcon />}
+                  onClick={handleSave}
+                  sx={{ textTransform: "none", ml: 1 }}
                 >
-                  Edit Profile
+                  Save
                 </Button>
-              ) : (
-                <>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    startIcon={<CancelIcon />}
-                    onClick={() => {
-                      setEditing(false);
-                      setForm({
-                        name: me?.name || "",
-                        email: me?.email || "",
-                        role: me?.role || "",
-                        university: me?.university || "",
-                        avatarUrl: me?.avatarUrl || "",
-                      });
-                    }}
-                    sx={{
-                      textTransform: "none",
-                      color: "#fff",
-                      borderColor: "rgba(255,255,255,0.18)",
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    startIcon={<SaveIcon />}
-                    onClick={handleSave}
-                    sx={{ textTransform: "none", ml: 1 }}
-                  >
-                    Save
-                  </Button>
-                </>
-              )}
-            </Box>
-          </Stack>
+              </Stack>
+            )}
+          </Box>
+          {/* </Stack> */}
         </Box>
 
         {/* Body */}
         <Box sx={{ p: { xs: 3, md: 4 } }}>
-          <Grid container spacing={3}>
+          <Grid container spacing={3} justifyContent="center" alignItems="flex-start">
             {/* Left: avatar + quick actions */}
-            <Grid item xs={12} md={4}>
-              <Paper
+            <Grid item xs={12} md={4} sx={{ display: "flex", justifyContent: "center" }}>
+              {/* <Paper
                 elevation={0}
                 sx={{
                   p: 3,
                   borderRadius: 2,
-                  textAlign: "center",  
+                  textAlign: "center",
                   bgcolor: "background.paper",
                   boxShadow: (theme) => `0 8px 24px ${theme.palette.mode === "light" ? "rgba(20,40,80,0.04)" : "rgba(0,0,0,0.4)"}`,
                 }}
-              >
-                <Box sx={{ position: "relative", display: "inline-block", mb: 2 }}>
+              > */}
+              <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+                <Box sx={{ position: "relative" }}>
                   <Avatar
                     src={form.avatarUrl || undefined}
                     sx={{
@@ -231,11 +242,11 @@ export default function SuperAdminProfile() {
                     }}
                     aria-label="upload"
                   >
-                    <CameraAltIcon fontSize="small" />
+                    <CameraAltIcon fontSize="small" sx={{ color: "#6b7cff" }} />
                   </IconButton>
-
-                  <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={handleFileChange} />
                 </Box>
+
+                <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={handleFileChange} />
 
                 <Typography variant="h6" sx={{ fontWeight: 700 }}>
                   {form.name || "—"}
@@ -244,7 +255,7 @@ export default function SuperAdminProfile() {
                   {form.role || "—"}
                 </Typography>
 
-                <Divider sx={{ my: 2 }} />
+                {/* <Divider sx={{ my: 2 }} /> */}
 
                 <Button
                   variant="contained"
@@ -252,7 +263,7 @@ export default function SuperAdminProfile() {
                   onClick={() => navigator.clipboard?.writeText(form.email || "")}
                   sx={{
                     textTransform: "none",
-                    mb: 1,
+                    // mb: 1,
                     background: "linear-gradient(90deg,#6bb8ff,#4d73ff)",
                     boxShadow: "0 6px 18px rgba(77,115,255,0.18)",
                   }}
@@ -271,7 +282,8 @@ export default function SuperAdminProfile() {
                 >
                   Remove Avatar
                 </Button>
-              </Paper>
+              </Box>
+              {/* </Paper> */}
             </Grid>
 
             {/* Right: form fields */}

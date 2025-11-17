@@ -68,20 +68,20 @@ const StyledForm = styled('form')({
 });
 
 /* Rounded TextField Style */
-const RoundedInput = styled(TextField)({
-  "& .MuiOutlinedInput-root": {
-    borderRadius: 12,
-    backgroundColor: "#fff",
-    height: 48,
-    "& fieldset": { borderColor: "#e1e7f0" },
-    "&:hover fieldset": { borderColor: "#a7c2ff" },
-    "&.Mui-focused fieldset": {
-      borderColor: "#5c6bc0",
-      borderWidth: "2px",
-    },
-  },
-  "& .MuiInputBase-input": { padding: "12px 14px" },
-});
+// const RoundedInput = styled(TextField)({
+//   "& .MuiOutlinedInput-root": {
+//     borderRadius: 12,
+//     backgroundColor: "#fff",
+//     height: 48,
+//     "& fieldset": { borderColor: "#e1e7f0" },
+//     "&:hover fieldset": { borderColor: "#a7c2ff" },
+//     "&.Mui-focused fieldset": {
+//       borderColor: "#5c6bc0",
+//       borderWidth: "2px",
+//     },
+//   },
+//   "& .MuiInputBase-input": { padding: "12px 14px" },
+// });
 
 /* ---------- Component ---------- */
 
@@ -209,14 +209,17 @@ const RegisterPage = () => {
             </Typography>
 
             {/* Input Fields */}
-            <RoundedInput fullWidth label="Full Name" name="name" value={form.name} onChange={handleChange} />
-            <RoundedInput fullWidth label="Email" name="email" value={form.email} onChange={handleChange} sx={{ mt: 2 }} />
+            <TextField fullWidth label="Full Name" name="name" variant="outlined" size="small" value={form.name} onChange={handleChange} />
 
-            <RoundedInput
+            <TextField fullWidth label="Email" name="email" variant="outlined" size="small" value={form.email} onChange={handleChange} sx={{ mt: 2 }} />
+
+            <TextField
               fullWidth
               label="Password"
               name="password"
               type={showPassword ? "text" : "password"}
+              variant="outlined"
+              size="small"
               value={form.password}
               onChange={handleChange}
               sx={{ mt: 2 }}
@@ -231,10 +234,12 @@ const RegisterPage = () => {
               }}
             />
 
-            <RoundedInput
+            <TextField
               fullWidth
               label="Confirm Password"
               name="confirmPassword"
+              variant="outlined"
+              size="small"
               type={showConfirmPassword ? "text" : "password"}
               value={form.confirmPassword}
               onChange={handleChange}
@@ -250,19 +255,21 @@ const RegisterPage = () => {
               }}
             />
 
-            <RoundedInput fullWidth label="Designation" name="designation" sx={{ mt: 2 }} value={form.designation} onChange={handleChange} />
+            <TextField fullWidth label="Designation" name="designation" variant="outlined" size="small" sx={{ mt: 2 }} value={form.designation} onChange={handleChange} />
 
-            <RoundedInput select fullWidth label="Role" name="role" sx={{ mt: 2 }} value={form.role} onChange={handleChange}>
+            <TextField select fullWidth label="Role" name="role" variant="outlined" size="small" sx={{ mt: 2 }} value={form.role} onChange={handleChange}>
               {roleOptions.map(opt => (
                 <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
               ))}
-            </RoundedInput>
+            </TextField>
 
-            <RoundedInput
+            <TextField
               select
               fullWidth
               label="University"
               name="university"
+              variant="outlined"
+              size="small"
               sx={{ mt: 2 }}
               disabled={fetchingUnis}
               value={form.university}
@@ -271,7 +278,7 @@ const RegisterPage = () => {
               {universities.map(u => (
                 <MenuItem key={u._id} value={u.name}>{u.name}</MenuItem>
               ))}
-            </RoundedInput>
+            </TextField>
 
             <Button
               type="submit"

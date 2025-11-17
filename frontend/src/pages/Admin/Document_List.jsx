@@ -327,44 +327,48 @@ export default function AdminDocumentList() {
 
     return (
         <Box sx={{ p: 3 }}>
-            {/* Header */}
-            <Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={2} mb={3}>
-                <Typography variant="h5" fontWeight={700} sx={{ color: "#2B6EF6" }}>
-                    Documents
-                </Typography>
-
-                <Box display="flex" alignItems="center" gap={2}>
-                    <TextField
-                        select
-                        label={loadingCats ? "Loading categories..." : "Filter by Category"}
-                        value={selectedCat}
-                        onChange={handleCategoryChange}
-                        sx={{
-                            minWidth: 240,
-                            background: "#fff",
-                            borderRadius: 2,
-                            boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-                            "& .MuiInputLabel-root": { color: "text.secondary" }
-                        }}
-                        disabled={loadingCats}
-                    >
-                        <MenuItem value="">All</MenuItem>
-                        {categories.map((c) => (
-                            <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
-                        ))}
-                    </TextField>
-                </Box>
-            </Box>
-
-            {/* Card wrapper with shadow & rounded */}
             <Paper
                 elevation={4}
                 sx={{
+                    p:2,
                     borderRadius: 3,
                     overflow: "hidden",
                     boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
                 }}
             >
+                
+                {/* Header */}
+                <Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={2} mb={3}>
+                    <Typography variant="h5" fontWeight={700} sx={{ color: "#2B6EF6" }}>
+                        Documents
+                    </Typography>
+
+                    <Box display="flex" alignItems="center" gap={2}>
+                        <TextField
+                            select
+                            label={loadingCats ? "Loading categories..." : "Filter by Category"}
+                            size="small"
+                            value={selectedCat}
+                            onChange={handleCategoryChange}
+                            sx={{
+                                minWidth: 240,
+                                background: "#fff",
+                                borderRadius: 2,
+                                boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                                "& .MuiInputLabel-root": { color: "text.secondary" }
+                            }}
+                            disabled={loadingCats}
+                        >
+                            <MenuItem value="">All</MenuItem>
+                            {categories.map((c) => (
+                                <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
+                            ))}
+                        </TextField>
+                    </Box>
+                </Box>
+
+                {/* Card wrapper with shadow & rounded */}
+
                 <Box sx={{ p: 2 }}>
                     {loading ? (
                         <Box display="flex" justifyContent="center" alignItems="center" py={6}>

@@ -472,7 +472,7 @@ export default function UniversityUsers() {
             />
 
             <Button
-              size="small"
+              // size="small"
               variant="outlined"
               onClick={() => fetchUsers()}
             >
@@ -626,23 +626,28 @@ export default function UniversityUsers() {
                 margin="dense"
                 label="Name"
                 variant="outlined"
+                size="small"
                 fullWidth
                 value={editRow?.name || ""}
                 onChange={(e) => onEditChange("name", e.target.value)}
               />
+
               <TextField
                 margin="dense"
                 label="Email"
                 variant="outlined"
+                size="small"
                 fullWidth
                 value={editRow?.email || ""}
                 onChange={(e) => onEditChange("email", e.target.value)}
               />
+
               <TextField
                 select
                 margin="dense"
                 label="Role"
                 variant="outlined"
+                size="small"
                 fullWidth
                 value={editRow?.role || "user"}
                 onChange={(e) => onEditChange("role", e.target.value)}
@@ -652,11 +657,13 @@ export default function UniversityUsers() {
                 <MenuItem value="student">Student</MenuItem>
                 <MenuItem value="user">User</MenuItem>
               </TextField>
+
               <TextField
                 select
                 margin="dense"
                 label="University"
                 variant="outlined"
+                size="small"
                 fullWidth
                 value={editRow?.university || ""}
                 onChange={(e) => onEditChange("university", e.target.value)}
@@ -670,6 +677,7 @@ export default function UniversityUsers() {
               </TextField>
             </Stack>
           </DialogContent>
+
           <DialogActions>
             <Button
               onClick={() => setEditOpen(false)}

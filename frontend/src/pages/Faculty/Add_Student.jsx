@@ -464,7 +464,7 @@ export default function Add_Student() {
                                 </Button>
                                 <Button
                                     variant="outlined"
-                                    color="secondary"
+                                    // color="secondary"
                                     onClick={() => navigate(-1)}
                                     startIcon={<CancelIcon />}
                                 >

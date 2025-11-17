@@ -17,6 +17,9 @@ import { toast } from "react-toastify";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import studentImage from "../../assets/images/student-add.png";
+import CancelIcon from "@mui/icons-material/Cancel";
+import { color } from "framer-motion";
+import { red } from "@mui/material/colors";
 
 const API_BASE = "http://localhost:5000/api";
 
@@ -44,7 +47,7 @@ export default function U_Register() {
       const res = await fetch(`${API_BASE}/universities`);
       const data = await res.json();
       if (res.ok) setUniversities(Array.isArray(data) ? data : []);
-    } catch {}
+    } catch { }
   };
 
   useEffect(() => {
@@ -133,8 +136,8 @@ export default function U_Register() {
   return (
     <Box
       sx={{
-        p: { xs: 2, md: 4 },
-        minHeight: "100vh",
+        p: { xs: 2, md: 5 },
+        // minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -147,7 +150,7 @@ export default function U_Register() {
           borderRadius: 3,
           p: { xs: 3, md: 5 },
           width: "100%",
-          maxWidth: 1000,
+          maxWidth: 990,
           background: "#fff",
         }}
       >
@@ -198,6 +201,7 @@ export default function U_Register() {
                     <TextField
                       label="Enter OTP"
                       variant="outlined"
+                      size="small"
                       value={form.otp}
                       onChange={(e) =>
                         setForm({ ...form, otp: e.target.value })
@@ -272,7 +276,7 @@ export default function U_Register() {
               )}
 
               <Box sx={{ display: "flex", gap: 2 }}>
-                <Button variant="contained" onClick={createUniversity}>
+                <Button variant="contained" onClick={createUniversity} startIcon={<AddIcon />}>
                   Create University
                 </Button>
 
@@ -288,24 +292,26 @@ export default function U_Register() {
                     setOtpSent(false);
                     setVerified(false);
                   }}
+                  startIcon={<CancelIcon />}
                 >
                   Cancel
                 </Button>
               </Box>
             </Stack>
           </Grid>
+
           {/* ---------------- Right Image Section ---------------- */}
-           <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "center" }}>
-             <img
-               src={studentImage} // 👈 Place image in public folder
-               alt="Working Girl"
-               style={{
-                 maxHeight: "400px",
-                 width: "auto",
-                 borderRadius: "10px",
-                 objectFit: "contain",
-               }}
-             />
+          <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "center" }}>
+            <img
+              src={studentImage} // Place image in public folder
+              alt="Working Girl"
+              style={{
+                maxHeight: "400px",
+                width: "auto",
+                borderRadius: "10px",
+                objectFit: "contain",
+              }}
+            />
           </Grid>
         </Grid>
       </Paper>

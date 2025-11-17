@@ -278,11 +278,11 @@ import {
   Stack,
   InputAdornment,
 } from "@mui/material";
+import { AuthContext } from "../../context/AuthContext";
+import { toast } from "react-toastify";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
-import { AuthContext } from "../../context/AuthContext";
-import { toast } from "react-toastify";
 import CancelIcon from "@mui/icons-material/Cancel";
 import SaveIcon from "@mui/icons-material/Save";
 
@@ -475,7 +475,7 @@ export default function SuperAdminList() {
               }}
             />
             <Button
-              size="small"
+              // size="small"
               variant="outlined"
               onClick={() => fetchUsers()}
             >
@@ -625,27 +625,33 @@ export default function SuperAdminList() {
           <DialogTitle sx={{ fontWeight: 700 }}>Edit Admin</DialogTitle>
           <DialogContent dividers>
             <Stack spacing={2}>
+
               <TextField
                 margin="dense"
                 label="Name"
                 variant="outlined"
+                size="small"
                 fullWidth
                 value={editRow?.name || ""}
                 onChange={(e) => onEditChange("name", e.target.value)}
               />
+
               <TextField
                 margin="dense"
                 label="Email"
                 variant="outlined"
+                size="small"
                 fullWidth
                 value={editRow?.email || ""}
                 onChange={(e) => onEditChange("email", e.target.value)}
               />
+
               <TextField
                 select
                 margin="dense"
                 label="Role"
                 variant="outlined"
+                size="small"
                 fullWidth
                 value={editRow?.role || "admin"}
                 onChange={(e) => onEditChange("role", e.target.value)}
@@ -655,16 +661,19 @@ export default function SuperAdminList() {
                 <MenuItem value="student">Student</MenuItem>
                 <MenuItem value="user">User</MenuItem>
               </TextField>
+
               <TextField
                 margin="dense"
                 label="University"
                 variant="outlined"
+                size="small"
                 fullWidth
                 value={editRow?.university || ""}
                 onChange={(e) => onEditChange("university", e.target.value)}
               />
             </Stack>
           </DialogContent>
+
           <DialogActions>
             <Button
               onClick={() => setEditOpen(false)}

@@ -152,9 +152,12 @@ import {
     CircularProgress,
     TextField,
     Stack,
-    TablePagination
+    TablePagination,
+    Button,
+    InputAdornment
 } from '@mui/material';
 import { AuthContext } from '../../context/AuthContext';
+import SearchIcon from "@mui/icons-material/Search";
 
 const API_BASE = 'http://localhost:5000/api';
 
@@ -195,76 +198,115 @@ export default function FacultyList() {
         setPage(0);
     };
 
+    // useEffect(() => {
+    //     const fetchFaculties = async () => {
+    //         if (!token) return;
+    //         setLoading(true);
+    //         setError('');
+
+    //         try {
+    //             const res = await fetch(`${API_BASE}/faculty`, {
+    //                 headers: authHeader
+    //             });
+
+    //             const text = await res.text();
+    //             const data = text ? JSON.parse(text) : [];
+
+    //             if (!res.ok) throw new Error(data?.message || "Failed to load faculties");
+
+    //             setFaculties(Array.isArray(data) ? data : []);
+
+    //         } catch (e) {
+    //             setError(e.message || "Failed to load faculties");
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+
+    //     fetchFaculties();
+    // }, [token, authHeader]);
+
+    const fetchFaculties = async () => {
+        if (!token) return;
+        setLoading(true);
+        setError('');
+
+        try {
+            const res = await fetch(`${API_BASE}/faculty`, {
+                headers: authHeader
+            });
+
+            const text = await res.text();
+            const data = text ? JSON.parse(text) : [];
+
+            if (!res.ok) throw new Error(data?.message || "Failed to load faculties");
+
+            setFaculties(Array.isArray(data) ? data : []);
+
+        } catch (e) {
+            setError(e.message || "Failed to load faculties");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchFaculties = async () => {
-            if (!token) return;
-            setLoading(true);
-            setError('');
-
-            try {
-                const res = await fetch(`${API_BASE}/faculty`, {
-                    headers: authHeader
-                });
-
-                const text = await res.text();
-                const data = text ? JSON.parse(text) : [];
-
-                if (!res.ok) throw new Error(data?.message || "Failed to load faculties");
-
-                setFaculties(Array.isArray(data) ? data : []);
-
-            } catch (e) {
-                setError(e.message || "Failed to load faculties");
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchFaculties();
     }, [token, authHeader]);
 
     return (
         <Box sx={{ p: 3 }}>
-
-            {/* Header Section */}
-            <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                alignItems={{ xs: 'stretch', sm: 'center' }}
-                justifyContent="space-between"
-                spacing={2}
-                mb={3}
-            >
-                <Typography
-                    variant="h5"
-                    fontWeight={800}
-                    sx={{ color: "#2B6EF6" }}
-                >
-                    Faculty List
-                </Typography>
-
-                <TextField
-                    value={q}
-                    onChange={(e) => setQ(e.target.value)}
-                    placeholder="Search by name, email, or university"
-                    size="small"
-                    sx={{
-                        maxWidth: 360,
-                        bgcolor: "#fff",
-                        borderRadius: 2,
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-                    }}
-                />
-            </Stack>
-
-            {/* MAIN CARD WITH SHADOW */}
             <Paper
                 elevation={4}
                 sx={{
+                    p: 2,
                     borderRadius: 3,
                     overflow: "hidden",
                     boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
                 }}
             >
+
+                {/* Header Section */}
+                <Stack
+                    direction={{ xs: "column", sm: "row" }}
+                    spacing={2}
+                    alignItems="center"
+                    justifyContent="space-between"
+                    mb={2}
+                >
+                    <Typography variant="h5" fontWeight={700} sx={{ color: "#2b4ddb" }}>
+                        Faculty List
+                    </Typography>
+
+                    <Stack
+                        direction="row"
+                        spacing={1}
+                        alignItems="center"
+                        sx={{ width: { xs: "100%", sm: "auto" } }}
+                    >
+                        <TextField
+                            value={q}
+                            onChange={(e) => setQ(e.target.value)}
+                            placeholder="Search by name, email, or university"
+                            size="small"
+                            sx={{
+                                maxWidth: 360,
+                                bgcolor: "#fff",
+                                borderRadius: 2,
+                                boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                            }}
+                        />
+                        <Button
+                            // size="small"
+                            variant="outlined"
+                            onClick={() => fetchFaculties()}
+                        >
+                            Refresh
+                        </Button>
+                    </Stack>
+                </Stack>
+
+                {/* MAIN CARD WITH SHADOW */}
                 <Box sx={{ p: 2 }}>
 
                     {/* Loading */}
@@ -335,6 +377,6 @@ export default function FacultyList() {
 
                 </Box>
             </Paper>
-        </Box>
+        </Box >
     );
 }

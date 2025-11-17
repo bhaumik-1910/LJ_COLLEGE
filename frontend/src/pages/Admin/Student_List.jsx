@@ -169,8 +169,12 @@ import {
     TablePagination,
     TextField,
     Paper,
+    Button,
+    Stack,
+    InputAdornment,
 } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
+import SearchIcon from "@mui/icons-material/Search";
 
 const API_BASE = "http://localhost:5000/api";
 
@@ -235,99 +239,123 @@ export default function AdminStudentList() {
 
     return (
         <Box sx={{ p: 3 }}>
+            <Paper
+                elevation={4}
+                sx={{
+                    borderRadius: 3,
+                    p: 2,
+                    mt: 1,
+                    boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
+                }}
+            >
 
-            {/* HEADER – only color changed */}
-            <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
-                <Typography variant="h5" fontWeight={800} sx={{ color: "#2B6EF6" }}>
-                    Students List
-                </Typography>
+                {/* Header */}
+                <Stack
+                    direction={{ xs: "column", sm: "row" }}
+                    spacing={2}
+                    alignItems="center"
+                    justifyContent="space-between"
+                    mb={2}
+                >
+                    <Typography variant="h5" fontWeight={700} sx={{ color: "#2b4ddb" }}>
+                        Student List
+                    </Typography>
 
-                <TextField
-                    size="small"
-                    placeholder="Search students..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    sx={{
-                        maxWidth: 360,
-                        background: "#fff",
-                        borderRadius: 2,
-                        boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
-                    }}
-                />
-            </Box>
-
-            {/* LOADING */}
-            {loading && (
-                <Box display="flex" alignItems="center" justifyContent="center" py={6}>
-                    <CircularProgress />
-                </Box>
-            )}
-
-            {/* ERROR */}
-            {!loading && error && (
-                <Typography color="error" mb={2}>{error}</Typography>
-            )}
-
-            {/* TABLE + SHADOW + ROUNDED */}
-            {!loading && !error && (
-                filteredRows.length === 0 ? (
-                    <Typography color="text.secondary">No students found.</Typography>
-                ) : (
-                    <Paper
-                        elevation={4}
-                        sx={{
-                            borderRadius: 3,
-                            p: 2,
-                            mt: 1,
-                            boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
-                        }}
+                    <Stack
+                        direction="row"
+                        spacing={1}
+                        alignItems="center"
+                        sx={{ width: { xs: "100%", sm: "auto" } }}
                     >
-                        <TableContainer>
-                            <Table size="small">
-                                <TableHead>
-                                    <TableRow sx={{ bgcolor: "#f5f7ff" }}>
-                                        <TableCell sx={{ fontWeight: 700 }}>Enrollment No</TableCell>
-                                        <TableCell sx={{ fontWeight: 700 }}>Full Name</TableCell>
-                                        <TableCell sx={{ fontWeight: 700 }}>Email</TableCell>
-                                        <TableCell sx={{ fontWeight: 700 }}>Course</TableCell>
-                                        <TableCell sx={{ fontWeight: 700 }}>Contact</TableCell>
-                                        <TableCell sx={{ fontWeight: 700 }}>Gender</TableCell>
-                                        <TableCell sx={{ fontWeight: 700 }}>University</TableCell>
-                                        <TableCell sx={{ fontWeight: 700 }}>Address</TableCell>
-                                    </TableRow>
-                                </TableHead>
-
-                                <TableBody>
-                                    {pagedRows.map((r) => (
-                                        <TableRow key={r._id} hover>
-                                            <TableCell>{r.enrolno}</TableCell>
-                                            <TableCell>{r.fullName}</TableCell>
-                                            <TableCell>{r.email}</TableCell>
-                                            <TableCell>{r.course}</TableCell>
-                                            <TableCell>{r.contact}</TableCell>
-                                            <TableCell>{r.gender}</TableCell>
-                                            <TableCell>{r.university}</TableCell>
-                                            <TableCell>{r.address}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-
-                        <TablePagination
-                            component="div"
-                            count={filteredRows.length}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            rowsPerPage={rowsPerPage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            rowsPerPageOptions={[5, 10, 25, 50]}
-                            showFirstButton
-                            showLastButton
+                        <TextField
+                            size="small"
+                            placeholder="Search student..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            sx={{ minWidth: 220, background: "#fff", borderRadius: 1 }}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <SearchIcon color="action" />
+                                    </InputAdornment>
+                                ),
+                            }}
                         />
-                    </Paper>
-                )
-            )}
+                        <Button
+                            // size="small"
+                            variant="outlined"
+                            onClick={() => fetchStudents()}
+                        >
+                            Refresh
+                        </Button>
+                    </Stack>
+                </Stack>
+
+                {/* LOADING */}
+                {loading && (
+                    <Box display="flex" alignItems="center" justifyContent="center" py={6}>
+                        <CircularProgress />
+                    </Box>
+                )}
+
+                {/* ERROR */}
+                {!loading && error && (
+                    <Typography color="error" mb={2}>{error}</Typography>
+                )}
+
+                {/* TABLE + SHADOW + ROUNDED */}
+                {!loading && !error && (
+                    filteredRows.length === 0 ? (
+                        <Typography color="text.secondary">No students found.</Typography>
+                    ) : (
+                        <>
+                            <TableContainer>
+                                <Table size="small">
+                                    <TableHead>
+                                        <TableRow sx={{ bgcolor: "#f5f7ff" }}>
+                                            <TableCell sx={{ fontWeight: 700 }}>Enrollment No</TableCell>
+                                            <TableCell sx={{ fontWeight: 700 }}>Full Name</TableCell>
+                                            <TableCell sx={{ fontWeight: 700 }}>Email</TableCell>
+                                            <TableCell sx={{ fontWeight: 700 }}>Course</TableCell>
+                                            <TableCell sx={{ fontWeight: 700 }}>Contact</TableCell>
+                                            <TableCell sx={{ fontWeight: 700 }}>Gender</TableCell>
+                                            <TableCell sx={{ fontWeight: 700 }}>University</TableCell>
+                                            <TableCell sx={{ fontWeight: 700 }}>Address</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+
+                                    <TableBody>
+                                        {pagedRows.map((r) => (
+                                            <TableRow key={r._id} hover>
+                                                <TableCell>{r.enrolno}</TableCell>
+                                                <TableCell>{r.fullName}</TableCell>
+                                                <TableCell>{r.email}</TableCell>
+                                                <TableCell>{r.course}</TableCell>
+                                                <TableCell>{r.contact}</TableCell>
+                                                <TableCell>{r.gender}</TableCell>
+                                                <TableCell>{r.university}</TableCell>
+                                                <TableCell>{r.address}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+
+                            <TablePagination
+                                component="div"
+                                count={filteredRows.length}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                rowsPerPage={rowsPerPage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                rowsPerPageOptions={[5, 10, 25, 50]}
+                                showFirstButton
+                                showLastButton
+                            />
+                        </>
+                    )
+                )}
+            </Paper>
         </Box>
     );
 }

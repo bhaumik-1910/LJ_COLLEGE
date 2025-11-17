@@ -422,7 +422,11 @@ export default function Add_document() {
                                 <Button type="submit" variant="contained" disabled={loading} startIcon={<SaveIcon />}>
                                     {loading ? "Saving..." : "Save"}
                                 </Button>
-                                <Button variant="outlined" color="secondary" onClick={() => navigate(-1)} startIcon={<CancelIcon />}>
+                                <Button
+                                    variant="outlined"
+                                    // color="secondary"
+                                    onClick={() => navigate(-1)}
+                                    startIcon={<CancelIcon />}>
                                     Cancel
                                 </Button>
                             </Box>

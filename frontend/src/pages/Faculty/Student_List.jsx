@@ -197,55 +197,56 @@ export default function Student_List() {
     return (
         <Box sx={{ p: 3 }}>
 
-            <Box display="flex" alignItems="center" justifyContent="space-between" >
-                <Typography
-                    variant="h5"
-                    fontWeight={700}
-                    color="primary.main"
-                    display="flex"
-                    alignItems="center"
-                    gap={1}
-                >
-                    Students List
-                    <PeopleIcon fontSize="large" />
-                </Typography>
+            <Paper sx={{ p: 3 }}>
 
-                {/* <Button variant="contained" onClick={() => navigate("/faculty-dashboard/add-student")} sx={{ gap: 1 }}>
+                <Box display="flex" alignItems="center" justifyContent="space-between" >
+                    <Typography
+                        variant="h5"
+                        fontWeight={700}
+                        color="primary.main"
+                        display="flex"
+                        alignItems="center"
+                        gap={1}
+                    >
+                        Students List
+                        <PeopleIcon fontSize="large" />
+                    </Typography>
+
+                    {/* <Button variant="contained" onClick={() => navigate("/faculty-dashboard/add-student")} sx={{ gap: 1 }}>
                     <PersonAddIcon fontSize="small" />
                     Add Student
                 </Button> */}
 
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => navigate("/faculty-dashboard/add-student")}
-                    sx={{
-                        gap: 1,
-                        minWidth: isSmallScreen ? 40 : "auto",
-                        p: isSmallScreen ? 1 : "6px 16px",
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => navigate("/faculty-dashboard/add-student")}
+                        sx={{
+                            gap: 1,
+                            minWidth: isSmallScreen ? 40 : "auto",
+                            p: isSmallScreen ? 1 : "6px 16px",
+                        }}
+                    >
+                        <PersonAddIcon fontSize={isSmallScreen ? "small" : "medium"} />
+                        {!isSmallScreen && "Add Student"}
+                    </Button>
+                </Box>
+
+                <TextField
+                    size="small"
+                    placeholder="Search students..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    sx={{ maxWidth: 360, mb: 2, mt: 2 }}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon color="action" />
+                            </InputAdornment>
+                        ),
                     }}
-                >
-                    <PersonAddIcon fontSize={isSmallScreen ? "small" : "medium"} />
-                    {!isSmallScreen && "Add Student"}
-                </Button>
-            </Box>
+                />
 
-            <TextField
-                size="small"
-                placeholder="Search students..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                sx={{ maxWidth: 360, mb: 2, mt: 2 }}
-                InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon color="action" />
-                        </InputAdornment>
-                    ),
-                }}
-            />
-
-            <Paper sx={{ p: 1 }}>
                 {loading && (
                     <Box display="flex" alignItems="center" justifyContent="center" py={6}>
                         <CircularProgress />

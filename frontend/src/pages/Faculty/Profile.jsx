@@ -302,23 +302,35 @@ export default function FacultyProfile() {
 
   if (loading) {
     return (
-      <Box sx={{ p: 3, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 240 }}>
+      <Box sx={{
+        p: 3,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: 240
+      }}>
         <CircularProgress />
       </Box>
     );
   }
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box
+      sx={{
+        p: 3,
+        display: "flex",
+        justifyContent: "center", // ⬅ centers horizontally
+        alignItems: "center",
+      }}>
       {/* centered outer card */}
       <Paper
         elevation={6}
         sx={{
-          maxWidth: 980,
-          mx: "auto",
+          // mx: "auto",
           borderRadius: 4,
           overflow: "hidden",
           bgcolor: "#fafbfd",
+          maxWidth: 900,
         }}
       >
         {/* gradient header */}
@@ -331,13 +343,15 @@ export default function FacultyProfile() {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            borderTopLeftRadius: 16,
+            borderTopRightRadius: 16,
           }}
         >
           <Box>
             <Typography variant="h5" sx={{ fontWeight: 800 }}>
               Faculty Profile
             </Typography>
-            <Typography variant="body2" sx={{ opacity: 0.95 }}>
+            <Typography variant="body2" sx={{ opacity: 0.9 }}>
               Manage your account details
             </Typography>
           </Box>
@@ -354,9 +368,10 @@ export default function FacultyProfile() {
                   color: "#fff",
                   borderRadius: 3,
                   px: 2.2,
+                  "&:hover": { bgcolor: "rgba(255,255,255,0.22)" },
                 }}
               >
-                Edit
+                Edit Profile
               </Button>
             ) : (
               <Stack direction="row" spacing={1}>
@@ -373,7 +388,13 @@ export default function FacultyProfile() {
                       avatarUrl: me?.avatarUrl || "",
                     });
                   }}
-                  sx={{ color: "#fff", borderColor: "rgba(255,255,255,0.2)", textTransform: "none", borderRadius: 3 }}
+                  sx={{
+                    color: "#fff",
+                    borderColor: "rgba(255,255,255,0.2)",
+                    textTransform: "none",
+                    borderRadius: 3,
+                  }}
+
                 >
                   Cancel
                 </Button>
@@ -381,7 +402,13 @@ export default function FacultyProfile() {
                   variant="contained"
                   startIcon={<SaveIcon />}
                   onClick={handleSave}
-                  sx={{ textTransform: "none", bgcolor: "rgba(255,255,255,0.18)", color: "#fff", borderRadius: 3 }}
+                  sx={{
+                    textTransform: "none",
+                    bgcolor: "rgba(255,255,255,0.18)",
+                    color: "#fff",
+                    borderRadius: 3,
+                    "&:hover": { bgcolor: "rgba(255,255,255,0.22)" },
+                  }}
                 >
                   Save
                 </Button>
@@ -395,7 +422,7 @@ export default function FacultyProfile() {
           <Grid container spacing={3} justifyContent="center" alignItems="flex-start">
             {/* left avatar card */}
             <Grid item xs={12} md={4} sx={{ display: "flex", justifyContent: "center" }}>
-              <Paper
+              {/* <Paper
                 elevation={0}
                 sx={{
                   borderRadius: 2,
@@ -405,94 +432,94 @@ export default function FacultyProfile() {
                   maxWidth: 320,
                   boxShadow: "0 6px 18px rgba(11,20,60,0.04)",
                 }}
-              >
-                <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-                  <Box sx={{ position: "relative" }}>
-                    <Avatar
-                      src={form.avatarUrl || undefined}
-                      sx={{
-                        width: 120,
-                        height: 120,
-                        bgcolor: "#e6e9ef",
-                        fontSize: 36,
-                        boxShadow: "0 8px 20px rgba(11,20,60,0.06)",
-                      }}
-                    >
-                      {form.name?.charAt(0)?.toUpperCase() || "F"}
-                    </Avatar>
+              > */}
+              <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+                <Box sx={{ position: "relative" }}>
+                  <Avatar
+                    src={form.avatarUrl || undefined}
+                    sx={{
+                      width: 120,
+                      height: 120,
+                      bgcolor: "#e6e9ef",
+                      fontSize: 36,
+                      boxShadow: "0 8px 20px rgba(11,20,60,0.06)",
+                    }}
+                  >
+                    {form.name?.charAt(0)?.toUpperCase() || "F"}
+                  </Avatar>
 
-                    <IconButton
-                      onClick={onPickFile}
-                      sx={{
-                        position: "absolute",
-                        right: -6,
-                        bottom: -6,
-                        bgcolor: "#fff",
-                        border: "2px solid #fff",
-                        boxShadow: "0 6px 12px rgba(11,20,60,0.08)",
-                        width: 40,
-                        height: 40,
-                      }}
-                      size="small"
-                    >
-                      <CameraAltIcon sx={{ color: "#6b7cff" }} />
-                    </IconButton>
-                  </Box>
-
-                  <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={handleFileChange} />
-
-                  <Box textAlign="center">
-                    <Typography variant="h6" fontWeight={700}>
-                      {me?.name || "-"}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {me?.email || "-"}
-                    </Typography>
-                  </Box>
-
-                  <Box width="100%" mt={1}>
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      onClick={() => {
-                        if (me?.email) {
-                          navigator.clipboard?.writeText(me.email);
-                          toast.success("Email copied");
-                        }
-                      }}
-                      sx={{
-                        textTransform: "none",
-                        borderRadius: 3,
-                        background: "linear-gradient(90deg,#4f73ff,#7fb1ff)",
-                        boxShadow: "0 8px 20px rgba(79,115,255,0.12)",
-                        color: "#fff",
-                        mb: 1,
-                      }}
-                    >
-                      Copy Email
-                    </Button>
-
-                    <Button
-                      fullWidth
-                      variant="outlined"
-                      onClick={() => setForm((f) => ({ ...f, avatarUrl: "" }))}
-                      sx={{
-                        textTransform: "none",
-                        borderRadius: 3,
-                        borderColor: "#e6e9ef",
-                        color: "#4f73ff",
-                      }}
-                    >
-                      Remove Avatar
-                    </Button>
-                  </Box>
+                  <IconButton
+                    onClick={onPickFile}
+                    sx={{
+                      position: "absolute",
+                      right: -6,
+                      bottom: -6,
+                      bgcolor: "#fff",
+                      border: "2px solid #fff",
+                      boxShadow: "0 6px 12px rgba(11,20,60,0.08)",
+                      width: 40,
+                      height: 40,
+                    }}
+                    size="small"
+                  >
+                    <CameraAltIcon fontSize="small" sx={{ color: "#6b7cff" }} />
+                  </IconButton>
                 </Box>
-              </Paper>
+
+                <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={handleFileChange} />
+
+                <Box textAlign="center">
+                  <Typography variant="h6" fontWeight={700}>
+                    {me?.name || "-"}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {me?.email || "-"}
+                  </Typography>
+                </Box>
+
+                <Box width="100%" mt={1}>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    onClick={() => {
+                      if (me?.email) {
+                        navigator.clipboard?.writeText(me.email);
+                        toast.success("Email copied");
+                      }
+                    }}
+                    sx={{
+                      textTransform: "none",
+                      borderRadius: 3,
+                      background: "linear-gradient(90deg,#4f73ff,#7fb1ff)",
+                      boxShadow: "0 8px 20px rgba(79,115,255,0.12)",
+                      color: "#fff",
+                      mb: 1,
+                    }}
+                  >
+                    Copy Email
+                  </Button>
+
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    onClick={() => setForm((f) => ({ ...f, avatarUrl: "" }))}
+                    sx={{
+                      textTransform: "none",
+                      borderRadius: 3,
+                      borderColor: "#e6e9ef",
+                      color: "#4f73ff",
+                    }}
+                  >
+                    Remove Avatar
+                  </Button>
+                </Box>
+              </Box>
+              {/* </Paper> */}
             </Grid>
 
-            {/* right form card */}
-            <Grid item xs={12} md={7} sx={{ display: "flex", justifyContent: "center" }}>
-              <Paper
+            {/* Right form  */}
+            <Grid item xs={12} md={8} >
+              {/* <Paper
                 elevation={0}
                 sx={{
                   borderRadius: 2,
@@ -502,52 +529,61 @@ export default function FacultyProfile() {
                   maxWidth: 600,
                   boxShadow: "0 6px 18px rgba(11,20,60,0.04)",
                 }}
-              >
-                <Stack spacing={2}>
-                  <TextField
-                    label="Name"
-                    value={form.name}
-                    onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                    disabled={!editing}
-                    fullWidth
-                    size="small"
-                    variant="outlined"
-                    InputProps={{ sx: { borderRadius: 3, bgcolor: "#fbfcff" } }}
-                  />
-                  <TextField
-                    label="Email"
-                    value={form.email}
-                    onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                    disabled={!editing}
-                    fullWidth
-                    size="small"
-                    variant="outlined"
-                    InputProps={{ sx: { borderRadius: 3, bgcolor: "#fbfcff" } }}
-                  />
+              > */}
+              <Stack spacing={2}>
+                <TextField
+                  label="Name"
+                  value={form.name}
+                  onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                  disabled={!editing}
+                  fullWidth
+                  variant="outlined"
+                  InputProps={{ sx: { borderRadius: 3, bgcolor: "#fbfcff" } }}
+                />
+                <TextField
+                  label="Email"
+                  value={form.email}
+                  onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                  disabled={!editing}
+                  fullWidth
+                  variant="outlined"
+                  InputProps={{ sx: { borderRadius: 3, bgcolor: "#fbfcff" } }}
+                />
 
-                  <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-                    <TextField
-                      label="Role"
-                      value={form.role}
-                      disabled
-                      fullWidth
-                      size="small"
-                      variant="outlined"
-                      InputProps={{ sx: { borderRadius: 3, bgcolor: "#fbfcff" } }}
-                    />
-                    <TextField
-                      label="University"
-                      value={form.university}
-                      onChange={(e) => setForm((f) => ({ ...f, university: e.target.value }))}
-                      disabled={!editing}
-                      fullWidth
-                      size="small"
-                      variant="outlined"
-                      InputProps={{ sx: { borderRadius: 3, bgcolor: "#fbfcff" } }}
-                    />
-                  </Stack>
+                <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                  <TextField
+                    label="Role"
+                    value={form.role}
+                    disabled
+                    fullWidth
+                    variant="outlined"
+                    InputProps={{ sx: { borderRadius: 3, bgcolor: "#fbfcff" } }}
+                  />
+                  <TextField
+                    label="University"
+                    value={form.university}
+                    onChange={(e) => setForm((f) => ({ ...f, university: e.target.value }))}
+                    disabled={!editing}
+                    fullWidth
+                    variant="outlined"
+                    InputProps={{ sx: { borderRadius: 3, bgcolor: "#fbfcff" } }}
+                  />
                 </Stack>
-              </Paper>
+
+                <TextField
+                  label="Avatar URL"
+                  value={form.avatarUrl}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, avatarUrl: e.target.value }))
+                  }
+                  disabled={!editing}
+                  fullWidth
+                  variant="outlined"
+                  helperText="Paste a public image URL or upload using camera icon"
+                  InputProps={{ sx: { borderRadius: 3, bgcolor: "#fbfcff" } }}
+                />
+              </Stack>
+              {/* </Paper> */}
             </Grid>
           </Grid>
         </Box>

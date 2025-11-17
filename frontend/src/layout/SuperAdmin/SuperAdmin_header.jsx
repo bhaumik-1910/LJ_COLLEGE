@@ -117,11 +117,11 @@ export default function SuperAdminHeader() {
 
         {/* Right Side: Keep the existing buttons */}
         <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1 }}>
-          <Tooltip title={mode === 'light' ? 'dark mode' : 'light mode'}>
+          {/* <Tooltip title={mode === 'light' ? 'dark mode' : 'light mode'}>
             <IconButton color="inherit" onClick={toggle} aria-label="Toggle theme mode">
               {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
           <IconButton color="inherit" onClick={handleOpen} aria-label="Account menu" size="small">
             <Avatar
               sx={{ width: 32, height: 32 }}

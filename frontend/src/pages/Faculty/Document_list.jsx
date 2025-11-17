@@ -120,39 +120,40 @@ export default function Document_list() {
     return (
         <Box sx={{ p: 3 }}>
 
-            <Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={2} mb={3}>
+            <Paper sx={{ p: 3 }}>
 
-                <Typography
-                    variant="h5"
-                    fontWeight={700}
-                    color="primary.main"
-                    display="flex"
-                    alignItems="center"
-                    gap={1}
-                >
-                    Documents List
-                    <DescriptionIcon fontSize="large" />
-                </Typography>
+                <Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={2} mb={3}>
 
-                <Box display="flex" alignItems="center" gap={2}>
-                    <TextField
-                        select
-                        label={loadingCats ? "Loading categories..." : "Filter by Category"}
-                        value={selectedCat}
-                        onChange={handleCategoryChange}
-                        sx={{ minWidth: 240 }}
-                        size="small"
-                        disabled={loadingCats}
+                    <Typography
+                        variant="h5"
+                        fontWeight={700}
+                        color="primary.main"
+                        display="flex"
+                        alignItems="center"
+                        gap={1}
                     >
-                        <MenuItem value="">All</MenuItem>
-                        {categories.map((c) => (
-                            <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
-                        ))}
-                    </TextField>
-                </Box>
-            </Box>
+                        Documents List
+                        <DescriptionIcon fontSize="large" />
+                    </Typography>
 
-            <Paper sx={{ p: 1 }}>
+                    <Box display="flex" alignItems="center" gap={2}>
+                        <TextField
+                            select
+                            label={loadingCats ? "Loading categories..." : "Filter by Category"}
+                            value={selectedCat}
+                            onChange={handleCategoryChange}
+                            sx={{ minWidth: 240 }}
+                            size="small"
+                            disabled={loadingCats}
+                        >
+                            <MenuItem value="">All</MenuItem>
+                            {categories.map((c) => (
+                                <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
+                            ))}
+                        </TextField>
+                    </Box>
+                </Box>
+
                 {loading ? (
                     // Display loading indicator
                     <Box display="flex" justifyContent="center" alignItems="center" py={6}>
