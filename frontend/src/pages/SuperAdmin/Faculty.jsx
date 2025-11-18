@@ -692,10 +692,9 @@ export default function Admin_Faculty() {
                 value={editRow?.role || "user"}
                 onChange={(e) => onEditChange("role", e.target.value)}
               >
+                <MenuItem value="superadmin">Super Admin</MenuItem>
                 <MenuItem value="admin">Admin</MenuItem>
                 <MenuItem value="faculty">Faculty</MenuItem>
-                <MenuItem value="student">Student</MenuItem>
-                <MenuItem value="user">User</MenuItem>
               </TextField>
 
               <TextField
