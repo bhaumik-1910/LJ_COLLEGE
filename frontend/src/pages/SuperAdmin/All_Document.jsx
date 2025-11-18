@@ -1077,7 +1077,7 @@ export default function All_Document() {
     [token]
   );
 
-  // ⭐ Fetch documents and auto extract categories
+  // Fetch documents and auto extract categories
   const fetchDocs = async (p = 0, limit = 10) => {
     if (!token) return;
     setLoading(true);
@@ -1094,7 +1094,7 @@ export default function All_Document() {
         setDocs(items);
         setTotal(data.total || items.length);
 
-        // ⭐ Extract unique category names automatically
+        // Extract unique category names automatically
         const uniqueCategories = [...new Set(
           items.map(d => d.category?.name || d.categoryName).filter(Boolean)
         )];
@@ -1111,7 +1111,7 @@ export default function All_Document() {
     // eslint-disable-next-line
   }, [token]);
 
-  // ⭐ Handle category filter
+  // Handle category filter
   const handleCategoryChange = (e) => {
     const value = e.target.value;
     setSelectedCat(value);

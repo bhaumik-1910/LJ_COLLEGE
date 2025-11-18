@@ -622,7 +622,7 @@ const Login = () => {
                     </Toggle>
                 </ToggleContainer>
             </Container>
-        </Box >
+        </Box>
     );
 };
 
