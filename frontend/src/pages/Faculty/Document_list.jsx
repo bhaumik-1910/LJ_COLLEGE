@@ -19,9 +19,9 @@ export default function Document_list() {
     const { token } = useContext(AuthContext);
     const [categories, setCategories] = useState([]);
     const [selectedCat, setSelectedCat] = useState("");
+    const [loadingCats, setLoadingCats] = useState(false);
     const [docs, setDocs] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [loadingCats, setLoadingCats] = useState(false);
     const [deletingId, setDeletingId] = useState(null);
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [targetId, setTargetId] = useState("");
