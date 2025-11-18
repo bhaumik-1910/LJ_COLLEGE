@@ -126,8 +126,8 @@ export default function AdminDashboard() {
 
     return (
 
-        <Box sx={{ p: 3 }}>
-            <Typography variant="h5" fontWeight={700} mb={2}>Admin Dashboard</Typography>
+        <Box sx={{ p: 5 }}>
+            <Typography variant="h5" fontWeight={700} mb={2} sx={{ color: "#2b4ddb" }}>Admin Dashboard</Typography>
 
             {loading ? (
                 <Box sx={{ py: 6, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

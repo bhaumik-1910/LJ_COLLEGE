@@ -387,7 +387,7 @@ export default function AdminList() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Update failed");
-      toast.success("Admin updated");
+      toast.success("Admin Updated..");
       setEditOpen(false);
       setEditRow(null);
       await fetchUsers();
@@ -410,7 +410,7 @@ export default function AdminList() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Delete failed");
-      toast.success("Admin deleted");
+      toast.success("Admin Deleted..");
       setDelOpen(false);
       setDelRow(null);
       await fetchUsers();
@@ -429,11 +429,11 @@ export default function AdminList() {
 
   const roleColor = (role) => {
     switch ((role || "").toLowerCase()) {
-      case "admin":
+      case "superadmin":
         return "secondary";
-      case "faculty":
+      case "admin":
         return "primary";
-      case "student":
+      case "faculty":
         return "success";
       default:
         return "default";
@@ -451,7 +451,7 @@ export default function AdminList() {
           justifyContent="space-between"
           mb={2}
         >
-          <Typography variant="h5" fontWeight={700}>
+          <Typography variant="h5" fontWeight={700} sx={{ color: "#2b4ddb" }}>
             Admins
           </Typography>
 
@@ -463,7 +463,7 @@ export default function AdminList() {
           >
             <TextField
               size="small"
-              placeholder="Search admins..."
+              placeholder="Search Admins..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               sx={{ minWidth: 220, background: "#fff", borderRadius: 1 }}
@@ -515,7 +515,7 @@ export default function AdminList() {
                     <Stack alignItems="center" spacing={1}>
                       <CircularProgress size={28} />
                       <Typography variant="body2" color="text.secondary">
-                        Loading Admins...
+                        Loading Admins..
                       </Typography>
                     </Stack>
                   </TableCell>
@@ -696,7 +696,7 @@ export default function AdminList() {
 
         {/* Delete confirm */}
         <Dialog open={delOpen} onClose={() => setDelOpen(false)}>
-          <DialogTitle>Delete admin?</DialogTitle>
+          <DialogTitle>Delete Admin?</DialogTitle>
           <DialogContent dividers>
             <Typography>
               Are you sure you want to delete <strong>{delRow?.email}</strong>?

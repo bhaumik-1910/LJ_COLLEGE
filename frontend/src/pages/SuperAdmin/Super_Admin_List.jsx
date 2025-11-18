@@ -391,7 +391,7 @@ export default function SuperAdminList() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Update failed");
-      toast.success("Admin updated");
+      toast.success("Super Admin Updated..");
       setEditOpen(false);
       setEditRow(null);
       await fetchUsers();
@@ -414,7 +414,7 @@ export default function SuperAdminList() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Delete failed");
-      toast.success("Admin deleted");
+      toast.success("Super Admin Deleted..");
       setDelOpen(false);
       setDelRow(null);
       await fetchUsers();
@@ -433,14 +433,14 @@ export default function SuperAdminList() {
 
   const roleColor = (role) => {
     switch ((role || "").toLowerCase()) {
-      case "admin":
+      case "superadmin":
         return "secondary";
-      case "faculty":
+      case "admin":
         return "primary";
-      case "student":
+      case "faculty":
         return "success";
       default:
-        return "default"; da
+        return "default";
     }
   };
 
@@ -455,7 +455,7 @@ export default function SuperAdminList() {
           justifyContent="space-between"
           mb={2}
         >
-          <Typography variant="h5" fontWeight={700}>
+          <Typography variant="h5" fontWeight={700} sx={{ color: "#2b4ddb" }}>
             Super Admins
           </Typography>
 
@@ -467,7 +467,7 @@ export default function SuperAdminList() {
           >
             <TextField
               size="small"
-              placeholder="Search admins..."
+              placeholder="Search super admins..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               sx={{ minWidth: 220, background: "#fff", borderRadius: 1 }}
@@ -528,7 +528,7 @@ export default function SuperAdminList() {
                 <TableRow>
                   <TableCell colSpan={6} align="center" sx={{ py: 4 }}>
                     <Typography variant="body2" color="text.secondary">
-                      No admins found
+                      No Super Admins Found
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -630,7 +630,7 @@ export default function SuperAdminList() {
           fullWidth
           maxWidth="sm"
         >
-          <DialogTitle sx={{ fontWeight: 700 }}>Edit Admin</DialogTitle>
+          <DialogTitle sx={{ fontWeight: 700 }}>Edit Super Admin</DialogTitle>
           <DialogContent dividers>
             <Stack spacing={2}>
 
@@ -700,7 +700,7 @@ export default function SuperAdminList() {
 
         {/* Delete confirm */}
         <Dialog open={delOpen} onClose={() => setDelOpen(false)}>
-          <DialogTitle>Delete admin?</DialogTitle>
+          <DialogTitle>Delete Super Admin?</DialogTitle>
           <DialogContent dividers>
             <Typography>
               Are you sure you want to delete <strong>{delRow?.email}</strong>?

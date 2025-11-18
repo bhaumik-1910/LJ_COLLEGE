@@ -174,7 +174,7 @@ export default function SuperAdminDashboard() {
 
     return (
         <Box sx={{ p: 4 }}>
-            <Typography variant="h5" fontWeight={700} sx={{ mb: 2 }}>Super Dashboard</Typography>
+            <Typography variant="h5" fontWeight={700} sx={{ mb: 2,color: "#2b4ddb" }}>Super Dashboard</Typography>
             {/* Top summary boxes */}
             <Grid container spacing={4} mb={4}>
                 {/* Total Admins Card */}

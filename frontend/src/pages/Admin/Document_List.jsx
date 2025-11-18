@@ -341,7 +341,7 @@ export default function AdminDocumentList() {
                 {/* Header */}
                 <Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={2} mb={3}>
                     <Typography variant="h5" fontWeight={700} sx={{ color: "#2B6EF6" }}>
-                        Documents
+                        Documents List
                     </Typography>
 
                     <Box display="flex" alignItems="center" gap={2}>

@@ -419,7 +419,7 @@ export default function Admin_Faculty() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Update failed");
-      toast.success("User updated");
+      toast.success("Faculty Updated..");
       setEditOpen(false);
       setEditRow(null);
       await fetchUsers();
@@ -442,7 +442,7 @@ export default function Admin_Faculty() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Delete failed");
-      toast.success("User deleted");
+      toast.success("Faculty Deleted..");
       setDelOpen(false);
       setDelRow(null);
       await fetchUsers();
@@ -461,11 +461,11 @@ export default function Admin_Faculty() {
 
   const roleColor = (role) => {
     switch ((role || "").toLowerCase()) {
-      case "admin":
+      case "superadmin":
         return "secondary";
-      case "faculty":
+      case "admin":
         return "primary";
-      case "student":
+      case "faculty":
         return "success";
       default:
         return "default";
@@ -483,7 +483,7 @@ export default function Admin_Faculty() {
           justifyContent="space-between"
           mb={2}
         >
-          <Typography variant="h5" fontWeight={700}>
+          <Typography variant="h5" fontWeight={700} sx={{ color: "#2b4ddb" }}>
             Faculty
           </Typography>
 
@@ -557,7 +557,7 @@ export default function Admin_Faculty() {
                 <TableRow>
                   <TableCell colSpan={6} align="center" sx={{ py: 4 }}>
                     <Typography variant="body2" color="text.secondary">
-                      No users found
+                      No Faculty Found
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -659,7 +659,7 @@ export default function Admin_Faculty() {
           fullWidth
           maxWidth="sm"
         >
-          <DialogTitle sx={{ fontWeight: 700 }}>Edit User</DialogTitle>
+          <DialogTitle sx={{ fontWeight: 700 }}>Edit Faculty</DialogTitle>
           <DialogContent dividers>
             <Stack spacing={2}>
               <TextField
@@ -728,7 +728,7 @@ export default function Admin_Faculty() {
 
         {/* Delete confirm */}
         <Dialog open={delOpen} onClose={() => setDelOpen(false)}>
-          <DialogTitle>Delete user?</DialogTitle>
+          <DialogTitle>Delete Faculty?</DialogTitle>
           <DialogContent dividers>
             <Typography>
               Are you sure you want to delete <strong>{delRow?.email}</strong>?

@@ -137,7 +137,7 @@ export default function SuperAdminProfile() {
           {/* <Stack direction={{ xs: "column", sm: "row" }} alignItems="center" justifyContent="space-between" spacing={2}> */}
           <Box>
             <Typography variant="h5" sx={{ fontWeight: 800 }}>
-              Admin Profile
+              Super Admin Profile
             </Typography>
             <Typography variant="body2" sx={{ opacity: 0.9 }}>
               Manage your account details
