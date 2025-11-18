@@ -6,7 +6,8 @@ import {
   InputAdornment,
   IconButton,
   MenuItem,
-  Box
+  Box,
+  Paper
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -164,7 +165,8 @@ const RegisterPage = () => {
   return (
     <Box
       sx={{
-        background: 'linear-gradient(to right, #f4f7fb, #eef3ff)',
+        // background: 'linear-gradient(to right, #f4f7fb, #eef3ff)',
+        // background: '#f4f7fb',
         minHeight: '100vh',
         display: 'flex',
         justifyContent: 'center',

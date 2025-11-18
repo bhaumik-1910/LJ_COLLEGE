@@ -474,7 +474,7 @@ export default function Admin_Faculty() {
 
   return (
     <Box sx={{ p: { xs: 2, md: 3 } }}>
-      <Paper elevation={2} sx={{ borderRadius: 2, p: { xs: 2, md: 3 } }}>
+      <Paper elevation={2} sx={{ borderRadius: 2, p: { xs: 2, md: 3 }, bgcolor: '#fff' }}>
         {/* Header */}
         <Stack
           direction={{ xs: "column", sm: "row" }}

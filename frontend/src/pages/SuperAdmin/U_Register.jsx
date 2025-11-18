@@ -141,7 +141,7 @@ export default function U_Register() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "#f7fbfc",
+        // background: "#f7fbfc",
       }}
     >
       <Paper

@@ -17,7 +17,7 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import PinterestIcon from "@mui/icons-material/Pinterest";
-import logo from '../assets/images/f_uni.png'
+import logo from '../assets/C_logo.jpeg'
 
 // Mock Toast for newsletter submission feedback
 const useToast = () => ({
@@ -166,12 +166,23 @@ const Footer = () => {
                             sx={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: 1,       
+                                gap: 1,
                                 mb: 2,
                             }}
                         >
                             {/* Logo */}
-                            <Box component="img" src={logo} alt="Logo" width={50} height={50} />
+                            <Box
+                                component="img"
+                                src={logo}
+                                alt="Logo"
+                                width={50}
+                                height={50}
+                                sx={{
+                                    borderRadius: "50%",
+                                    objectFit: "cover",
+                                }}
+                            />
+
 
                             {/* University text */}
                             <Typography
@@ -187,7 +198,16 @@ const Footer = () => {
                         </Typography>
                         {/* Social Icons */}
                         <Box sx={{ mt: 3, display: 'flex' }}>
-                            <SocialIconBox><YouTubeIcon fontSize="small" /></SocialIconBox>
+                            <SocialIconBox>
+                                {/* <a
+                                    href="https://www.youtube.com/@ljuniversity6167"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                > */}
+                                <YouTubeIcon fontSize="small" />
+                                {/* </a> */}
+                            </SocialIconBox>
+
                             <SocialIconBox><FacebookIcon fontSize="small" /></SocialIconBox>
                             <SocialIconBox><TwitterIcon fontSize="small" /></SocialIconBox>
                             <SocialIconBox><PinterestIcon fontSize="small" /></SocialIconBox>
@@ -206,7 +226,7 @@ const Footer = () => {
                             <EmailIcon fontSize="small" sx={{ mr: 1, color: '#6fa8dc' }} /> ljuniversity@gmail.com
                         </FooterLink>
                         <FooterLink variant="body2" sx={{ display: 'flex', alignItems: 'center' }}>
-                            <PhoneIcon fontSize="small" sx={{ mr: 1, color: '#6fa8dc' }} /> +91 - 9313629723
+                            <PhoneIcon fontSize="small" sx={{ mr: 1, color: '#6fa8dc' }} /> +91 - 90990 63417
                         </FooterLink>
                     </Grid>
 

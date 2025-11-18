@@ -234,7 +234,7 @@ export default function All_Document() {
 
   return (
     <Box sx={{ p: { xs: 2, md: 3 } }}>
-      <Paper elevation={3} sx={{ borderRadius: 2, p: { xs: 2, md: 3 } }}>
+      <Paper elevation={3} sx={{ borderRadius: 2, p: { xs: 2, md: 3 }, bgcolor: '#fff' }}>
         {/* Header */}
         <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
           <Typography variant="h5" fontWeight={700}>
