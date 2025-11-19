@@ -3,6 +3,7 @@
 // import { AuthContext } from '../../context/AuthContext';
 
 // const API_BASE = 'http://localhost:5000/api';
+// const API_BASE = import.meta.env.VITE_API_BASE;
 
 // export default function FacultyList() {
 //     const { token } = useContext(AuthContext);
@@ -161,7 +162,8 @@ import { AuthContext } from '../../context/AuthContext';
 import SearchIcon from "@mui/icons-material/Search";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
-const API_BASE = 'http://localhost:5000/api';
+// const API_BASE = 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function FacultyList() {
     const { token } = useContext(AuthContext);

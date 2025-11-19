@@ -13,7 +13,8 @@ export const AuthContext = createContext({
     resetPassword: async () => ({ success: false }),
 });
 
-const API_BASE = 'http://localhost:5000/api';
+// const API_BASE = 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(() => localStorage.getItem('token'));

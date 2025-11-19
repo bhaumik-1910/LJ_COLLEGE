@@ -6,8 +6,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CancelIcon from '@mui/icons-material/Cancel';
 import DescriptionIcon from '@mui/icons-material/Description';
 
-const API_BASE = "http://localhost:5000/api";
-const BACKEND_BASE = "http://localhost:5000";
+// const API_BASE = "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
+// const BACKEND_BASE = "http://localhost:5000";
+const BACKEND_BASE = import.meta.env.VITE_BACKEND_BASE;
 
 const toBackendUrl = (p) => {
     if (!p) return "";

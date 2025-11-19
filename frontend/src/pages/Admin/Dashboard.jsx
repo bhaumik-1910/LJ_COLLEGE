@@ -12,7 +12,8 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 // Register Chart.js elements
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const API_BASE = 'http://localhost:5000/api';
+// const API_BASE = 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function AdminDashboard() {
     const { token } = useContext(AuthContext);

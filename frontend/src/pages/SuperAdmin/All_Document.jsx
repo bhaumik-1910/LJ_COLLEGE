@@ -3,7 +3,9 @@
 // import { AuthContext } from "../../context/AuthContext";
 
 // const API_BASE = "http://localhost:5000/api";
+// const API_BASE = import.meta.env.VITE_API_BASE;
 // const BACKEND_BASE = "http://localhost:5000";
+// const BACKEND_BASE = import.meta.env.VITE_BACKEND_BASE;
 
 // const toBackendUrl = (p) => {
 //     if (!p) return "";
@@ -169,7 +171,9 @@
 // import { AuthContext } from "../../context/AuthContext";
 
 // const API_BASE = "http://localhost:5000/api";
+// const API_BASE = import.meta.env.VITE_API_BASE;
 // const BACKEND_BASE = "http://localhost:5000";
+// const BACKEND_BASE = import.meta.env.VITE_BACKEND_BASE;
 
 // const toBackendUrl = (p) => {
 //   if (!p) return "";
@@ -432,7 +436,9 @@
 // import { AuthContext } from "../../context/AuthContext";
 
 // const API_BASE = "http://localhost:5000/api";
+// const API_BASE = import.meta.env.VITE_API_BASE;
 // const BACKEND_BASE = "http://localhost:5000";
+// const BACKEND_BASE = import.meta.env.VITE_BACKEND_BASE;
 
 // const toBackendUrl = (p) => {
 //   if (!p) return "";
@@ -693,7 +699,9 @@
 // import { AuthContext } from "../../context/AuthContext";
 
 // const API_BASE = "http://localhost:5000/api";
+// const API_BASE = import.meta.env.VITE_API_BASE;
 // const BACKEND_BASE = "http://localhost:5000";
+// const BACKEND_BASE = import.meta.env.VITE_BACKEND_BASE;
 
 // // Convert /uploads/... → http://localhost:5000/uploads/...
 // const toBackendUrl = (p) => {
@@ -1051,8 +1059,10 @@ import {
 } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
 
-const API_BASE = "http://localhost:5000/api";
-const BACKEND_BASE = "http://localhost:5000";
+// const API_BASE = "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
+// const BACKEND_BASE = "http://localhost:5000";
+const BACKEND_BASE = import.meta.env.VITE_BACKEND_BASE;
 
 const toBackendUrl = (p) => {
   if (!p) return "";
@@ -1064,6 +1074,10 @@ export default function All_Document() {
 
   const [categories, setCategories] = useState([]);  // Auto extracted
   const [selectedCat, setSelectedCat] = useState("");
+
+  const [allDocTypes, setAllDocTypes] = useState([]);
+  const [selectedTypes, setSelectedTypes] = useState("");
+
   const [docs, setDocs] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -1098,8 +1112,14 @@ export default function All_Document() {
         const uniqueCategories = [...new Set(
           items.map(d => d.category?.name || d.categoryName).filter(Boolean)
         )];
-
         setCategories(uniqueCategories);
+
+
+        const uniqueType = [...new Set(
+          items.map(d => d.type?.name || d.type).filter(Boolean)
+        )];
+        setAllDocTypes(uniqueType);
+        // setAllDocTypes(Array.isArray(typeData.items) ? typeData.items : []);
       }
     } finally {
       setLoading(false);
@@ -1126,6 +1146,21 @@ export default function All_Document() {
     }
   };
 
+  // Handle Type filter
+  const handleTypeChange = (e) => {
+    const value = e.target.value;
+    setSelectedTypes(value);
+
+    if (!value) {
+      fetchDocs(page, rowsPerPage);  // Show all
+    } else {
+      const filteredDocs = docs.filter(
+        (d) => (d.type?.name || d.type) === value
+      );
+      setDocs(filteredDocs);
+    }
+  };
+
   const getFileName = (doc) => {
     if (doc?.fileOriginalName) return doc.fileOriginalName;
     try {
@@ -1137,6 +1172,7 @@ export default function All_Document() {
   };
 
   const handleChangePage = (_evt, newPage) => setPage(newPage);
+
   const handleChangeRowsPerPage = (evt) => {
     setRowsPerPage(parseInt(evt.target.value, 10));
     setPage(0);
@@ -1171,30 +1207,70 @@ export default function All_Document() {
         }}
       >
         {/* Header */}
-        <Box display="flex" justifyContent="space-between" mb={3} flexWrap="wrap" gap={2}>
-          <Typography variant="h5" fontWeight={700} sx={{ color: "#2B6EF6" }}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={3}
+          flexWrap="wrap"
+          gap={2}
+        >
+
+          {/* Left Side Title */}
+          <Typography
+            variant="h5"
+            fontWeight={700}
+            sx={{ color: "#2B6EF6" }}
+          >
             All Documents
           </Typography>
 
-          <TextField
-            select
-            label="Filter by Category"
-            size="small"
-            value={selectedCat}
-            onChange={handleCategoryChange}
-            sx={{
-              minWidth: 240,
-              background: "#fff",
-              borderRadius: 2,
-              boxShadow: "0 2px 8px rgba(0,0,0,0.06)"
-            }}
-          >
-            <MenuItem value="">All</MenuItem>
-            {categories.map((c) => (
-              <MenuItem key={c} value={c}>{c}</MenuItem>
-            ))}
-          </TextField>
+          {/* Right Side Filters */}
+          <Box display="flex" gap={2}>
+
+            {/* Category Filter */}
+            <TextField
+              select
+              label="Filter by Category"
+              size="small"
+              value={selectedCat}
+              onChange={handleCategoryChange}
+              sx={{
+                minWidth: 240,
+                background: "#fff",
+                borderRadius: 2,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.06)"
+              }}
+            >
+              <MenuItem value="">All</MenuItem>
+              {categories.map((c) => (
+                <MenuItem key={c} value={c}>{c}</MenuItem>
+              ))}
+            </TextField>
+
+            {/* Type Filter */}
+            <TextField
+              select
+              size="small"
+              label="Filter by Type"
+              value={selectedTypes}
+              onChange={handleTypeChange}
+              sx={{
+                minWidth: 180,
+                background: "#fff",
+                borderRadius: 2,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.06)"
+              }}
+            >
+              <MenuItem value="">All</MenuItem>
+              {allDocTypes.map((t) => (
+                <MenuItem key={t} value={t}>{t}</MenuItem>
+              ))}
+            </TextField>
+
+          </Box>
         </Box>
+
 
         {/* Table */}
         <Box sx={{ p: 2 }}>

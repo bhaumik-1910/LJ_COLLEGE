@@ -25,6 +25,7 @@
 // import { toast } from "react-toastify";
 
 // const API_BASE = "http://localhost:5000/api";
+// const API_BASE = import.meta.env.VITE_API_BASE;
 
 // export default function AdminUsers() {
 //     const { token } = useContext(AuthContext);
@@ -317,7 +318,8 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import SaveIcon from "@mui/icons-material/Save";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
-const API_BASE = "http://localhost:5000/api";
+// const API_BASE = "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function Admin_Faculty() {
   const { token } = useContext(AuthContext);

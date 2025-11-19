@@ -16,7 +16,8 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend, LineElement, CategorySca
 ChartJS.register(ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
 
 
-const API_BASE = "http://localhost:5000/api";
+// const API_BASE = "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function SuperAdminDashboard() {
     const navigate = useNavigate();
@@ -174,7 +175,7 @@ export default function SuperAdminDashboard() {
 
     return (
         <Box sx={{ p: 4 }}>
-            <Typography variant="h5" fontWeight={700} sx={{ mb: 2,color: "#2b4ddb" }}>Super Dashboard</Typography>
+            <Typography variant="h5" fontWeight={700} sx={{ mb: 2, color: "#2b4ddb" }}>Super Dashboard</Typography>
             {/* Top summary boxes */}
             <Grid container spacing={4} mb={4}>
                 {/* Total Admins Card */}

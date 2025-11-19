@@ -17,7 +17,9 @@
 // import { AuthContext } from "../../context/AuthContext";
 
 // const API_BASE = "http://localhost:5000/api";
+// const API_BASE = import.meta.env.VITE_API_BASE;
 // const BACKEND_BASE = "http://localhost:5000";
+// const BACKEND_BASE = import.meta.env.VITE_BACKEND_BASE;
 
 // const toBackendUrl = (p) => {
 //     if (!p) return "";
@@ -225,8 +227,10 @@ import {
 } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
 
-const API_BASE = "http://localhost:5000/api";
-const BACKEND_BASE = "http://localhost:5000";
+// const API_BASE = "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
+// const BACKEND_BASE = "http://localhost:5000";
+const BACKEND_BASE = import.meta.env.VITE_BACKEND_BASE;
 
 const toBackendUrl = (p) => {
     if (!p) return "";

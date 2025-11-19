@@ -10,7 +10,8 @@ import CancelIcon from '@mui/icons-material/Cancel';
 // *** Image import - Make sure this path is correct ***
 import studentImage from './../../assets/images/student-add.png';
 
-const API_BASE = "http://localhost:5000/api";
+// const API_BASE = "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function Add_document() {
     const navigate = useNavigate();

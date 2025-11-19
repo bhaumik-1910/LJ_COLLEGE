@@ -6,7 +6,8 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import DescriptionIcon from '@mui/icons-material/Description';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 
-const API_BASE = "http://localhost:5000/api";
+// const API_BASE = "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function FacultyDashboard() {
     const navigate = useNavigate();

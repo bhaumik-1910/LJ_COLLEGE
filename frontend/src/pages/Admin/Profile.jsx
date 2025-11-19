@@ -4,6 +4,7 @@
 // import { toast } from "react-toastify";
 
 // const API_BASE = "http://localhost:5000/api";
+// const API_BASE = import.meta.env.VITE_API_BASE;
 
 // export default function AdminProfile() {
 //     const { token } = useContext(AuthContext);
@@ -206,7 +207,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { AuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 
-const API_BASE = "http://localhost:5000/api";
+// const API_BASE = "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function AdminProfile() {
   const { token } = useContext(AuthContext);
