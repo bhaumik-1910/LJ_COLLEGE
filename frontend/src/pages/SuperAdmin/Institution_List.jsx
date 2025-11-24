@@ -1,5 +1,5 @@
 // frontend/src/pages/SuperAdmin/Institution_List.jsx
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
     Box,
     Button,
@@ -27,31 +27,36 @@ export default function InstitutionList() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    // Fetch institutions + universities
+    // Fetch institutions 
     const fetchInstitutions = async () => {
         try {
             setLoading(true);
-
-            const instReq = fetch(`${API_BASE}/institutions`, {
-                headers: { Authorization: `Bearer ${token}` }
+            const response = await fetch(`${API_BASE}/institutions`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
             });
 
-            const [instRes] = await Promise.all([instReq]);
-
-            if (!instRes.ok) {
-                throw new Error("Failed to fetch data");
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const institutionsData = await instRes.json();
+            const result = await response.json();
 
-            setInstitutions(institutionsData);
+            if (result.success && Array.isArray(result.data)) {
+                setInstitutions(result.data);
+            } else {
+                setInstitutions(result);
+            }
         } catch (error) {
-            toast.error("Failed to load data");
+            toast.error(error.message || 'Failed to load institutions');
         } finally {
             setLoading(false);
         }
     };
 
+    // Call both functions in useEffect
     useEffect(() => {
         fetchInstitutions();
     }, []);
@@ -120,7 +125,7 @@ export default function InstitutionList() {
                             ) : institutions.length > 0 ? (
                                 institutions.map((institution) => (
                                     <TableRow key={institution._id}>
-                                        <TableCell>{institution.name}</TableCell>
+                                        <TableCell>{institution.university}</TableCell>
                                         <TableCell>{institution.name}</TableCell>
                                         <TableCell>
                                             {institution.courses?.length > 0 ? (
@@ -165,3 +170,5 @@ export default function InstitutionList() {
         </Box>
     );
 }
+
+

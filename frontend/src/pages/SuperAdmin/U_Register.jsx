@@ -21,8 +21,8 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { color } from "framer-motion";
 import { red } from "@mui/material/colors";
 
-// const API_BASE = "http://localhost:5000/api";
-const API_BASE = import.meta.env.VITE_API_BASE;
+const API_BASE = "http://localhost:5000/api";
+// const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function U_Register() {
   const navigate = useNavigate();

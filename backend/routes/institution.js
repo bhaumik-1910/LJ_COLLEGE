@@ -1,191 +1,272 @@
-// // backend/routes/institution.js
-// const express = require('express');
-// const Institution = require('../models/Institution');
-// const University = require('../models/University');
-// import { authRequired, requireAnyRole, requireRole } from "../middleware/auth.js";
+// // backend/routes/institution.js===================================================================
+// import express from "express";
+// import Institution from '../models/Institution.js';
+// import { authRequired } from '../middleware/auth.js';
+// import University from '../models/University.js';
 
 // const router = express.Router();
 
-// // Get all institutions with university details
+// // Create new institution
+// router.post('/', authRequired, async (req, res) => {
+//     try {
+//         const { university, name, courses } = req.body;
+
+//         // Validate input
+//         if (!university || !name) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: 'University and name are required'
+//             });
+//         }
+
+//         // Check for duplicate institution
+//         const existingInstitution = await Institution.findOne({
+//             university,
+//             name: { $regex: new RegExp(`^${name}$`, 'i') }
+//         });
+
+//         if (existingInstitution) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: 'An institution with this name already exists for the selected university'
+//             });
+//         }
+
+//         // Create and save institution
+//         const institution = new Institution({
+//             university,
+//             name: name.trim(),
+//             courses: Array.isArray(courses)
+//                 ? [...new Set(courses.map(c => c.trim()).filter(Boolean))]
+//                 : []
+//         });
+
+//         const savedInstitution = await institution.save();
+
+//         res.status(201).json({
+//             success: true,
+//             data: savedInstitution
+//         });
+
+//     } catch (error) {
+//         res.status(500).json({
+//             success: false,
+//             message: 'Server error'
+//         });
+//     }
+// });
+
+
+// // Get all institutions
 // router.get('/', authRequired, async (req, res) => {
 //     try {
 //         const institutions = await Institution.find()
 //             .populate('university', 'name')
 //             .sort({ name: 1 });
-//         res.json(institutions);
+
+//         res.json({
+//             success: true,
+//             data: institutions
+//         });
 //     } catch (error) {
 //         console.error('Error fetching institutions:', error);
-//         res.status(500).json({ message: 'Server error' });
-//     }
-// });
-
-// // Create a new institution
-// router.post('/', authRequired, requireRole("superadmin"), async (req, res) => {
-//     try {
-//         const { name, university, courses } = req.body;
-
-//         // Validate input
-//         if (!name || !university) {
-//             return res.status(400).json({ message: 'Name and university are required' });
-//         }
-
-//         // Check if university exists
-//         const universityExists = await University.findById(university);
-//         if (!universityExists) {
-//             return res.status(400).json({ message: 'University not found' });
-//         }
-
-//         // Check for duplicate institution name in the same university (case insensitive)
-//         const existingInstitution = await Institution.findOne({
-//             name: { $regex: new RegExp(`^${name}$`, 'i') },
-//             university
+//         res.status(500).json({
+//             success: false,
+//             message: 'Server error'
 //         });
-
-//         if (existingInstitution) {
-//             return res.status(400).json({
-//                 message: 'An institution with this name already exists in the selected university'
-//             });
-//         }
-
-//         // Create new institution
-//         const institution = new Institution({
-//             name,
-//             university,
-//             courses: courses ? courses.filter(course => course && course.trim() !== '') : []
-//         });
-
-//         const newInstitution = await institution.save();
-//         res.status(201).json(await newInstitution.populate('university', 'name'));
-//     } catch (error) {
-//         console.error('Error creating institution:', error);
-//         res.status(500).json({ message: 'Server error' });
 //     }
 // });
 
-// // Update an institution
-// router.put('/:id', authRequired, requireRole("superadmin"), async (req, res) => {
-//     try {
-//         const { name, university, courses } = req.body;
-
-//         // Check if institution exists
-//         let institution = await Institution.findById(req.params.id);
-//         if (!institution) {
-//             return res.status(404).json({ message: 'Institution not found' });
-//         }
-
-//         // Check if university exists
-//         const universityExists = await University.findById(university);
-//         if (!universityExists) {
-//             return res.status(400).json({ message: 'University not found' });
-//         }
-
-//         // Check for duplicate institution name in the same university (case insensitive)
-//         const existingInstitution = await Institution.findOne({
-//             _id: { $ne: req.params.id },
-//             name: { $regex: new RegExp(`^${name}$`, 'i') },
-//             university
-//         });
-
-//         if (existingInstitution) {
-//             return res.status(400).json({
-//                 message: 'An institution with this name already exists in the selected university'
-//             });
-//         }
-
-//         // Update institution
-//         institution.name = name;
-//         institution.university = university;
-//         institution.courses = courses ? courses.filter(course => course && course.trim() !== '') : [];
-
-//         const updatedInstitution = await institution.save();
-//         res.json(await updatedInstitution.populate('university', 'name'));
-//     } catch (error) {
-//         console.error('Error updating institution:', error);
-//         res.status(500).json({ message: 'Server error' });
-//     }
-// });
-
-// // Delete an institution
-// router.delete('/:id', authRequired, requireRole("superadmin"), async (req, res) => {
-//     try {
-//         const institution = await Institution.findByIdAndDelete(req.params.id);
-//         if (!institution) {
-//             return res.status(404).json({ message: 'Institution not found' });
-//         }
-//         res.json({ message: 'Institution deleted successfully' });
-//     } catch (error) {
-//         console.error('Error deleting institution:', error);
-//         res.status(500).json({ message: 'Server error' });
-//     }
-// });
-
-// module.exports = router;
+// export default router;
 
 
-import express from "express";  
+import express from "express";
 import Institution from '../models/Institution.js';
-import University from '../models/University.js';
 import { authRequired } from '../middleware/auth.js';
+import University from '../models/University.js';
 
 const router = express.Router();
 
-// Create a new institution
-router.post('/', authRequired, async (req, res) => {
+/* ===================================================
+   CREATE INSTITUTION
+   POST /api/institutions
+=================================================== */
+router.post("/", authRequired, async (req, res) => {
     try {
-        const { name, university, courses } = req.body;
+        const { university, name, courses } = req.body;
 
         // Validate input
-        if (!name || !university) {
-            return res.status(400).json({ message: 'Name and university are required' });
+        if (!university || !name?.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: "University and Institution name are required",
+            });
         }
 
-        // Check if university exists
-        const universityExists = await University.findById(university);
-        if (!universityExists) {
-            return res.status(400).json({ message: 'University not found' });
-        }
-
-        // Check for duplicate institution name in the same university
+        // Check for duplicate (case-insensitive)
         const existingInstitution = await Institution.findOne({
-            name: { $regex: new RegExp(`^${name}$`, 'i') },
-            university
+            university,
+            name: { $regex: new RegExp(`^${name.trim()}$`, "i") },
         });
 
         if (existingInstitution) {
             return res.status(400).json({
-                message: 'An institution with this name already exists in the selected university'
+                success: false,
+                message:
+                    "Institution already exists under this university",
             });
         }
 
-        // Create new institution
-        const institution = new Institution({
-            name,
+        // Prepare clean courses
+        const cleanedCourses = Array.isArray(courses)
+            ? [...new Set(courses.map((c) => c.trim()).filter(Boolean))]
+            : [];
+
+        // Create institution
+        const newInstitution = new Institution({
             university,
-            courses: courses ? courses.filter(course => course && course.trim() !== '') : []
+            name: name.trim(),
+            courses: cleanedCourses,
         });
 
-        const savedInstitution = await institution.save();
+        const savedInstitution = await newInstitution.save();
 
-        // Populate university details in the response
-        const populatedInstitution = await savedInstitution.populate('university', 'name');
-
-        res.status(201).json(populatedInstitution);
+        return res.status(201).json({
+            success: true,
+            message: "Institution created successfully",
+            data: savedInstitution,
+        });
     } catch (error) {
-        console.error('Error creating institution:', error);
-        res.status(500).json({ message: 'Server error' });
+        console.log("Institution Create Error:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: error.message || "Server error",
+        });
     }
 });
 
-// Get all institutions with university details
-router.get('/', authRequired, async (req, res) => {
+/* ===================================================
+   GET ALL INSTITUTIONS
+   GET /api/institutions
+=================================================== */
+router.get("/", authRequired, async (req, res) => {
     try {
-        const institutions = await Institution.find()
-            .populate('university', 'name')
-            .sort({ createdAt: -1 });
-        res.json(institutions);
+        const institutions = await Institution.find().sort({ createdAt: -1 });
+
+        return res.status(200).json({
+            success: true,
+            data: institutions,
+        });
     } catch (error) {
-        console.error('Error fetching institutions:', error);
-        res.status(500).json({ message: 'Server error' });
+        console.log("Fetch Institutions Error:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Server error",
+        });
+    }
+});
+
+/* ===================================================
+   GET INSTITUTION BY ID
+   GET /api/institutions/:id
+=================================================== */
+router.get("/:id", authRequired, async (req, res) => {
+    try {
+        const institution = await Institution.findById(req.params.id);
+
+        if (!institution) {
+            return res.status(404).json({
+                success: false,
+                message: "Institution not found",
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            data: institution,
+        });
+    } catch (error) {
+        console.log("Institution Get Error:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Server error",
+        });
+    }
+});
+
+/* ===================================================
+   UPDATE INSTITUTION
+   PUT /api/institutions/:id
+=================================================== */
+router.put("/:id", authRequired, async (req, res) => {
+    try {
+        const { university, name, courses } = req.body;
+
+        const cleanedCourses = Array.isArray(courses)
+            ? [...new Set(courses.map((c) => c.trim()).filter(Boolean))]
+            : [];
+
+        const updated = await Institution.findByIdAndUpdate(
+            req.params.id,
+            {
+                university,
+                name: name?.trim(),
+                courses: cleanedCourses,
+            },
+            { new: true }
+        );
+
+        if (!updated) {
+            return res.status(404).json({
+                success: false,
+                message: "Institution not found",
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Institution updated successfully",
+            data: updated,
+        });
+    } catch (error) {
+        console.log("Institution Update Error:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Server error",
+        });
+    }
+});
+
+/* ===================================================
+   DELETE INSTITUTION
+   DELETE /api/institutions/:id
+=================================================== */
+router.delete("/:id", authRequired, async (req, res) => {
+    try {
+        const deleted = await Institution.findByIdAndDelete(req.params.id);
+
+        if (!deleted) {
+            return res.status(404).json({
+                success: false,
+                message: "Institution not found",
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Institution deleted successfully",
+        });
+    } catch (error) {
+        console.log("Institution Delete Error:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Server error",
+        });
     }
 });
 

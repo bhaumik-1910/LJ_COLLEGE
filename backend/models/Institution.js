@@ -1,47 +1,22 @@
-// // backend/models/Institution.js
-// import mongoose from "mongoose";
-
-// const institutionSchema = new mongoose.Schema({
-//     name: {
-//         type: String,
-//         required: true,
-//         trim: true
-//     },
-//     university: {
-//         type: mongoose.Schema.Types.ObjectId,
-//         ref: 'University',
-//         required: true
-//     },
-//     courses: {
-//         type: [String],
-//         default: [],
-//     },
-//     createdAt: {
-//         type: Date,
-//         default: Date.now
-//     }
-// });
-
-// // Compound index to ensure unique institution names within a university
-// institutionSchema.index({ name: 1, university: 1 }, { unique: true });
-
-// module.exports = mongoose.model('Institution', institutionSchema);
 
 import mongoose from "mongoose";
 
 const institutionSchema = new mongoose.Schema({
+    university: {
+        // type: mongoose.Schema.Types.ObjectId,
+        // ref: "University",
+        // required: true
+        type: String,
+        required: true,
+        trim: true
+    },
+
     name: {
         type: String,
         required: true,
         trim: true
     },
-    university: {
-        // type: mongoose.Schema.Types.ObjectId,
-        // ref: 'University',
-        // required: true
-        type: String,
-        required: true,
-    },
+
     courses: [{
         type: String,
         trim: true
@@ -66,6 +41,7 @@ institutionSchema.pre('save', function (next) {
     }
     next();
 });
+
 
 const Institution = mongoose.model('Institution', institutionSchema);
 
