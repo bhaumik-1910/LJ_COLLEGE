@@ -11,12 +11,14 @@ const superAdminLinks = [
   { id: 2, title: 'Universities', image: iconsImgs.add, path: '/superadmin-dashboard/university-register' },
   { id: 3, title: 'Register', image: iconsImgs.add, path: '/superadmin-dashboard/register' },
   { id: 4, title: 'University Users', image: iconsImgs.users, path: '/superadmin-dashboard/university-users' },
-  { id: 5, title: 'Document', image: iconsImgs.document, path: '/superadmin-dashboard/document' },
-  { id: 6, title: 'Super Admin', image: iconsImgs.admin, path: '/superadmin-dashboard/superadmin' },
-  { id: 7, title: 'Admins', image: iconsImgs.admin, path: '/superadmin-dashboard/admins' },
-  { id: 9, title: 'Faculty', image: iconsImgs.faculty, path: '/superadmin-dashboard/faculty' },
-  { id: 8, title: 'Profile', image: iconsImgs.profile, path: '/superadmin-dashboard/profile' },
-  { id: 10, title: 'Logout', image: iconsImgs.logout, path: '/logout' },
+  { id: 5, title: 'Institution', image: iconsImgs.users, path: '/superadmin-dashboard/institution' },
+  { id: 6, title: 'Institution List', image: iconsImgs.users, path: '/superadmin-dashboard/institution-list' },
+  { id: 7, title: 'Document', image: iconsImgs.document, path: '/superadmin-dashboard/document' },
+  { id: 8, title: 'Super Admin', image: iconsImgs.admin, path: '/superadmin-dashboard/superadmin' },
+  { id: 9, title: 'Admins', image: iconsImgs.admin, path: '/superadmin-dashboard/admins' },
+  { id: 10, title: 'Faculty', image: iconsImgs.faculty, path: '/superadmin-dashboard/faculty' },
+  { id: 11, title: 'Profile', image: iconsImgs.profile, path: '/superadmin-dashboard/profile' },
+  { id: 12, title: 'Logout', image: iconsImgs.logout, path: '/logout' },
 ];
 
 const AdminLinks = [
@@ -72,7 +74,7 @@ const Sidebar = () => {
     links.forEach(link => {
       map[link.title] = link.path;
     });
-    return map; 
+    return map;
   }, [links]);
 
   const currentActiveTitle = useMemo(() => {

@@ -330,6 +330,9 @@ import { AuthContext } from "../context/AuthContext";
 import studentimg from "../assets/images/student-add.png";
 import PersonAddRoundedIcon from "@mui/icons-material/PersonAddRounded";
 
+
+const API_BASE = import.meta.env.VITE_API_BASE;
+
 /* ---------- Styled Components ---------- */
 
 const Container = styled("div")(({ theme }) => ({
@@ -405,7 +408,7 @@ const RegisterPage = () => {
     const fetchUnis = async () => {
       try {
         setFetchingUnis(true);
-        const res = await fetch("http://localhost:5000/api/universities");
+        const res = await fetch(`${API_BASE}/universities`);
         const data = await res.json();
         if (!res.ok) throw new Error(data.message);
         setUniversities(data || []);

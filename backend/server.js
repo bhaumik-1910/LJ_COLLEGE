@@ -10,6 +10,8 @@ import studentRoutes from "./routes/students.js";
 import categoriesRoutes from "./routes/categories.js";
 import documentsRoutes from "./routes/documents.js";
 
+import institutionRoutes from "./routes/institution.js";
+
 dotenv.config();
 
 const app = express();
@@ -38,6 +40,9 @@ app.use("/api/superadmin", superadminRoutes)
 app.use('/api/faculty', studentRoutes);
 app.use('/api/categories', categoriesRoutes);
 app.use('/api/documents', documentsRoutes);
+
+// After initializing express app and before starting the server
+app.use('/api/institutions', institutionRoutes);
 
 // Start Server
 const PORT = process.env.PORT;

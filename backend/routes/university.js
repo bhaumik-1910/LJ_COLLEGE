@@ -30,7 +30,6 @@ router.post("/verify-otp", async (req, res) => {
 });
 
 // POST /api/universities
-// });
 router.post("/", async (req, res) => {
     try {
         const { name, email, courses } = req.body || {}; // Destructure the new 'courses' field
