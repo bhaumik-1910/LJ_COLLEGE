@@ -545,8 +545,9 @@ import { toast } from 'react-toastify';
 // import { ArrowBack as ArrowBackIcon, Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { ArrowBack as ArrowBackIcon, Add as AddIcon, Delete as DeleteIcon, Cancel as CancelIcon } from '@mui/icons-material';
 import studentImage from "../../assets/images/student-add.png";
-
 import { AuthContext } from '../../context/AuthContext';
+import PersonAddRoundedIcon from "@mui/icons-material/PersonAddRounded";
+
 // import CancelIcon from "@mui/icons-material/Cancel";
 // import AddIcon from "@mui/icons-material/Add";
 
@@ -675,22 +676,26 @@ export default function University_Institute() {
         >
 
             {/* LEFT SIDE FORM */}
-            <Box sx={{ flex: 1 }}>
+            <Box sx={{ flex: 1, color: "#2b4ddb" } }>
                 <Button
                     startIcon={<ArrowBackIcon />}
                     onClick={() => navigate(-1)}
                     sx={{ mb: 2 }}
                     disabled={loading}
+                    
                 >
                     Back to List
                 </Button>
 
                 <Typography
                     variant="h4"
-                    sx={{ color: "#3b6ef6", fontWeight: 700, mr: 1 }}
+                    sx={{ fontSize: 22, fontWeight: 700, color: "#2b4ddb", lineHeight: 1.2 }}
                 >
-                    CREATE INSTITUTION
+                    CREATE INSTITUTION  
+
+                    <PersonAddRoundedIcon sx={{ fontSize: 32, color: "#2b4ddb" }} />
                 </Typography>
+                
 
                 <Typography sx={{ mb: 3, color: "gray" }}>
                     Add institution details & assign courses
