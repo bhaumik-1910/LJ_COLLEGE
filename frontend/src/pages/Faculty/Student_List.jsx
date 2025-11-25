@@ -301,7 +301,7 @@ export default function Student_List() {
                                                 <TableCell>{r.university}</TableCell>
                                                 <TableCell>{r.address}</TableCell>
                                                 <TableCell align="right">
-                                                    <IconButton size="small" onClick={() => onEdit(r)}><EditIcon /></IconButton>
+                                                    <IconButton size="small" color="primary" onClick={() => onEdit(r)}><EditIcon /></IconButton>
                                                     <IconButton size="small" color="error" onClick={() => onDelete(r)}><DeleteIcon /></IconButton>
                                                 </TableCell>
                                             </TableRow>

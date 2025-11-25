@@ -590,7 +590,7 @@ export default function AdminList() {
                     </TableCell>
 
                     <TableCell align="right">
-                      <IconButton size="small" onClick={() => onEdit(r)}>
+                      <IconButton size="small" color="primary" onClick={() => onEdit(r)}>
                         <EditIcon />
                       </IconButton>
                       <IconButton
