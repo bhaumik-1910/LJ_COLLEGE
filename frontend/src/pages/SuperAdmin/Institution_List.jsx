@@ -235,9 +235,13 @@ export default function InstitutionList() {
     };
 
     return (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: { xs: 2, md: 3 } }}>
+            <Paper elevation={2} sx={{ borderRadius: 2, p: { xs: 2, md: 3 }, bgcolor: '#fff' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, alignItems: 'center' }}>
-                <Typography variant="h5">Institution Management</Typography>
+                {/* <Typography variant="h5">Institution Management</Typography> */}
+                <Typography variant="h5" fontWeight={700} sx={{ color: "#2b4ddb" }}>
+                            Institution Management
+                          </Typography>
                 <Button
                     variant="contained"
                     startIcon={<AddIcon />}
@@ -247,7 +251,7 @@ export default function InstitutionList() {
                 </Button>
             </Box>
 
-            <Paper sx={{ p: 3, mb: 3 }}>
+            <Box >
                 <TableContainer>
                     <Table>
                         <TableHead>
@@ -312,7 +316,7 @@ export default function InstitutionList() {
 
                     </Table>
                 </TableContainer>
-            </Paper>
+            </Box>
             {/* Delete Confirmation Dialog */}
             <Dialog
                 open={deleteDialogOpen}
@@ -477,7 +481,10 @@ export default function InstitutionList() {
                     </Button>
                 </DialogActions>
             </Dialog>
-
+        </Paper>
         </Box>
     );
 }
+
+
+
