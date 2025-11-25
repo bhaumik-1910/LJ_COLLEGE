@@ -9,9 +9,9 @@ import { AuthContext } from '../../../context/AuthContext';
 const superAdminLinks = [
   { id: 1, title: 'Dashboard', image: iconsImgs.home, path: '/superadmin-dashboard' },
   { id: 2, title: 'Universities', image: iconsImgs.add, path: '/superadmin-dashboard/university-register' },
-  { id: 3, title: 'Register', image: iconsImgs.add, path: '/superadmin-dashboard/register' },
-  { id: 4, title: 'University Users', image: iconsImgs.users, path: '/superadmin-dashboard/university-users' },
-  { id: 5, title: 'Institution', image: iconsImgs.users, path: '/superadmin-dashboard/institution' },
+  { id: 3, title: 'Institution', image: iconsImgs.users, path: '/superadmin-dashboard/institution' },
+  { id: 4, title: 'Register', image: iconsImgs.add, path: '/superadmin-dashboard/register' },
+  { id: 5, title: 'University Users', image: iconsImgs.users, path: '/superadmin-dashboard/university-users' },
   { id: 6, title: 'Institution List', image: iconsImgs.users, path: '/superadmin-dashboard/institution-list' },
   { id: 7, title: 'Document', image: iconsImgs.document, path: '/superadmin-dashboard/document' },
   { id: 8, title: 'Super Admin', image: iconsImgs.admin, path: '/superadmin-dashboard/superadmin' },
