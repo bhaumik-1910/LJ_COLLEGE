@@ -32,7 +32,7 @@ router.post("/verify-otp", async (req, res) => {
 // POST /api/universities
 router.post("/", async (req, res) => {
     try {
-        const { name, email, courses } = req.body || {}; // Destructure the new 'courses' field
+        const { name, email } = req.body || {}; //courses -> Destructure the new 'courses' field
 
         if (!name || !email) {
             return res.status(400).json({ message: "Name and email required" });
@@ -48,10 +48,10 @@ router.post("/", async (req, res) => {
         }
 
         // Validate if 'courses' is an array before creating the document
-        const newCourses = (Array.isArray(courses) && courses.length > 0) ? courses : [];
+        // const newCourses = (Array.isArray(courses) && courses.length > 0) ? courses : [];
 
         // Create the new University document, including the courses array
-        const uni = await University.create({ name, email, courses: newCourses });
+        const uni = await University.create({ name, email }); //, courses: newCourses
 
         clearVerification(email);
         res.status(201).json(uni);

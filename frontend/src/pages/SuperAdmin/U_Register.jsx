@@ -6,20 +6,19 @@ import {
   TextField,
   Button,
   Divider,
-  List,
-  ListItemText,
-  IconButton,
+  // List,
+  // ListItemText,
+  // IconButton,
   Stack,
   Grid,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
+// import DeleteIcon from "@mui/icons-material/Delete";
 import studentImage from "../../assets/images/student-add.png";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { color } from "framer-motion";
-import { red } from "@mui/material/colors";
+
 
 const API_BASE = "http://localhost:5000/api";
 // const API_BASE = import.meta.env.VITE_API_BASE;
@@ -31,9 +30,9 @@ export default function U_Register() {
     email: "",
     otp: "",
     name: "",
-    courses: [],
+    // courses: [],
   });
-  const [newCourse, setNewCourse] = useState("");
+  // const [newCourse, setNewCourse] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [verified, setVerified] = useState(false);
   const [universities, setUniversities] = useState([]);
@@ -89,27 +88,27 @@ export default function U_Register() {
     }
   };
 
-  const handleAddCourse = () => {
-    if (newCourse.trim() === "") return;
-    setForm((prevForm) => ({
-      ...prevForm,
-      courses: [...prevForm.courses, newCourse.trim()],
-    }));
-    setNewCourse("");
-  };
+  // const handleAddCourse = () => {
+  //   if (newCourse.trim() === "") return;
+  //   setForm((prevForm) => ({
+  //     ...prevForm,
+  //     courses: [...prevForm.courses, newCourse.trim()],
+  //   }));
+  //   setNewCourse("");
+  // };
 
-  const handleRemoveCourse = (index) => {
-    setForm((prevForm) => ({
-      ...prevForm,
-      courses: prevForm.courses.filter((_, i) => i !== index),
-    }));
-  };
+  // const handleRemoveCourse = (index) => {
+  //   setForm((prevForm) => ({
+  //     ...prevForm,
+  //     courses: prevForm.courses.filter((_, i) => i !== index),
+  //   }));
+  // };
 
   const createUniversity = async () => {
     if (!verified) return toast.error("Verify email via OTP first");
     if (!form.name) return toast.error("Enter university name");
-    if (form.courses.length === 0)
-      return toast.error("Add at least one course");
+    // if (form.courses.length === 0)
+    //   return toast.error("Add at least one course");
 
     try {
       const res = await fetch(`${API_BASE}/universities`, {
@@ -118,14 +117,14 @@ export default function U_Register() {
         body: JSON.stringify({
           name: form.name,
           email: form.email,
-          courses: form.courses,
+          // courses: form.courses,
         }),
       });
       const data = await res.json();
       if (!res.ok)
         throw new Error(data.message || "Failed to create university");
       toast.success("University created");
-      setForm({ email: "", otp: "", name: "", courses: [] });
+      setForm({ email: "", otp: "", name: "" });//, courses: []
       setOtpSent(false);
       setVerified(false);
       await loadUniversities();
@@ -228,7 +227,7 @@ export default function U_Register() {
                   setForm({ ...form, name: e.target.value })
                 }
               />
-
+              {/* 
               <Box sx={{ display: "flex", gap: 1 }}>
                 <TextField
                   fullWidth
@@ -241,9 +240,9 @@ export default function U_Register() {
                 <IconButton color="primary" onClick={handleAddCourse}>
                   <AddIcon />
                 </IconButton>
-              </Box>
+              </Box> */}
 
-              {form.courses.length > 0 && (
+              {/* {form.courses.length > 0 && (
                 <Box>
                   <Typography
                     variant="subtitle1"
@@ -274,7 +273,7 @@ export default function U_Register() {
                     ))}
                   </List>
                 </Box>
-              )}
+              )} */}
 
               <Box sx={{ display: "flex", gap: 2 }}>
                 <Button variant="contained" onClick={createUniversity} startIcon={<AddIcon />}>
@@ -288,7 +287,7 @@ export default function U_Register() {
                       email: "",
                       otp: "",
                       name: "",
-                      courses: [],
+                      // courses: [],
                     });
                     setOtpSent(false);
                     setVerified(false);
