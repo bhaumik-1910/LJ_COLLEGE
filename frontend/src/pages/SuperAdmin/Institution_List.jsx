@@ -25,6 +25,8 @@ import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon, Close as CloseI
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
+import CancelIcon from "@mui/icons-material/Cancel";
+import SaveIcon from "@mui/icons-material/Save";
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 
@@ -237,147 +239,149 @@ export default function InstitutionList() {
     return (
         <Box sx={{ p: { xs: 2, md: 3 } }}>
             <Paper elevation={2} sx={{ borderRadius: 2, p: { xs: 2, md: 3 }, bgcolor: '#fff' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, alignItems: 'center' }}>
-                {/* <Typography variant="h5">Institution Management</Typography> */}
-                <Typography variant="h5" fontWeight={700} sx={{ color: "#2b4ddb" }}>
-                            Institution Management
-                          </Typography>
-                <Button
-                    variant="contained"
-                    startIcon={<AddIcon />}
-                    onClick={() => navigate('/superadmin-dashboard/institution')}
-                >
-                    Add Institution
-                </Button>
-            </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, alignItems: 'center' }}>
+                    {/* <Typography variant="h5">Institution Management</Typography> */}
+                    <Typography variant="h5" fontWeight={700} sx={{ color: "#2b4ddb" }}>
+                        Institution Management
+                    </Typography>
+                    <Button
+                        variant="contained"
+                        startIcon={<AddIcon />}
+                        onClick={() => navigate('/superadmin-dashboard/institution')}
+                    >
+                        Add Institution
+                    </Button>
+                </Box>
 
-            <Box >
-                <TableContainer>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>University</TableCell>
-                                <TableCell>Institution Name</TableCell>
-                                <TableCell>Courses</TableCell>
-                                <TableCell align="right">Actions</TableCell>
-                            </TableRow>
-                        </TableHead>
-
-                        <TableBody>
-                            {loading ? (
+                <Box >
+                    <TableContainer>
+                        <Table>
+                            <TableHead>
                                 <TableRow>
-                                    <TableCell colSpan={4} align="center">
-                                        <CircularProgress />
-                                    </TableCell>
+                                    <TableCell>University</TableCell>
+                                    <TableCell>Institution Name</TableCell>
+                                    <TableCell>Courses</TableCell>
+                                    <TableCell align="right">Actions</TableCell>
                                 </TableRow>
-                            ) : institutions.length > 0 ? (
-                                institutions.map((institution) => (
-                                    <TableRow key={institution._id}>
-                                        <TableCell>{institution.university}</TableCell>
-                                        <TableCell>{institution.name}</TableCell>
-                                        <TableCell>
-                                            {institution.courses?.length > 0 ? (
-                                                <Box component="ul" sx={{ pl: 2, my: 0 }}>
-                                                    {institution.courses.map((course, index) => (
-                                                        <li key={index}>{course}</li>
-                                                    ))}
-                                                </Box>
-                                            ) : 'No courses'}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <IconButton
-                                                onClick={() => handleEditClick(institution)}
-                                                color="primary"
-                                                size="small"
-                                                title="Edit"
-                                            >
-                                                <EditIcon />
-                                            </IconButton>
-                                            <IconButton
-                                                onClick={() => handleDeleteClick(institution)}
-                                                color="error"
-                                                size="small"
-                                                disabled={isDeleting}
-                                                title="Delete"
-                                            >
-                                                <DeleteIcon />
-                                            </IconButton>
+                            </TableHead>
+
+                            <TableBody>
+                                {loading ? (
+                                    <TableRow>
+                                        <TableCell colSpan={4} align="center">
+                                            <CircularProgress />
                                         </TableCell>
                                     </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell colSpan={4} align="center">
-                                        No institutions found.
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
+                                ) : institutions.length > 0 ? (
+                                    institutions.map((institution) => (
+                                        <TableRow key={institution._id}>
+                                            <TableCell>{institution.university}</TableCell>
+                                            <TableCell>{institution.name}</TableCell>
+                                            <TableCell>
+                                                {institution.courses?.length > 0 ? (
+                                                    <Box component="ul" sx={{ pl: 2, my: 0 }}>
+                                                        {institution.courses.map((course, index) => (
+                                                            <li key={index}>{course}</li>
+                                                        ))}
+                                                    </Box>
+                                                ) : 'No courses'}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <IconButton
+                                                    onClick={() => handleEditClick(institution)}
+                                                    color="primary"
+                                                    size="small"
+                                                    title="Edit"
+                                                >
+                                                    <EditIcon />
+                                                </IconButton>
+                                                <IconButton
+                                                    onClick={() => handleDeleteClick(institution)}
+                                                    color="error"
+                                                    size="small"
+                                                    disabled={isDeleting}
+                                                    title="Delete"
+                                                >
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                ) : (
+                                    <TableRow>
+                                        <TableCell colSpan={4} align="center">
+                                            No institutions found.
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
 
-                    </Table>
-                </TableContainer>
-            </Box>
-            {/* Delete Confirmation Dialog */}
-            <Dialog
-                open={deleteDialogOpen}
-                onClose={handleCloseDeleteDialog}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">
-                    Confirm Deletion
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        Are you sure you want to delete the institution "{institutionToDelete?.name}"?
-                        This action cannot be undone.
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        onClick={handleCloseDeleteDialog}
-                        disabled={isDeleting}
-                        color="primary"
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={handleDelete}
-                        color="error"
-                        variant="contained"
-                        disabled={isDeleting}
-                        startIcon={isDeleting ? <CircularProgress size={20} /> : null}
-                        autoFocus
-                    >
-                        {isDeleting ? 'Deleting...' : 'Delete'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-
-            {/* Edit Institution Dialog */}
-            <Dialog
-                open={editDialogOpen}
-                onClose={handleCloseEditDialog}
-                maxWidth="md"
-                fullWidth
-            >
-                <DialogTitle>
-                    <Box display="flex" justifyContent="space-between" alignItems="center">
-                        <span>Edit Institution</span>
-                        <IconButton
-                            edge="end"
-                            color="inherit"
-                            onClick={handleCloseEditDialog}
-                            aria-label="close"
-                            disabled={isSaving}
+                        </Table>
+                    </TableContainer>
+                </Box>
+                {/* Delete Confirmation Dialog */}
+                <Dialog
+                    open={deleteDialogOpen}
+                    onClose={handleCloseDeleteDialog}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        Confirm Deletion
+                    </DialogTitle>
+                    <DialogContent dividers>
+                        <DialogContentText id="alert-dialog-description">
+                            Are you sure you want to delete the institution <strong>"{institutionToDelete?.name}"?</strong>
+                            This action cannot be undone.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={handleCloseDeleteDialog}
+                            disabled={isDeleting}
+                            color="primary"
+                            startIcon={<CancelIcon />}
                         >
-                            <CloseIcon />
-                        </IconButton>
-                    </Box>
-                </DialogTitle>
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={handleDelete}
+                            color="error"
+                            variant="contained"
+                            disabled={isDeleting}
+                            // startIcon={isDeleting ? <CircularProgress size={20} /> : null}
+                            startIcon={<DeleteIcon />}
+                            autoFocus
+                        >
+                            {isDeleting ? 'Deleting...' : 'Delete'}
+                        </Button>
+                    </DialogActions>
+                </Dialog>
 
-                <DialogContent dividers>
-                    {/* <TextField
+                {/* Edit Institution Dialog */}
+                <Dialog
+                    open={editDialogOpen}
+                    onClose={handleCloseEditDialog}
+                    maxWidth="md"
+                    fullWidth
+                >
+                    <DialogTitle>
+                        <Box display="flex" justifyContent="space-between" alignItems="center">
+                            <span>Edit Institution</span>
+                            <IconButton
+                                edge="end"
+                                color="inherit"
+                                onClick={handleCloseEditDialog}
+                                aria-label="close"
+                                disabled={isSaving}
+                            >
+                                <CloseIcon />
+                            </IconButton>
+                        </Box>
+                    </DialogTitle>
+
+                    <DialogContent dividers>
+                        {/* <TextField
                         select
                         fullWidth
                         margin="normal"
@@ -394,94 +398,97 @@ export default function InstitutionList() {
                             </MenuItem>
                         ))}
                     </TextField> */}
-                    <TextField
-                        select
-                        fullWidth
-                        margin="normal"
-                        label="University"
-                        name="university"
-                        value={formData.university}
-                        onChange={handleInputChange}
-                        required
-                        disabled={loading || universities.length === 0}
-                    >
-                        <MenuItem value="" disabled>
-                            {universities.length === 0 ? 'Loading universities...' : ''}
-                        </MenuItem>
-                        {universities.map((univ) => (
-                            <MenuItem key={univ._id} value={univ.name}>
-                                {univ.name}
+                        <TextField
+                            select
+                            fullWidth
+                            margin="normal"
+                            label="University"
+                            name="university"
+                            value={formData.university}
+                            onChange={handleInputChange}
+                            required
+                            disabled={loading || universities.length === 0}
+                        >
+                            <MenuItem value="" disabled>
+                                {universities.length === 0 ? 'Loading universities...' : ''}
                             </MenuItem>
-                        ))}
-                    </TextField>
+                            {universities.map((univ) => (
+                                <MenuItem key={univ._id} value={univ.name}>
+                                    {univ.name}
+                                </MenuItem>
+                            ))}
+                        </TextField>
 
-                    <TextField
-                        fullWidth
-                        margin="normal"
-                        label="Institution Name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        required
-                        disabled={isSaving}
-                    />
+                        <TextField
+                            fullWidth
+                            margin="normal"
+                            label="Institution Name"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            required
+                            disabled={isSaving}
+                        />
 
-                    <Box sx={{ mt: 3, mb: 2 }}>
-                        <Typography variant="subtitle1" gutterBottom>
-                            Courses
-                        </Typography>
+                        <Box sx={{ mt: 3, mb: 2 }}>
+                            <Typography variant="subtitle1" gutterBottom>
+                                Courses
+                            </Typography>
 
-                        {formData.courses.map((course, index) => (
-                            <Box key={index} sx={{ display: 'flex', gap: 1, mb: 1, alignItems: 'center' }}>
-                                <TextField
-                                    fullWidth
-                                    value={course}
-                                    onChange={(e) => handleCourseChange(index, e.target.value)}
-                                    placeholder={`Course ${index + 1}`}
-                                    disabled={isSaving}
-                                />
-                                <IconButton
-                                    onClick={() => removeCourseField(index)}
-                                    disabled={formData.courses.length <= 1 || isSaving}
-                                    color="error"
-                                >
-                                    <DeleteIcon fontSize="small" />
-                                </IconButton>
-                            </Box>
-                        ))}
+                            {formData.courses.map((course, index) => (
+                                <Box key={index} sx={{ display: 'flex', gap: 1, mb: 1, alignItems: 'center' }}>
+                                    <TextField
+                                        fullWidth
+                                        value={course}
+                                        onChange={(e) => handleCourseChange(index, e.target.value)}
+                                        placeholder={`Course ${index + 1}`}
+                                        disabled={isSaving}
+                                    />
+                                    <IconButton
+                                        onClick={() => removeCourseField(index)}
+                                        disabled={formData.courses.length <= 1 || isSaving}
+                                        variant="outlined"
+                                        color="error"
+                                    >
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </Box>
+                            ))}
+
+                            <Button
+                                onClick={addCourseField}
+                                startIcon={<AddIcon />}
+                                variant="outlined"
+                                sx={{ mt: 1 }}
+                                disabled={isSaving}
+                            >
+                                Add Course
+                            </Button>
+                        </Box>
+                    </DialogContent>
+
+                    <DialogActions>
+                        <Button
+                            onClick={handleCloseEditDialog}
+                            disabled={isSaving}
+                            startIcon={<CancelIcon />}
+                        >
+                            Cancel
+                        </Button>
 
                         <Button
-                            onClick={addCourseField}
-                            startIcon={<AddIcon />}
-                            variant="outlined"
-                            sx={{ mt: 1 }}
+                            variant="contained"
+                            color="primary"
                             disabled={isSaving}
+                            onClick={handleSubmitEdit}
+                            // startIcon={isSaving ? <CircularProgress size={20} /> : null}
+                            startIcon={<SaveIcon />}
                         >
-                            Add Course
+                            {isSaving ? 'Saving...' : 'Save Changes'}
                         </Button>
-                    </Box>
-                </DialogContent>
-
-                <DialogActions>
-                    <Button
-                        onClick={handleCloseEditDialog}
-                        disabled={isSaving}
-                    >
-                        Cancel
-                    </Button>
-
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        disabled={isSaving}
-                        onClick={handleSubmitEdit}
-                        startIcon={isSaving ? <CircularProgress size={20} /> : null}
-                    >
-                        {isSaving ? 'Saving...' : 'Save Changes'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </Paper>
+                    </DialogActions>
+                </Dialog>
+            </Paper>
         </Box>
     );
 }

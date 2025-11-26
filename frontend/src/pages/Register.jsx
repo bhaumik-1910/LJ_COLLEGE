@@ -472,7 +472,7 @@ const RegisterPage = () => {
   const roleOptions = useMemo(() => {
     if (currentRole === "superadmin")
       return [
-        { value: "superadmin", label: "Super Admin"  },
+        { value: "superadmin", label: "Super Admin" },
         { value: "admin", label: "Admin" },
       ];
 

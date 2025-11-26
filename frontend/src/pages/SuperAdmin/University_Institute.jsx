@@ -659,11 +659,20 @@ export default function University_Institute() {
         }
     };
 
+    const handleCancel = () => {
+        setFormData({
+            university: '',
+            name: '',
+            courses: ['']
+        });
+    };
+
+
     return (
         <Box
             sx={{
                 p: 4,
-                maxWidth: "1200px",
+                maxWidth: "1100px",
                 mx: "auto",
                 my: 4,
                 bgcolor: "#fff",
@@ -676,26 +685,34 @@ export default function University_Institute() {
         >
 
             {/* LEFT SIDE FORM */}
-            <Box sx={{ flex: 1, color: "#2b4ddb" } }>
+            <Box sx={{ flex: 1, color: "#2b4ddb" }}>
                 <Button
                     startIcon={<ArrowBackIcon />}
                     onClick={() => navigate(-1)}
                     sx={{ mb: 2 }}
                     disabled={loading}
-                    
+
                 >
                     Back to List
                 </Button>
 
                 <Typography
                     variant="h4"
-                    sx={{ fontSize: 22, fontWeight: 700, color: "#2b4ddb", lineHeight: 1.2 }}
+                    sx={{
+                        fontSize: 22,
+                        fontWeight: 700,
+                        color: "#2b4ddb",
+                        lineHeight: 1.2,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1.5,
+                    }}
                 >
-                    CREATE INSTITUTION  
-
+                    CREATE INSTITUTION
                     <PersonAddRoundedIcon sx={{ fontSize: 32, color: "#2b4ddb" }} />
                 </Typography>
-                
+
+
 
                 <Typography sx={{ mb: 3, color: "gray" }}>
                     Add institution details & assign courses
@@ -713,7 +730,7 @@ export default function University_Institute() {
                     size="small"
                     disabled={loading || universities.length === 0}
                     sx={{
-                        bgcolor: "#f9f9f9",
+                        // bgcolor: "#f9f9f9",
                         borderRadius: "10px"
                     }}
                 >
@@ -738,7 +755,7 @@ export default function University_Institute() {
                     required
                     size="small"
                     disabled={loading}
-                    sx={{ bgcolor: "#f9f9f9", borderRadius: "10px" }}
+                    sx={{ borderRadius: "10px" }}
                 />
 
                 <Typography sx={{ mt: 3, fontWeight: 600 }}>Courses</Typography>
@@ -755,7 +772,7 @@ export default function University_Institute() {
                             placeholder={`Course ${index + 1}`}
                             disabled={loading}
                             size="small"
-                            sx={{ bgcolor: "#f9f9f9", borderRadius: "10px" }}
+                            sx={{ borderRadius: "10px" }}
                         />
 
                         {formData.courses.length > 1 && (
@@ -785,39 +802,26 @@ export default function University_Institute() {
                     Add Course
                 </Button>
 
-                <Box sx={{ mt: 4, display: "flex", gap: 2 }}>
-
-
-                <Button
+                <Box sx={{ display: "flex", gap: 2, mt: 4 }}>
+                    <Button
                         variant="contained"
-                        sx={{
-                            background: "linear-gradient(90deg, #2445ff, #6a77ff)",
-                            px: 4,
-                            py: 1.3,
-                            borderRadius: "30px",
-                            fontSize: "16px"
-                        }}
                         disabled={loading}
                         onClick={handleSubmit}
                         startIcon={<AddIcon />}
-                        // startIcon={loading ? <CircularProgress size={20} /> : null}
-                        size="small"
                     >
                         {loading ? "Creating..." : "Create Institution"}
                     </Button>
 
                     <Button
-                        type="button"
                         variant="outlined"
                         disabled={loading}
-                        // size="small"
+                        onClick={handleCancel}
                         startIcon={<CancelIcon />}
                     >
                         Cancel
                     </Button>
-
-                    
                 </Box>
+
             </Box>
 
             {/* RIGHT SIDE ILLUSTRATION */}
