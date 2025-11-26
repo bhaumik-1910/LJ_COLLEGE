@@ -655,7 +655,7 @@ export default function UniversityUsers() {
                 value={editRow?.university || ""}
                 onChange={(e) => onEditChange("university", e.target.value)}
               >
-                <MenuItem value="">— none —</MenuItem>
+                {/* <MenuItem value="">— none —</MenuItem> */}
                 {universities.map((u) => (
                   <MenuItem key={u._id} value={u.name}>
                     {u.name}
