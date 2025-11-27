@@ -22,9 +22,20 @@ export default function Add_document() {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    // Add these state variables at the top of your component
+    const [universities, setUniversities] = useState([]);
+    const [institutes, setInstitutes] = useState([]);
+    const [courses, setCourses] = useState([]);
+    const [selectedUniversity, setSelectedUniversity] = useState("");
+    const [selectedInstitute, setSelectedInstitute] = useState("");
+
     const [form, setForm] = useState({
-        enrolno: "",
-        fullName: "",
+        university: "",
+        universityName: "",
+        institute: "",
+        course: "",
+        // enrolno: "",
+        // fullName: "",
         type: "",
         categoryId: "",
         categoryName: "",
@@ -33,44 +44,64 @@ export default function Add_document() {
         images: [], // up to 4
     });
 
-    const selectedStudent = useMemo(() => students.find((s) => s.enrolno === form.enrolno) || null, [students, form.enrolno]);
+    // const selectedStudent = useMemo(() => students.find((s) => s.enrolno === form.enrolno) || null, [students, form.enrolno]);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setForm((prev) => ({ ...prev, [name]: value }));
+        // const { name, value } = e.target;
+        // setForm((prev) => ({ ...prev, [name]: value }));
+
+
+        const { name, value, type, files } = e.target;
+        if (type === 'file') {
+            const file = files[0];
+            setForm((prev) => ({ ...prev, file }));
+        } else {
+            setForm((prev) => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleFile = (e) => {
-        const file = e.target.files?.[0] || null;
-        setForm((prev) => ({ ...prev, file }));
+        // const file = e.target.files?.[0] || null;
+        // setForm((prev) => ({ ...prev, file }));
+        const file = e.target.files?.[0];
+        if (file) {
+            setForm(prev => ({ ...prev, file }));
+        }
+        e.target.value = '';
     };
 
     const handleImages = (e) => {
-        const files = Array.from(e.target.files || []).slice(0, 4);
-        setForm((prev) => ({ ...prev, images: files }));
+        // const files = Array.from(e.target.files || []).slice(0, 4);
+        // setForm((prev) => ({ ...prev, images: files }));
+        const files = e.target.files ? Array.from(e.target.files).slice(0, 4) : [];
+        setForm(prev => ({
+            ...prev,
+            images: [...prev.images, ...files].slice(0, 4) // Ensure max 4 images
+        }));
+        e.target.value = '';
     };
 
     // Keep fullName in sync when enrolno selected
-    useEffect(() => {
-        if (selectedStudent) {
-            setForm((prev) => ({ ...prev, fullName: selectedStudent.fullName }));
-        } else {
-            setForm((prev) => ({ ...prev, fullName: "" }));
-        }
-    }, [selectedStudent]);
+    // useEffect(() => {
+    //     if (selectedStudent) {
+    //         setForm((prev) => ({ ...prev, fullName: selectedStudent.fullName }));
+    //     } else {
+    //         setForm((prev) => ({ ...prev, fullName: "" }));
+    //     }
+    // }, [selectedStudent]);
 
-    const fetchStudents = async () => {
-        try {
-            const res = await fetch(`${API_BASE}/faculty/students`, {
-                headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
-            });
-            const data = await res.json();
-            if (res.ok) setStudents(Array.isArray(data) ? data : []);
-            else toast.error(data.message || "Failed to fetch students");
-        } catch (e) {
-            toast.error("Failed to fetch students");
-        }
-    };
+    // const fetchStudents = async () => {
+    //     try {
+    //         const res = await fetch(`${API_BASE}/faculty/students`, {
+    //             headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+    //         });
+    //         const data = await res.json();
+    //         if (res.ok) setStudents(Array.isArray(data) ? data : []);
+    //         else toast.error(data.message || "Failed to fetch students");
+    //     } catch (e) {
+    //         toast.error("Failed to fetch students");
+    //     }
+    // };
 
     const fetchCategories = async () => {
         try {
@@ -86,14 +117,14 @@ export default function Add_document() {
     };
 
     useEffect(() => {
-        fetchStudents();
+        // fetchStudents();
         fetchCategories();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const validate = () => {
-        if (!form.enrolno) return toast.error("Select student enrolment no");
-        if (!form.fullName) return toast.error("Student name required");
+        if (!form.universityName) return toast.error("Select University");
+        if (!form.institute) return toast.error("Select Institute ");
+        if (!form.course) return toast.error("Select Course");
         if (!form.type.trim()) return toast.error("Type is required");
         if (!form.date) return toast.error("Date is required");
         if (!form.file) return toast.error("Upload a document file");
@@ -114,6 +145,36 @@ export default function Add_document() {
     };
 
     const onSubmit = async (e) => {
+        // e.preventDefault();
+        // const err = validate();
+        // if (err) return;
+
+        // setLoading(true);
+        // try {
+        //     const fd = new FormData();
+        //     // fd.append("enrolno", form.enrolno);
+        //     fd.append("type", form.type);
+        //     fd.append("date", form.date);
+        //     if (form.categoryId) fd.append("categoryId", form.categoryId);
+        //     if (form.categoryName.trim()) fd.append("categoryName", form.categoryName.trim());
+        //     if (form.file) fd.append("file", form.file);
+        //     for (const img of form.images) fd.append("images", img);
+
+        //     const res = await fetch(`${API_BASE}/documents`, {
+        //         method: "POST",
+        //         headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+        //         body: fd,
+        //     });
+        //     const data = await res.json().catch(() => ({}));
+        //     if (!res.ok) throw new Error(data.message || "Upload failed");
+        //     toast.success("Document uploaded successfully");
+        //     setForm({ universityName: "", institute: "", course: "", type: "", categoryId: "", categoryName: "", date: "", file: null, images: [] });
+        // } catch (error) {
+        //     toast.error(error.message || "Something went wrong");
+        // } finally {
+        //     setLoading(false);
+        // }
+
         e.preventDefault();
         const err = validate();
         if (err) return;
@@ -121,11 +182,16 @@ export default function Add_document() {
         setLoading(true);
         try {
             const fd = new FormData();
-            fd.append("enrolno", form.enrolno);
+            fd.append('university', form.university);
+            fd.append('universityName', form.universityName);
+            fd.append('institute', form.institute);
+            fd.append('course', form.course);
             fd.append("type", form.type);
             fd.append("date", form.date);
+
             if (form.categoryId) fd.append("categoryId", form.categoryId);
             if (form.categoryName.trim()) fd.append("categoryName", form.categoryName.trim());
+
             if (form.file) fd.append("file", form.file);
             for (const img of form.images) fd.append("images", img);
 
@@ -136,122 +202,220 @@ export default function Add_document() {
             });
             const data = await res.json().catch(() => ({}));
             if (!res.ok) throw new Error(data.message || "Upload failed");
+
             toast.success("Document uploaded successfully");
-            setForm({ enrolno: "", fullName: "", type: "", categoryId: "", categoryName: "", date: "", file: null, images: [] });
-            // navigate("/faculty-dashboard/document-list");
+
+            setForm({ university: '', universityName: "", institute: "", course: "", type: "", categoryId: "", categoryName: "", date: "", file: null, images: [] });
         } catch (error) {
             toast.error(error.message || "Something went wrong");
         } finally {
             setLoading(false);
         }
+
+
+        // if (!validate()) return;
+
+        // setLoading(true);
+        // try {
+        //     const formData = new FormData();
+
+        //     // Add form fields to formData
+        //     formData.append('university', form.university);
+        //     formData.append('universityName', form.universityName);
+        //     formData.append('institute', form.institute);
+        //     formData.append('course', form.course);
+        //     formData.append('type', form.type);
+        //     formData.append('date', form.date);
+
+        //     // Add category (either ID or name)
+        //     if (form.categoryId) {
+        //         formData.append('categoryId', form.categoryId);
+        //     } else if (form.categoryName) {
+        //         formData.append('categoryName', form.categoryName);
+        //     }
+
+        //     // Add the main document file
+        //     if (form.file) {
+        //         formData.append('file', form.file);
+        //     }
+
+        //     // Add image files
+        //     form.images.forEach((image, index) => {
+        //         formData.append('images', image);
+        //     });
+
+        //     const res = await fetch(`${API_BASE}/documents`, {
+        //         method: 'POST',
+        //         headers: {
+        //             Authorization: `Bearer ${token}`,
+        //         },
+        //         body: formData
+        //     });
+
+        //     const data = await res.json().catch(err => {
+        //         console.error('Error parsing JSON response:', err);
+        //         throw new Error('Invalid response from server');
+        //     });
+
+        //     if (!res.ok) {
+        //         throw new Error(data.message || 'Failed to upload document');
+        //     }
+
+        //     toast.success('Document uploaded successfully');
+
+        //     // Reset form
+        //     setForm({
+        //         university: '',
+        //         universityName: '',
+        //         institute: '',
+        //         course: '',
+        //         type: '',
+        //         categoryId: '',
+        //         categoryName: '',
+        //         date: '',
+        //         file: null,
+        //         images: []
+        //     });
+
+        // } catch (error) {
+        //     console.error('Upload error:', error);
+        //     toast.error(error.message || 'Failed to upload document');
+        // } finally {
+        //     setLoading(false);
+        // }
     };
 
+
+    // Add these fetch functions
+    const fetchUniversities = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/universities`, {
+                headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+            });
+            const data = await res.json();
+            if (res.ok) setUniversities(Array.isArray(data) ? data : []);
+            else toast.error(data.message || "Failed to fetch universities");
+        } catch (e) {
+            toast.error("Failed to fetch universities");
+        }
+    };
+
+    //Fetch To the institutions
+    const fetchInstitutes = async (universityName) => {
+        if (!universityName) {
+            setInstitutes([]);
+            return;
+        }
+
+        try {
+            const url = `${API_BASE}/institutions/university/${encodeURIComponent(universityName)}`;
+
+            const res = await fetch(url, {
+                headers: {
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            // First check if response is JSON
+            const contentType = res.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await res.text();
+                throw new Error('Server returned non-JSON response');
+            }
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.message || `HTTP error! status: ${res.status}`);
+            }
+
+            // Handle the response format
+            const institutesData = data.data || [];
+
+            setInstitutes(institutesData);
+            setForm(prev => ({
+                ...prev,
+                institute: "",
+                course: ""
+            }));
+
+        } catch (error) {
+            toast.error(`Error fetching institutes: ${error.message}`);
+            setInstitutes([]);
+        }
+    };
+
+
+    // Fetch courses when institute is selected
+    const fetchCourses = async (instituteId) => {
+        if (!instituteId) {
+            setCourses([]);
+            return;
+        }
+
+        try {
+            const url = `${API_BASE}/institutions/${instituteId}/courses`;
+
+            const res = await fetch(url, {
+                headers: {
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            // First check if response is JSON
+            const contentType = res.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await res.text();
+                throw new Error('Server returned non-JSON response');
+            }
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.message || `HTTP error! status: ${res.status}`);
+            }
+
+            // Handle the response format
+            const coursesData = Array.isArray(data) ? data : (data.data || []);
+
+            setCourses(coursesData);
+
+        } catch (error) {
+            toast.error(`Error fetching courses: ${error.message}`);
+            setCourses([]);
+        }
+    };
+
+    useEffect(() => {
+        fetchUniversities();
+    }, []);
+
+    useEffect(() => {
+        if (selectedUniversity) {
+            fetchInstitutes(selectedUniversity);
+        }
+    }, [selectedUniversity]);
+
+
+    useEffect(() => {
+        if (form.institute) {
+            fetchCourses(form.institute);
+        } else {
+            setCourses([]);
+        }
+    }, [form.institute]);
+
     return (
-        // <Box component="form" onSubmit={onSubmit} sx={{ p: 3, maxWidth: 720, mx: "auto" }}>
-        //     <Paper elevation={4} sx={{ p: 5, borderRadius: 2 }}>
-
-        //         <Typography variant="h5" fontWeight={700} mb={2}>Add Document</Typography>
-
-        //         <Grid container spacing={2} direction="column">
-        //             <Grid item xs={12}>
-        //                 <TextField select label="Student Enrolment No" name="enrolno" value={form.enrolno} onChange={handleChange} fullWidth size="small">
-        //                     {students.map((s) => (
-        //                         <MenuItem key={s._id} value={s.enrolno}>{s.enrolno}</MenuItem>
-        //                     ))}
-        //                 </TextField>
-        //             </Grid>
-
-        //             <Grid item xs={12}>
-        //                 <TextField select label="Student Name" name="fullName" size="small" value={form.fullName} onChange={(e) => {
-        //                     const value = e.target.value;
-        //                     const match = students.find((s) => s.fullName === value);
-        //                     setForm((prev) => ({ ...prev, fullName: value, enrolno: match ? match.enrolno : prev.enrolno }));
-        //                 }} fullWidth>
-        //                     {students.map((s) => (
-        //                         <MenuItem key={s._id} value={s.fullName}>{s.fullName}</MenuItem>
-        //                     ))}
-        //                 </TextField>
-        //             </Grid>
-
-        //             <Grid item xs={12}>
-        //                 <TextField label="Type" name="type" value={form.type} size="small" onChange={handleChange} fullWidth placeholder="e.g., Assignment, Report" />
-        //             </Grid>
-        //             <Grid item xs={12}>
-        //                 <TextField select label="Category (existing)" name="categoryId" size="small" value={form.categoryId} onChange={(e) => setForm((p) => ({ ...p, categoryId: e.target.value, categoryName: "" }))} fullWidth>
-        //                     <MenuItem value="">None</MenuItem>
-        //                     {categories.map((c) => (
-        //                         <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
-        //                     ))}
-        //                 </TextField>
-        //             </Grid>
-
-        //             <Grid item xs={12}>
-        //                 <TextField label="Or New Category" name="categoryName" size="small" value={form.categoryName} onChange={(e) => setForm((p) => ({ ...p, categoryName: e.target.value, categoryId: "" }))} fullWidth />
-        //             </Grid>
-
-        //             <Grid item xs={12}>
-        //                 <TextField type="date" label="Date" name="date" value={form.date} size="small" onChange={handleChange} fullWidth InputLabelProps={{ shrink: true }} />
-        //             </Grid>
-
-        //             <Grid item xs={12}>
-        //                 <Button variant="outlined" component="label">
-        //                     Upload Document (pdf/doc/ppt/xls)
-        //                     <input type="file" hidden accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx" onChange={handleFile} />
-        //                 </Button>
-        //                 <Typography variant="body2" sx={{ ml: 2, display: "inline-block" }}>{form.file ? form.file.name : "No file selected"}</Typography>
-        //             </Grid>
-
-        //             <Grid item xs={12}>
-        //                 <Button variant="outlined" component="label">
-        //                     Upload Images (max 4)
-        //                     <input type="file" hidden multiple accept="image/png,image/jpeg,image/webp" onChange={handleImages} />
-        //                 </Button>
-        //                 <Typography variant="body2" sx={{ ml: 2, display: "inline-block" }}>{form.images.length > 0 ? `${form.images.length} selected` : "None"}</Typography>
-        //             </Grid>
-
-        //         </Grid>
-
-        //         <Box mt={3} display="flex" gap={2}>
-        //             <Button type="submit" variant="contained" disabled={loading}>{loading ? "Saving..." : "Save"}</Button>
-        //             <Button variant="outlined" color="secondary" onClick={() => navigate(-1)}>Cancel</Button>
-        //         </Box>
-
-        //         {/* 2. Image Section (Right) - md={6} */}
-        //         <Grid item xs={12} md={6} sx={{
-        //             display: { xs: 'none', md: 'flex' },
-        //             justifyContent: 'center',
-        //             alignItems: 'center',
-        //             backgroundColor: theme.palette.primary.light + '10',
-        //             borderTopRightRadius: 8,
-        //             borderBottomRightRadius: 8,
-        //         }}>
-        //             <Box sx={{
-        //                 width: '100%',
-        //                 maxWidth: 400,
-        //                 p: 3,
-        //             }}>
-        //                 <img
-        //                     src={studentImage}
-        //                     alt="Student Form Illustration"
-        //                     style={{
-        //                         width: '100%',
-        //                         height: 'auto',
-        //                         display: 'block'
-        //                     }}
-        //                 />
-        //             </Box>
-        //         </Grid>
-
-        //     </Paper >
-        // </Box>
-        <Box component="form" onSubmit={onSubmit} sx={{ p: 3, maxWidth: 990, mx: "auto" }}>
+        <Box component="form" onSubmit={onSubmit} sx={{ p: 3, maxWidth: 1000, mx: "auto" }}>
             <Paper elevation={4} sx={{ p: { xs: 2, md: 4 }, borderRadius: 2 }}>
                 <Grid
                     container
                     spacing={3}
                     alignItems="stretch"
                     sx={{
-                        flexDirection: { xs: "column", md: "row" }, // column on mobile, row on desktop
+                        flexDirection: { xs: "column", md: "row" },
                     }}
                 >
 
@@ -273,46 +437,112 @@ export default function Add_document() {
 
                         {/* Form Fields */}
                         <Grid container spacing={2} direction="column">
-                            {/* All your form fields stay here */}
+                            {/* University Dropdown */}
                             <Grid item xs={12}>
                                 <TextField
                                     select
-                                    label="Student Enrolment No"
-                                    name="enrolno"
-                                    value={form.enrolno}
-                                    onChange={handleChange}
                                     fullWidth
+                                    label="Select University"
+                                    name="university"
                                     size="small"
+                                    value={form.university}
+                                    onChange={(e) => {
+                                        const selectedUniversity = universities.find(u => u._id === e.target.value);
+                                        if (selectedUniversity) {
+                                            setSelectedUniversity(selectedUniversity.name);
+                                            setForm(prev => ({
+                                                ...prev,
+                                                university: selectedUniversity._id,
+                                                universityName: selectedUniversity.name,
+                                                institute: "",
+                                                course: ""
+                                            }));
+                                            fetchInstitutes(selectedUniversity.name);
+                                        }
+                                    }}
+                                    required
                                 >
-                                    {students.map((s) => (
-                                        <MenuItem key={s._id} value={s.enrolno}>
-                                            {s.enrolno}
+                                    <MenuItem value="">
+                                        <em>Select University</em>
+                                    </MenuItem>
+                                    {universities.map((univ) => (
+                                        <MenuItem key={univ._id} value={univ._id}>
+                                            {univ.name}
                                         </MenuItem>
                                     ))}
                                 </TextField>
                             </Grid>
 
+                            {/* Institute Dropdown */}
                             <Grid item xs={12}>
                                 <TextField
                                     select
-                                    label="Student Name"
-                                    name="fullName"
+                                    fullWidth
+                                    label="Select Institute"
+                                    name="institute"
                                     size="small"
-                                    value={form.fullName}
+                                    value={form.institute}
                                     onChange={(e) => {
-                                        const value = e.target.value;
-                                        const match = students.find((s) => s.fullName === value);
-                                        setForm((prev) => ({
+                                        const selectedId = e.target.value;
+                                        setForm(prev => ({
                                             ...prev,
-                                            fullName: value,
-                                            enrolno: match ? match.enrolno : prev.enrolno,
+                                            institute: selectedId,
+                                            course: ""
+                                        }));
+                                        fetchCourses(selectedId);
+                                    }}
+                                    // onChange={(e) => {
+                                    //     const selectedId = e.target.value;
+                                    //     const inst = institutes.find(i => i._id === selectedId);
+
+                                    //     setForm(prev => ({
+                                    //         ...prev,
+                                    //         institute: selectedId,
+                                    //         instituteName: inst?.name || "",
+                                    //         course: ""
+                                    //     }));
+
+                                    //     fetchCourses(selectedId);
+                                    // }}
+
+                                    disabled={!form.university}
+                                    required
+                                >
+                                    <MenuItem value="">
+                                        <em>Select Institute</em>
+                                    </MenuItem>
+                                    {institutes.map((inst) => (
+                                        <MenuItem key={inst._id} value={inst._id}>
+                                            {inst.name}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            </Grid>
+
+                            {/* Course Dropdown */}
+                            <Grid item xs={12} md={4}>
+                                <TextField
+                                    select
+                                    fullWidth
+                                    label="Select Course"
+                                    name="course"
+                                    size="small"
+                                    value={form.course}
+                                    onChange={(e) => {
+                                        setForm(prev => ({
+                                            ...prev,
+                                            course: e.target.value
                                         }));
                                     }}
-                                    fullWidth
+                                    disabled={!form.institute}
+                                    required
                                 >
-                                    {students.map((s) => (
-                                        <MenuItem key={s._id} value={s.fullName}>
-                                            {s.fullName}
+                                    <MenuItem value="">
+                                        <em>Select Course</em>
+                                    </MenuItem>
+                                    {courses.map((course, index) => (
+                                        <MenuItem key={index} value={course}>
+                                            {course}
                                         </MenuItem>
                                     ))}
                                 </TextField>
@@ -421,7 +651,7 @@ export default function Add_document() {
                             {/* Buttons */}
                             <Box mt={3} display="flex" gap={2}>
                                 <Button type="submit" variant="contained" disabled={loading} startIcon={<SaveIcon />}>
-                                    {loading ? "Saving..." : "Save"}
+                                    {loading ? "Saving..." : "Upload Document"}
                                 </Button>
                                 <Button
                                     variant="outlined"

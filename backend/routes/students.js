@@ -47,7 +47,7 @@ router.post("/students", authRequired, requireRole("faculty"), async (req, res) 
             contact,
             gender: normalizedGender,
             course,
-            university: uni, // critical: scope to faculty's university
+            university: uni, 
             address,
             addedBy: req.user.id,
         });

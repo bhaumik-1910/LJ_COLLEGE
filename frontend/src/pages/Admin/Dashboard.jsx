@@ -21,7 +21,7 @@ export default function AdminDashboard() {
 
     const [loading, setLoading] = useState(true);
     const [facultyCount, setFacultyCount] = useState(0);
-    const [studentCount, setStudentCount] = useState(0);
+    // const [studentCount, setStudentCount] = useState(0);
     const [documentCount, setDocumentCount] = useState(0);
 
     const fetchCounts = async () => {
@@ -47,11 +47,11 @@ export default function AdminDashboard() {
             }
 
             // Fetch student count
-            const stuRes = await fetch(`${API_BASE}/faculty/students/count`, { headers: { ...authHeader } });
-            const stuJson = await stuRes.json();
-            if (stuRes.ok && typeof stuJson?.count === 'number') {
-                setStudentCount(stuJson.count);
-            }
+            // const stuRes = await fetch(`${API_BASE}/faculty/students/count`, { headers: { ...authHeader } });
+            // const stuJson = await stuRes.json();
+            // if (stuRes.ok && typeof stuJson?.count === 'number') {
+            //     setStudentCount(stuJson.count);
+            // }
 
             // Fetch document count
             const docRes = await fetch(`${API_BASE}/documents/count`, { headers: { ...authHeader } });
@@ -86,18 +86,18 @@ export default function AdminDashboard() {
 
     // Data for the new Doughnut chart
     const countsChartData = {
-        labels: ["Faculties", "Students", "Documents"],
+        labels: ["Faculties", "Documents"],
         datasets: [{
-            data: [facultyCount, studentCount, documentCount],
+            data: [facultyCount, documentCount],
             backgroundColor: [
                 '#1cc88a', // Green for Faculties
                 '#f6c23e', // Yellow for Students
-                '#36b9cc', // Blue/Cyan for Documents
+                // '#36b9cc', // Blue/Cyan for Documents
             ],
             hoverBackgroundColor: [
                 '#17a673',
                 '#d89d14',
-                '#2c9faf',
+                // '#2c9faf',
             ],
             borderColor: '#fff',
             borderWidth: 1,
@@ -143,13 +143,15 @@ export default function AdminDashboard() {
                             <Typography variant="h6" fontWeight={700}>{facultyCount}</Typography>
                         </Paper>
                     </Grid>
-                    <Grid item xs={12} sm={6} md={4}>
+
+                    {/* <Grid item xs={12} sm={6} md={4}>
                         <Paper sx={{ ...cardStyles, bgcolor: '#f6c23e' }}>
                             <PersonIcon sx={{ fontSize: '3rem', mb: 1 }} />
                             <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Students</Typography>
                             <Typography variant="h6" fontWeight={700}>{studentCount}</Typography>
                         </Paper>
-                    </Grid>
+                    </Grid> */}
+
                     <Grid item xs={12} sm={6} md={4}>
                         <Paper sx={{ ...cardStyles, bgcolor: '#36b9cc' }}>
                             <DescriptionIcon sx={{ fontSize: '3rem', mb: 1 }} />
@@ -162,7 +164,7 @@ export default function AdminDashboard() {
 
             {/* Doughnut Chart on the right */}
             <Grid item xs={12} md={6} sx={{ mt: 5 }}>
-                {!loading && (facultyCount + studentCount + documentCount > 0) && (
+                {!loading && (facultyCount + documentCount > 0) && (
                     <Box sx={{ maxWidth: '400px', width: '100%', height: 400 }}>
                         <Paper elevation={3} sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
                             <Typography variant="h6" fontWeight={700} mb={2}>Overall Distribution</Typography>
@@ -175,7 +177,7 @@ export default function AdminDashboard() {
             </Grid>
 
             {/* Display message if no data */}
-            {!loading && (facultyCount + studentCount + documentCount === 0) && (
+            {!loading && (facultyCount + documentCount === 0) && (
                 <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                     <Typography textAlign="center" mt={4} color="text.secondary">
                         No data available for the chart.

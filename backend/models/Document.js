@@ -2,21 +2,54 @@ import mongoose from "mongoose";
 
 const documentSchema = new mongoose.Schema(
     {
-        student: {
+        // student: {
+        //     type: mongoose.Schema.Types.ObjectId,
+        //     ref: "Student",
+        //     required: true,
+        // },
+        // studentEnrolno: {
+        //     type: String,
+        //     required: true,
+        //     trim: true,
+        // },
+        // studentName: {
+        //     type: String,
+        //     required: true,
+        //     trim: true,
+        // },
+        university: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Student",
+            ref: "University",
             required: true,
         },
-        studentEnrolno: {
+
+        universityName: {
             type: String,
             required: true,
             trim: true,
         },
-        studentName: {
+
+        institute: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Institution",
+            required: true,
+            // type: String,
+            // required: true,
+            // trim: true,
+        },
+
+        instituteName: {
             type: String,
             required: true,
             trim: true,
         },
+
+        course: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+
         category: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Category",

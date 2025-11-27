@@ -79,6 +79,7 @@ export default function Document_list() {
         }
     };
 
+
     useEffect(() => {
         if (!token) return;
         fetchCategories();
@@ -112,7 +113,7 @@ export default function Document_list() {
         try {
             const res = await fetch(`${API_BASE}/documents/${targetId}`, { method: 'DELETE', headers });
             if (!res.ok) { const data = await res.json().catch(() => ({})); throw new Error(data.message || 'Failed to delete'); }
-            toast.success('Deleted');
+            toast.success('Deleted Document');
             if (!selectedCat) fetchDocs(""); else fetchDocs(`id:${selectedCat}`);
             closeDeleteDialog();
         } catch (e) { toast.error(e.message || 'Delete failed'); }
@@ -171,8 +172,9 @@ export default function Document_list() {
                             <Table size="small">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>Student Name</TableCell>
-                                        <TableCell>Enrolment No</TableCell>
+                                        <TableCell>Univesity Name</TableCell>
+                                        <TableCell>Institute Name</TableCell>
+                                        <TableCell>Course</TableCell>
                                         <TableCell>Type</TableCell>
                                         <TableCell>Category</TableCell>
                                         <TableCell>Date</TableCell>
@@ -184,8 +186,9 @@ export default function Document_list() {
                                 <TableBody>
                                     {paginatedDocs.map((d) => (
                                         <TableRow key={d._id} hover>
-                                            <TableCell>{d.student?.fullName || d.studentName}</TableCell>
-                                            <TableCell>{d.student?.enrolno || d.studentEnrolno}</TableCell>
+                                            <TableCell>{d.universityName}</TableCell>
+                                            <TableCell>{d.instituteName}</TableCell>
+                                            <TableCell>{d.course}</TableCell>
                                             <TableCell>{d.type}</TableCell>
                                             <TableCell>{d.category?.name || d.categoryName}</TableCell>
                                             <TableCell>{new Date(d.date).toLocaleDateString()}</TableCell>
@@ -235,7 +238,7 @@ export default function Document_list() {
             {/* Delete confirm dialog */}
             <Dialog open={confirmOpen} onClose={closeDeleteDialog} maxWidth="xs" fullWidth>
                 <DialogTitle>Delete Document</DialogTitle>
-                <DialogContent>
+                <DialogContent dividers>
                     <DialogContentText>
                         Are you sure you want to delete this document? This action cannot be undone.
                     </DialogContentText>

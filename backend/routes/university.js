@@ -15,7 +15,6 @@ router.post("/send-otp", async (req, res) => {
         await sendOtpEmail(email, otp);
         res.json({ message: "OTP sent" });
     } catch (e) {
-        console.error(e);
         res.status(500).json({ message: "Failed to send OTP" });
     }
 });
@@ -56,20 +55,28 @@ router.post("/", async (req, res) => {
         clearVerification(email);
         res.status(201).json(uni);
     } catch (e) {
-        console.error(e);
         res.status(500).json({ message: "Server error" });
     }
 });
 
-// GET /api/universities
+// GET /api/universities Fetch All 
 router.get("/", async (_req, res) => {
     try {
         const list = await University.find({}).sort({ name: 1 });
         res.json(list);
     } catch (e) {
-        console.error(e);
         res.status(500).json({ message: "Server error" });
     }
 });
+
+// In your university.js routes
+// router.get('/', async (req, res) => {
+//     try {
+//         const universities = await University.find({}).select('_id name').lean();
+//         res.json(universities);
+//     } catch (error) {
+//         res.status(500).json({ message: 'Server error' });
+//     }
+// });
 
 export default router;

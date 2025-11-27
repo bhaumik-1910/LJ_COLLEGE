@@ -1285,8 +1285,9 @@ export default function All_Document() {
               <Table size="small">
                 <TableHead>
                   <TableRow sx={{ bgcolor: "#f5f7ff" }}>
-                    <TableCell sx={{ fontWeight: 700 }}>Student Name</TableCell>
-                    <TableCell sx={{ fontWeight: 700 }}>Enrolment No</TableCell>
+                    <TableCell sx={{ fontWeight: 700 }}>Univesity Name</TableCell>
+                    <TableCell sx={{ fontWeight: 700 }}>Institute Name</TableCell>
+                    <TableCell sx={{ fontWeight: 700 }}>Course</TableCell>
                     <TableCell sx={{ fontWeight: 700 }}>Type</TableCell>
                     <TableCell sx={{ fontWeight: 700 }}>Category</TableCell>
                     <TableCell sx={{ fontWeight: 700 }}>Date</TableCell>
@@ -1298,8 +1299,9 @@ export default function All_Document() {
                 <TableBody>
                   {pagedRows.map((d) => (
                     <TableRow key={d._id} hover>
-                      <TableCell>{d.student?.fullName}</TableCell>
-                      <TableCell>{d.student?.enrolno}</TableCell>
+                      <TableCell>{d.universityName}</TableCell>
+                      <TableCell>{d.instituteName}</TableCell>
+                      <TableCell>{d.course}</TableCell>
                       <TableCell>{d.type}</TableCell>
                       <TableCell>{d.category?.name || d.categoryName}</TableCell>
                       <TableCell>{d.date ? new Date(d.date).toLocaleDateString() : "-"}</TableCell>

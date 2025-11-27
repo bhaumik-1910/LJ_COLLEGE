@@ -18,7 +18,7 @@ export default function FacultyDashboard() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-    const [studentCount, setStudentCount] = useState(0);
+    // const [studentCount, setStudentCount] = useState(0);
     const [documentCount, setDocumentCount] = useState(0);
     const [monthly, setMonthly] = useState([]); // [{ month: 1..12, count }]
 
@@ -47,7 +47,7 @@ export default function FacultyDashboard() {
                 if (!dRes.ok) throw new Error(dData.message || "Failed to fetch documents count");
                 if (!mRes.ok) throw new Error(mData.message || "Failed to fetch monthly stats");
 
-                setStudentCount(Number(sData.count || 0));
+                // setStudentCount(Number(sData.count || 0));
                 setDocumentCount(Number(dData.count || 0));
                 setMonthly(Array.isArray(mData.months) ? mData.months : []);
             } catch (e) {
@@ -141,13 +141,13 @@ export default function FacultyDashboard() {
             ) : (
                 <>
                     <Grid container spacing={4} mb={4}>
-                        <Grid item xs={12} sm={6} md={3} sx={{ minWidth: '220px' }}>
+                        {/* <Grid item xs={12} sm={6} md={3} sx={{ minWidth: '220px' }}>
                             <Paper sx={{ ...cardStyles, bgcolor: '#1cc88a' }}>
                                 <PeopleAltIcon sx={{ fontSize: '3rem', mb: 1 }} />
                                 <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Students</Typography>
                                 <Typography variant="h5" fontWeight={700}>{studentCount}</Typography>
                             </Paper>
-                        </Grid>
+                        </Grid> */}
                         <Grid item xs={12} sm={6} md={3} sx={{ minWidth: '220px' }}>
                             <Paper sx={{ ...cardStyles, bgcolor: '#4e73df' }}>
                                 <DescriptionIcon sx={{ fontSize: '3rem', mb: 1 }} />

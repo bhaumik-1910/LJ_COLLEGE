@@ -270,4 +270,63 @@ router.delete("/:id", authRequired, async (req, res) => {
     }
 });
 
+
+// // GET /api/institutions - Get all institutions
+router.get('/university/:universityName', async (req, res) => {
+    try {
+        const { universityName } = req.params;
+
+        // Decode URL-encoded university name
+        const decodedUniversityName = decodeURIComponent(universityName);
+
+        // Find institutions that match the university name (case-insensitive)
+        const institutions = await Institution.find({
+            university: { $regex: new RegExp('^' + decodedUniversityName + '$', 'i') }
+        }).select('_id name courses').lean();
+
+        res.json({
+            success: true,
+            data: institutions
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Server error while fetching institutions',
+            error: error.message
+        });
+    }
+});
+
+
+// Get courses for an institution
+router.get('/:institutionId/courses', async (req, res) => {
+    try {
+        const { institutionId } = req.params;
+
+        // Check if institution exists
+        const institution = await Institution.findById(institutionId);
+        if (!institution) {
+            console.log('Institution not found with ID:', institutionId);
+            return res.status(404).json({
+                success: false,
+                message: 'Institution not found'
+            });
+        }
+
+        // Return the courses array directly from the institution document
+        res.json({
+            success: true,
+            data: institution.courses || []
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Server error while fetching courses',
+            error: error.message
+        });
+    }
+});
+
 export default router;

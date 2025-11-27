@@ -69,8 +69,10 @@ router.get("/documents", authRequired, requireRole("superadmin"), async (req, re
             .sort({ createdAt: -1 })
             .skip((p - 1) * l)
             .limit(l)
-            .populate({ path: "student", select: "enrolno fullName university" })
-            .populate({ path: "category", select: "name" });
+            // .populate({ path: "student", select: "enrolno fullName university" })
+            // .populate({ path: "category", select: "name" });
+            .populate({ path: "category", select: "name" })
+            .populate({ path: "uploadedBy", select: "fullName email" });
         const total = await Document.countDocuments({});
         res.json({ items: docs, total, page: p, limit: l });
     } catch (e) {
