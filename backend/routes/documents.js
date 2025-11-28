@@ -36,53 +36,62 @@ const resolveUniversity = async (req) => {
 };
 
 
+
 // GET /api/documents 
 // router.get("/", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
 //     try {
 //         const { categoryId, categoryName } = req.query;
-//         const uni = await resolveUniversity(req);
-//         if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
 
-//         const studentIds = await Student.find({ university: uni }).select("_id");
-//         const filter = { student: { $in: studentIds.map(s => s._id) } };
+//         // Resolve current user's university
+//         const uni = await resolveUniversity(req);
+//         if (!uni) {
+//             return res.status(400).json({
+//                 message: "University not found in token/profile",
+//             });
+//         }
+
+//         // Build filter object
+//         // const filter = {
+//         //     // university: uni 
+//         //     university: new mongoose.Types.ObjectId(uni)
+//         // };
+//         // filter.university = new mongoose.Types.ObjectId(uni);
+//         const filter = { university: uni };
 
 //         if (categoryId) filter.category = categoryId;
-//         else if (categoryName) filter.categoryName = categoryName;
+//         if (categoryName) filter.categoryName = categoryName;
 
+//         console.log("FILTER USED:", filter);
+
+//         // Find documents
 //         const docs = await Document.find(filter)
 //             .sort({ createdAt: -1 })
-//             .populate({ path: "student", select: "enrolno fullName" })
-//             .populate({ path: "category", select: "name" });
+//             .populate({ path: "category", select: "name" })
+//             .populate({ path: "uploadedBy", select: "fullName email" });
 
 //         res.json(docs);
 //     } catch (e) {
 //         res.status(500).json({ message: "Failed to fetch documents" });
 //     }
-// });
-// In your backend route (documents.js)
+// }
+// );
+
+// In documents.js proepr data ave che aa ma 
 router.get("/", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
     try {
-        const { categoryId, categoryName } = req.query;
-
-        // Build filter object
-        const filter = {};
-
-        if (categoryId) filter.category = categoryId;
-        if (categoryName) filter.categoryName = categoryName;
-
-        // Find documents
-        const docs = await Document.find(filter)
+        // For testing only - show all documents
+        const docs = await Document.find()
             .sort({ createdAt: -1 })
-            .populate({ path: "category", select: "name" })
-            .populate({ path: "uploadedBy", select: "fullName email" });
+            .populate('category', 'name')
+            .populate('uploadedBy', 'name email')
+            .populate('university', 'name');
 
         res.json(docs);
-    } catch (e) {
-        console.error("Document fetch error:", e);
+    } catch (error) {
+        console.error('Error fetching documents:', error);
         res.status(500).json({ message: "Failed to fetch documents" });
     }
-}
-);
+});
 
 
 
@@ -418,17 +427,43 @@ router.delete("/:id", authRequired, requireAnyRole(["faculty", "admin"]), async 
 //         res.status(500).json({ message: "Failed to fetch document count" });
 //     }
 // });
+// router.get("/count", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
+//     try {
+//         const uni = await resolveUniversity(req);
+
+//         if (!uni) {
+//             return res.status(400).json({
+//                 message: "University for user not found or not assigned"
+//             });
+//         }
+
+//         const count = await Document.countDocuments({ university: uni });
+//         res.json({ count });
+//     } catch {
+//         res.status(500).json({ message: "Failed to fetch document count" });
+//     }
+// });
 router.get("/count", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
     try {
-        const uni = await resolveUniversity(req);
-        if (!uni) return res.status(400).json({ message: "Faculty university not set" });
+        const user = await User.findById(req.user.id)
+            .select('university')
+            .populate('university', '_id name');
 
-        const count = await Document.countDocuments({ university: uni });
+        const filter = user?.university?.name
+            ? { university: user.university._id }
+            : {};
+
+        const count = await Document.countDocuments(filter);
         res.json({ count });
-    } catch (e) {
-        res.status(500).json({ message: "Failed to fetch document count" });
+    } catch (error) {
+        console.error('Error getting document count:', error);
+        res.status(500).json({
+            message: "Failed to get document count",
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 });
+
 
 
 // GET /api/documents/stats/monthly — scoped to university

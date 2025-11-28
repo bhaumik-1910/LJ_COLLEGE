@@ -6,7 +6,7 @@ import connectDB from "./config/db.js";
 import userRoutes from "./routes/user.js";
 import universityRoutes from "./routes/university.js";
 import superadminRoutes from "./routes/superadmin.js";
-import studentRoutes from "./routes/students.js";
+import adminRoutes from "./routes/admin.js";
 import categoriesRoutes from "./routes/categories.js";
 import documentsRoutes from "./routes/documents.js";
 
@@ -37,7 +37,7 @@ connectDB();
 app.use("/api/users", userRoutes)
 app.use("/api/universities", universityRoutes)
 app.use("/api/superadmin", superadminRoutes)
-app.use('/api/faculty', studentRoutes);
+app.use('/api/faculty', adminRoutes);
 app.use('/api/categories', categoriesRoutes);
 app.use('/api/documents', documentsRoutes);
 

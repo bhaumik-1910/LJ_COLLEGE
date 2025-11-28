@@ -60,7 +60,7 @@ export default function AdminDashboard() {
                 setDocumentCount(docJson.count);
             }
         } catch (error) {
-            console.error("Failed to fetch counts:", error);
+            toast.error("Failed to fetch counts");
         } finally {
             setLoading(false);
         }

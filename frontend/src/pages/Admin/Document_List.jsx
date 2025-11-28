@@ -262,21 +262,50 @@ export default function AdminDocumentList() {
         }
     };
 
-    const fetchDocs = async (categoryIdOrName = "") => {
+    // const fetchDocs = async (categoryIdOrName = "") => {
+    //     setLoading(true);
+    //     try {
+    //         const qs = categoryIdOrName
+    //             ? categoryIdOrName.startsWith("id:")
+    //                 ? `?categoryId=${encodeURIComponent(categoryIdOrName.slice(3))}`
+    //                 : `?categoryName=${encodeURIComponent(categoryIdOrName)}`
+    //             : "";
+    //         const res = await fetch(`${API_BASE}/documents${qs}`, { headers });
+    //         const data = await res.json();
+    //         setDocs(res.ok ? (Array.isArray(data) ? data : []) : []);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+    // In Document_List.jsx data ave che 
+    const fetchDocs = async () => {
         setLoading(true);
         try {
-            const qs = categoryIdOrName
-                ? categoryIdOrName.startsWith("id:")
-                    ? `?categoryId=${encodeURIComponent(categoryIdOrName.slice(3))}`
-                    : `?categoryName=${encodeURIComponent(categoryIdOrName)}`
-                : "";
-            const res = await fetch(`${API_BASE}/documents${qs}`, { headers });
+            const res = await fetch(`${API_BASE}/documents`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (!res.ok) {
+                const error = await res.json();
+                if (res.status === 400 && error.message.includes('not associated with any university')) {
+                    alert('Your account is not associated with any university. Please contact support.');
+                    return;
+                }
+                throw new Error(error.message || 'Failed to fetch documents');
+            }
+
             const data = await res.json();
-            setDocs(res.ok ? (Array.isArray(data) ? data : []) : []);
+            setDocs(Array.isArray(data) ? data : []);
+        } catch (error) {
+            console.error('Error:', error);
+            setDocs([]);
         } finally {
             setLoading(false);
         }
     };
+
+
 
     useEffect(() => {
         if (!token) return;
