@@ -100,7 +100,8 @@ export default function SuperAdminDashboard() {
 
     // Derived totals
     const totalUsers = users.length;
-    const totalAdmins = users.filter((u) => String(u.role).toLowerCase() === "superadmin").length;
+    const totalSuperAdmins = users.filter((u) => String(u.role).toLowerCase() === "superadmin").length;
+    const totalAdmins = users.filter((u) => String(u.role).toLowerCase() === "admin").length;
     const totalFaculty = users.filter((u) => String(u.role).toLowerCase() === "faculty").length;
     const totalUniversities = universities.length;
     const totalOtherUsers = totalUsers - (totalAdmins + totalFaculty);
@@ -108,18 +109,20 @@ export default function SuperAdminDashboard() {
 
     // Data for the charts
     const usersChartData = {
-        labels: ["Admins", "Faculty", "Other Users"],
+        labels: ["Super Admins", "Admins", "Faculty", "Other Users"],
         datasets: [{
-            data: [totalAdmins, totalFaculty, totalOtherUsers],
+            data: [totalSuperAdmins, totalAdmins, totalFaculty, totalOtherUsers],
             backgroundColor: [
                 "rgba(255, 99, 132, 0.6)",
                 "rgba(54, 162, 235, 0.6)",
                 "rgba(255, 206, 86, 0.6)",
+                "rgba(126, 108, 64, 0.6)",
             ],
             borderColor: [
                 "rgba(255, 99, 132, 1)",
                 "rgba(54, 162, 235, 1)",
                 "rgba(255, 206, 86, 1)",
+                "rgba(126, 108, 64, 1)",
             ],
             borderWidth: 1,
         }],
@@ -127,11 +130,11 @@ export default function SuperAdminDashboard() {
 
     // In a real-world scenario, you might want to show more data for universities, but here we'll just show the total
     const universityChartData = {
-        labels: ["Universities"],
+        labels: ["Universities", "Institutions"],
         datasets: [{
-            data: [totalUniversities],
-            backgroundColor: ["rgba(75, 192, 192, 0.6)"],
-            borderColor: ["rgba(75, 192, 192, 1)"],
+            data: [totalUniversities, totalInstitutions],
+            backgroundColor: ["rgba(75, 192, 192, 0.6)", "rgba(255, 99, 132, 0.6)"],
+            borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
             borderWidth: 1,
         }],
     };
@@ -191,23 +194,23 @@ export default function SuperAdminDashboard() {
             <Typography variant="h5" fontWeight={700} sx={{ mb: 2, color: "#2b4ddb" }}>Super Dashboard</Typography>
             {/* Top summary boxes */}
             <Grid container spacing={4} mb={4}>
-                {/* Total Admins Card */}
+                {/* Total Super Admins Card */}
                 <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
                     <Paper sx={{ ...cardStyles, bgcolor: '#4e73df' }}>
                         <AdminPanelSettingsIcon sx={{ fontSize: '3rem', mb: 1 }} />
                         <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Super Admins</Typography>
+                        <Typography variant="h5" fontWeight={700}>{totalSuperAdmins}</Typography>
+                    </Paper>
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
+                    <Paper sx={{ ...cardStyles, bgcolor: '#4e73df' }}>
+                        <AdminPanelSettingsIcon sx={{ fontSize: '3rem', mb: 1 }} />
+                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Admins</Typography>
                         <Typography variant="h5" fontWeight={700}>{totalAdmins}</Typography>
                     </Paper>
                 </Grid>
 
-                {/* Total Admin Card */}
-                <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
-                    <Paper sx={{ ...cardStyles, bgcolor: '#f6c23e' }}>
-                        <PersonIcon sx={{ fontSize: '3rem', mb: 1 }} />
-                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Admins</Typography>
-                        <Typography variant="h5" fontWeight={700}>{totalUsers}</Typography>
-                    </Paper>
-                </Grid>
 
                 {/* Total Faculty Card */}
                 <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
@@ -218,6 +221,14 @@ export default function SuperAdminDashboard() {
                     </Paper>
                 </Grid>
 
+                {/* Total Users Card */}
+                <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
+                    <Paper sx={{ ...cardStyles, bgcolor: '#f6c23e' }}>
+                        <PersonIcon sx={{ fontSize: '3rem', mb: 1 }} />
+                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Users</Typography>
+                        <Typography variant="h5" fontWeight={700}>{totalUsers}</Typography>
+                    </Paper>
+                </Grid>
 
                 {/* Total Universities Card */}
                 <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
