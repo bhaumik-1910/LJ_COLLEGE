@@ -82,7 +82,7 @@
 
 import express from "express";
 import Institution from '../models/Institution.js';
-import { authRequired } from '../middleware/auth.js';
+import { authRequired, requireRole } from '../middleware/auth.js';
 import University from '../models/University.js';
 
 const router = express.Router();
@@ -172,6 +172,24 @@ router.get("/", authRequired, async (req, res) => {
    GET INSTITUTION BY ID
    GET /api/institutions/:id
 =================================================== */
+// In your institutions route file
+router.get('/count', authRequired, requireRole('superadmin'), async (req, res) => {
+    try {
+        const count = await Institution.countDocuments({});
+        res.json({
+            success: true,   
+            count
+        });
+    } catch (error) {
+        console.error('Error counting institutions:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to count institutions',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+    }
+});
+
 router.get("/:id", authRequired, async (req, res) => {
     try {
         const institution = await Institution.findById(req.params.id);
@@ -196,6 +214,7 @@ router.get("/:id", authRequired, async (req, res) => {
         });
     }
 });
+
 
 /* ===================================================
    UPDATE INSTITUTION
@@ -328,5 +347,6 @@ router.get('/:institutionId/courses', async (req, res) => {
         });
     }
 });
+
 
 export default router;

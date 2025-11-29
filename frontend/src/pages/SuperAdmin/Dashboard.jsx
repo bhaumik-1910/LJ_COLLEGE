@@ -29,6 +29,7 @@ export default function SuperAdminDashboard() {
 
     const [universities, setUniversities] = useState([]);
     const [users, setUsers] = useState([]);
+    const [institutionCount, setInstitutionCount] = useState(0);
 
     const [docCount, setDocCount] = useState(0);
     const [monthly, setMonthly] = useState({
@@ -77,11 +78,22 @@ export default function SuperAdminDashboard() {
         } catch { }
     };
 
+    const fetchInstitutionCount = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/institutions/count`, { headers: { ...authHeader } });
+            const data = await res.json();
+            if (res.ok && data.success) { setInstitutionCount(data.count); }
+        } catch (error) {
+            console.error('Error fetching institution count:', error);
+        }
+    };
+
     useEffect(() => {
         fetchUniversities();
         fetchUsers();
         fetchDocCount();
         fetchMonthly();
+        fetchInstitutionCount();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -92,6 +104,7 @@ export default function SuperAdminDashboard() {
     const totalFaculty = users.filter((u) => String(u.role).toLowerCase() === "faculty").length;
     const totalUniversities = universities.length;
     const totalOtherUsers = totalUsers - (totalAdmins + totalFaculty);
+    const totalInstitutions = institutionCount;
 
     // Data for the charts
     const usersChartData = {
@@ -212,6 +225,15 @@ export default function SuperAdminDashboard() {
                         <SchoolIcon sx={{ fontSize: '3rem', mb: 1 }} />
                         <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Universities</Typography>
                         <Typography variant="h5" fontWeight={700}>{totalUniversities}</Typography>
+                    </Paper>
+                </Grid>
+
+                {/* Total Institutions Card */}
+                <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
+                    <Paper sx={{ ...cardStyles, bgcolor: '#52211dff' }}>
+                        <SchoolIcon sx={{ fontSize: '3rem', mb: 1 }} />
+                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Institutions</Typography>
+                        <Typography variant="h5" fontWeight={700}>{totalInstitutions}</Typography>
                     </Paper>
                 </Grid>
 

@@ -11,6 +11,8 @@ import path from "path";
 import University from "../models/University.js";
 import Institution from "../models/Institution.js";
 
+import mongoose from 'mongoose';
+
 const router = express.Router();
 
 const sanitizeName = (name) =>
@@ -25,12 +27,43 @@ const ensureDir = (dir) => {
 };
 
 // Resolve faculty university from JWT payload or DB fallback
+// const resolveUniversity = async (req) => {
+//     if (req?.user?.university)
+//         return req.user.university;
+//     try {
+//         const u = await User.findById(req.user.id).select("university");
+//         return u?.university || null;
+//     } catch {
+//         return null;
+//     }
+// };
 const resolveUniversity = async (req) => {
-    if (req?.user?.university) return req.user.university;
     try {
-        const u = await User.findById(req.user.id).select("university");
-        return u?.university || null;
-    } catch {
+        // If we have a direct university ID in the user object
+        if (req?.user?.university && mongoose.Types.ObjectId.isValid(req.user.university)) {
+            return req.user.university;
+        }
+
+        // If we have a university name in the user object
+        if (req?.user?.university) {
+            const uni = await University.findOne({ name: req.user.university }).select('_id');
+            return uni?._id?.toString() || null;
+        }
+
+        // If no university in user object, try to get it from the user document
+        const user = await User.findById(req.user.id).select("university");
+        if (!user?.university) return null;
+
+        if (mongoose.Types.ObjectId.isValid(user.university)) {
+            return user.university;
+        }
+
+        // If university is stored as a name in the user document
+        const uni = await University.findOne({ name: user.university }).select('_id');
+        return uni?._id?.toString() || null;
+
+    } catch (error) {
+        console.error('Error resolving university:', error);
         return null;
     }
 };
@@ -38,60 +71,64 @@ const resolveUniversity = async (req) => {
 
 
 // GET /api/documents 
-// router.get("/", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
-//     try {
-//         const { categoryId, categoryName } = req.query;
-
-//         // Resolve current user's university
-//         const uni = await resolveUniversity(req);
-//         if (!uni) {
-//             return res.status(400).json({
-//                 message: "University not found in token/profile",
-//             });
-//         }
-
-//         // Build filter object
-//         // const filter = {
-//         //     // university: uni 
-//         //     university: new mongoose.Types.ObjectId(uni)
-//         // };
-//         // filter.university = new mongoose.Types.ObjectId(uni);
-//         const filter = { university: uni };
-
-//         if (categoryId) filter.category = categoryId;
-//         if (categoryName) filter.categoryName = categoryName;
-
-//         console.log("FILTER USED:", filter);
-
-//         // Find documents
-//         const docs = await Document.find(filter)
-//             .sort({ createdAt: -1 })
-//             .populate({ path: "category", select: "name" })
-//             .populate({ path: "uploadedBy", select: "fullName email" });
-
-//         res.json(docs);
-//     } catch (e) {
-//         res.status(500).json({ message: "Failed to fetch documents" });
-//     }
-// }
-// );
-
-// In documents.js proepr data ave che aa ma 
 router.get("/", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
     try {
-        // For testing only - show all documents
-        const docs = await Document.find()
+        // Get the user's university ID from the authenticated user
+        const userUniversityId = await resolveUniversity(req);
+        console.log("University ID 1 ->:", userUniversityId);
+
+        if (!userUniversityId) {
+            return res.status(400).json({
+                success: false,
+                message: "User's university not found"
+            });
+        }
+
+        // Verify the university exists (optional but good practice)
+        const universityExists = await University.exists({ _id: userUniversityId });
+        if (!universityExists) {
+            return res.status(404).json({
+                success: false,
+                message: "University not found in database"
+            });
+        }
+
+        // Find documents using the university ID
+        const docs = await Document.find({ university: userUniversityId })
             .sort({ createdAt: -1 })
             .populate('category', 'name')
             .populate('uploadedBy', 'name email')
             .populate('university', 'name');
 
-        res.json(docs);
+        res.json({
+            success: true,
+            data: docs
+        });
     } catch (error) {
         console.error('Error fetching documents:', error);
-        res.status(500).json({ message: "Failed to fetch documents" });
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch documents",
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 });
+// In documents.js proepr data ave che aa ma 
+// router.get("/", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
+//     try {
+//         // For testing only - show all documents
+//         const docs = await Document.find()
+//             .sort({ createdAt: -1 })
+//             .populate('category', 'name')
+//             .populate('uploadedBy', 'name email')
+//             .populate('university', 'name');
+
+//         res.json(docs);
+//     } catch (error) {
+//         console.error('Error fetching documents:', error);
+//         res.status(500).json({ message: "Failed to fetch documents" });
+//     }
+// });
 
 
 
@@ -443,27 +480,67 @@ router.delete("/:id", authRequired, requireAnyRole(["faculty", "admin"]), async 
 //         res.status(500).json({ message: "Failed to fetch document count" });
 //     }
 // });
+// router.get("/count", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
+//     try {
+//         const user = await User.findById(req.user.id)
+//             .select('university')
+//             .populate('university', '_id name');
+
+//         const filter = user?.university?.name
+//             ? { university: user.university._id }
+//             : {};
+
+//         const count = await Document.countDocuments(filter);
+//         res.json({ count });
+//     } catch (error) {
+//         console.error('Error getting document count:', error);
+//         res.status(500).json({
+//             message: "Failed to get document count",
+//             error: process.env.NODE_ENV === 'development' ? error.message : undefined
+//         });
+//     }
+// });
 router.get("/count", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
     try {
-        const user = await User.findById(req.user.id)
-            .select('university')
-            .populate('university', '_id name');
+        // Get the user's university ID
+        const userUniversityId = await resolveUniversity(req);
 
-        const filter = user?.university?.name
-            ? { university: user.university._id }
-            : {};
+        if (!userUniversityId) {
+            return res.status(400).json({
+                success: false,
+                message: "User's university not found"
+            });
+        }
 
-        const count = await Document.countDocuments(filter);
-        res.json({ count });
+        // Verify the university exists
+        const universityExists = await University.exists({ _id: userUniversityId });
+        if (!universityExists) {
+            return res.status(404).json({
+                success: false,
+                message: "University not found in database"
+            });
+        }
+
+        // Count documents for the specific university
+        const count = await Document.countDocuments({
+            university: userUniversityId
+        });
+
+        res.json({
+            success: true,
+            count,
+            universityId: userUniversityId
+        });
+
     } catch (error) {
         console.error('Error getting document count:', error);
         res.status(500).json({
+            success: false,
             message: "Failed to get document count",
             error: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
     }
 });
-
 
 
 // GET /api/documents/stats/monthly — scoped to university

@@ -279,32 +279,69 @@ export default function AdminDocumentList() {
     // };
 
     // In Document_List.jsx data ave che 
+    // const fetchDocs = async () => {
+    //     setLoading(true);
+    //     try {
+    //         const res = await fetch(`${API_BASE}/documents`, {
+    //             headers: { 'Authorization': `Bearer ${token}` }
+    //         });
+
+    //         if (!res.ok) {
+    //             const error = await res.json();
+    //             if (res.status === 400 && error.message.includes('not associated with any university')) {
+    //                 alert('Your account is not associated with any university. Please contact support.');
+    //                 return;
+    //             }
+    //             throw new Error(error.message || 'Failed to fetch documents');
+    //         }
+
+    //         const data = await res.json();
+    //         setDocs(Array.isArray(data) ? data : []);
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //         setDocs([]);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+    // Proper Document Data So 
     const fetchDocs = async () => {
         setLoading(true);
         try {
             const res = await fetch(`${API_BASE}/documents`, {
-                headers: { 'Authorization': `Bearer ${token}` }
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
             });
 
+            const data = await res.json();
+
             if (!res.ok) {
-                const error = await res.json();
-                if (res.status === 400 && error.message.includes('not associated with any university')) {
+                if (res.status === 400 && data.message?.includes('university not found')) {
                     alert('Your account is not associated with any university. Please contact support.');
                     return;
                 }
-                throw new Error(error.message || 'Failed to fetch documents');
+                throw new Error(data.message || 'Failed to fetch documents');
             }
 
-            const data = await res.json();
-            setDocs(Array.isArray(data) ? data : []);
+            // Handle the response format: { success: true, data: [...] }
+            if (data.success && Array.isArray(data.data)) {
+                setDocs(data.data);
+            } else {
+                console.warn('Unexpected response format:', data);
+                setDocs([]);
+            }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error fetching documents:', error);
             setDocs([]);
+            // Show error message to user
+            alert(error.message || 'An error occurred while fetching documents');
         } finally {
             setLoading(false);
         }
     };
-
 
 
     useEffect(() => {

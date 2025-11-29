@@ -60,20 +60,58 @@ export default function Document_list() {
         setPage(0);
     };
 
-    const fetchDocs = async (categoryIdOrName = "") => {
+    // const fetchDocs = async (categoryIdOrName = "") => {
+    //     setLoading(true);
+    //     try {
+    //         const qs = categoryIdOrName
+    //             ? categoryIdOrName.startsWith("id:")
+    //                 ? `?categoryId=${encodeURIComponent(categoryIdOrName.slice(3))}`
+    //                 : `?categoryName=${encodeURIComponent(categoryIdOrName)}`
+    //             : "";
+    //         const res = await fetch(`${API_BASE}/documents${qs}`, { headers });
+    //         const data = await res.json();
+    //         if (res.ok) setDocs(Array.isArray(data) ? data : []);
+    //         else toast.error(data.message || "Failed to fetch documents");
+    //     } catch (e) {
+    //         toast.error("Failed to fetch documents");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+    // Proper Document Data So 
+    const fetchDocs = async () => {
         setLoading(true);
         try {
-            const qs = categoryIdOrName
-                ? categoryIdOrName.startsWith("id:")
-                    ? `?categoryId=${encodeURIComponent(categoryIdOrName.slice(3))}`
-                    : `?categoryName=${encodeURIComponent(categoryIdOrName)}`
-                : "";
-            const res = await fetch(`${API_BASE}/documents${qs}`, { headers });
+            const res = await fetch(`${API_BASE}/documents`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
             const data = await res.json();
-            if (res.ok) setDocs(Array.isArray(data) ? data : []);
-            else toast.error(data.message || "Failed to fetch documents");
-        } catch (e) {
-            toast.error("Failed to fetch documents");
+
+            if (!res.ok) {
+                if (res.status === 400 && data.message?.includes('university not found')) {
+                    alert('Your account is not associated with any university. Please contact support.');
+                    return;
+                }
+                throw new Error(data.message || 'Failed to fetch documents');
+            }
+
+            // Handle the response format: { success: true, data: [...] }
+            if (data.success && Array.isArray(data.data)) {
+                setDocs(data.data);
+            } else {
+                console.warn('Unexpected response format:', data);
+                setDocs([]);
+            }
+        } catch (error) {
+            console.error('Error fetching documents:', error);
+            setDocs([]);
+            // Show error message to user
+            alert(error.message || 'An error occurred while fetching documents');
         } finally {
             setLoading(false);
         }
