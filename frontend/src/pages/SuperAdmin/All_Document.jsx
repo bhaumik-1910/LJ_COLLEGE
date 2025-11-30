@@ -1203,6 +1203,7 @@ export default function All_Document() {
           p: 2,
           borderRadius: 3,
           overflow: "hidden",
+          background: "#fff",
           boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
         }}
       >
@@ -1267,7 +1268,6 @@ export default function All_Document() {
                 <MenuItem key={t} value={t}>{t}</MenuItem>
               ))}
             </TextField>
-
           </Box>
         </Box>
 
@@ -1284,7 +1284,7 @@ export default function All_Document() {
             <TableContainer>
               <Table size="small">
                 <TableHead>
-                  <TableRow sx={{ bgcolor: "#f5f7ff" }}>
+                  <TableRow>
                     <TableCell sx={{ fontWeight: 700 }}>Univesity Name</TableCell>
                     <TableCell sx={{ fontWeight: 700 }}>Institute Name</TableCell>
                     <TableCell sx={{ fontWeight: 700 }}>Course</TableCell>

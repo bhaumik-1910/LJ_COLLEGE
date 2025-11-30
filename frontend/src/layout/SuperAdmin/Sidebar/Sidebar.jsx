@@ -152,9 +152,7 @@ const superAdminLinks = [
   { id: 4, title: 'University Users', image: iconsImgs.users, path: '/superadmin-dashboard/university-users' },
   { id: 5, title: 'Institution', image: iconsImgs.users, path: '/superadmin-dashboard/institution' },
   { id: 6, title: 'Institution List', image: iconsImgs.users, path: '/superadmin-dashboard/institution-list' },
-  
-  
-  
+
   { id: 7, title: 'Document', image: iconsImgs.document, path: '/superadmin-dashboard/document' },
   { id: 8, title: 'Super Admin', image: iconsImgs.admin, path: '/superadmin-dashboard/superadmin' },
   { id: 9, title: 'Admins', image: iconsImgs.admin, path: '/superadmin-dashboard/admins' },
@@ -202,9 +200,9 @@ const Sidebar = () => {
     else if (role === 'admin') {
       return AdminLinks;
     }
-    else if (role === 'admin') {
-      return AdminLinks;
-    }
+    // else if (role === 'admin') {
+    //   return AdminLinks;
+    // }
     else if (role === 'faculty') {
       return facultyLinks;
     }

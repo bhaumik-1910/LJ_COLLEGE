@@ -155,9 +155,9 @@ export default function U_Register() {
         }}
       >
         <Grid container spacing={4}>
-          {/* -------- Left form ONLY (full width) -------- */}
+          {/* Left form ONLY (full width) */}
           <Grid item xs={12}>
-            <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+            <Box sx={{ display: "flex", alignItems: "center", mb: 6, mt: 2 }}>
               <Typography
                 variant="h5"
                 sx={{ color: "#3b6ef6", fontWeight: 700, mr: 1 }}
@@ -182,7 +182,7 @@ export default function U_Register() {
             <Stack spacing={2}>
               <TextField
                 fullWidth
-                label="University Email"
+                label="University Email*"
                 variant="outlined"
                 value={form.email}
                 size="small"
@@ -219,7 +219,7 @@ export default function U_Register() {
 
               <TextField
                 fullWidth
-                label="University Name"
+                label="University Name*"
                 variant="outlined"
                 value={form.name}
                 size="small"
@@ -300,7 +300,7 @@ export default function U_Register() {
             </Stack>
           </Grid>
 
-          {/* ---------------- Right Image Section ---------------- */}
+          {/* Right Image Section */}
           <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "center" }}>
             <img
               src={studentImage} // Place image in public folder

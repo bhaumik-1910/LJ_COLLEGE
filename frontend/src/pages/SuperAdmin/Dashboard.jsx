@@ -177,103 +177,188 @@ export default function SuperAdminDashboard() {
     };
 
     // Common styles for the cards
+    // const cardStyles = {
+    //     p: 3,
+    //     color: 'white',
+    //     borderRadius: '12px',
+    //     height: '100%',
+    //     display: 'flex',
+    //     flexDirection: 'column',
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    //     textAlign: 'center',
+    // };
     const cardStyles = {
         p: 3,
-        color: 'white',
-        borderRadius: '12px',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center',
+        color: "white",
+        borderRadius: "12px",
+        height: "200px",
+        width: '250px',
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center",
+        gap: 1,
+        boxShadow: 3,
+        "& svg": { fontSize: "3rem" }
     };
 
+
     return (
+        // <Box sx={{ p: 4 }}>
+        //     <Typography variant="h5" fontWeight={700} sx={{ mb: 2, color: "#2b4ddb" }}>Super Dashboard</Typography>
+        //     {/* Top summary boxes */}
+        //     <Grid container spacing={4} mb={4}>
+        //         {/* Total Super Admins Card */}
+        //         <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
+        //             <Paper sx={{ ...cardStyles, bgcolor: '#4e73df' }}>
+        //                 <AdminPanelSettingsIcon sx={{ fontSize: '3rem', mb: 1 }} />
+        //                 <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Super Admins</Typography>
+        //                 <Typography variant="h5" fontWeight={700}>{totalSuperAdmins}</Typography>
+        //             </Paper>
+        //         </Grid>
+
+        //         <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
+        //             <Paper sx={{ ...cardStyles, bgcolor: '#4e73df' }}>
+        //                 <AdminPanelSettingsIcon sx={{ fontSize: '3rem', mb: 1 }} />
+        //                 <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Admins</Typography>
+        //                 <Typography variant="h5" fontWeight={700}>{totalAdmins}</Typography>
+        //             </Paper>
+        //         </Grid>
+
+
+        //         {/* Total Faculty Card */}
+        //         <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
+        //             <Paper sx={{ ...cardStyles, bgcolor: '#1cc88a' }}>
+        //                 <PeopleAltIcon sx={{ fontSize: '3rem', mb: 1 }} />
+        //                 <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Faculty</Typography>
+        //                 <Typography variant="h5" fontWeight={700}>{totalFaculty}</Typography>
+        //             </Paper>
+        //         </Grid>
+
+        //         {/* Total Users Card */}
+        //         <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
+        //             <Paper sx={{ ...cardStyles, bgcolor: '#f6c23e' }}>
+        //                 <PersonIcon sx={{ fontSize: '3rem', mb: 1 }} />
+        //                 <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Users</Typography>
+        //                 <Typography variant="h5" fontWeight={700}>{totalUsers}</Typography>
+        //             </Paper>
+        //         </Grid>
+
+        //         {/* Total Universities Card */}
+        //         <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
+        //             <Paper sx={{ ...cardStyles, bgcolor: '#e74a3b' }}>
+        //                 <SchoolIcon sx={{ fontSize: '3rem', mb: 1 }} />
+        //                 <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Universities</Typography>
+        //                 <Typography variant="h5" fontWeight={700}>{totalUniversities}</Typography>
+        //             </Paper>
+        //         </Grid>
+
+        //         {/* Total Institutions Card */}
+        //         <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
+        //             <Paper sx={{ ...cardStyles, bgcolor: '#52211dff' }}>
+        //                 <SchoolIcon sx={{ fontSize: '3rem', mb: 1 }} />
+        //                 <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Institutions</Typography>
+        //                 <Typography variant="h5" fontWeight={700}>{totalInstitutions}</Typography>
+        //             </Paper>
+        //         </Grid>
+
+        //         {/* Total Documents Card */}
+        //         <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
+        //             <Paper sx={{ ...cardStyles, bgcolor: '#36b9cc' }}>
+        //                 <DescriptionIcon sx={{ fontSize: '3rem', mb: 1 }} />
+        //                 <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Documents</Typography>
+        //                 <Typography variant="h5" fontWeight={700}>{docCount}</Typography>
+        //             </Paper>
+        //         </Grid>
+
+        //     </Grid>
+
+        //     {/* Monthly Documents */}
+        //     <Grid container spacing={3} mb={4}>
+        //         <Grid item xs={12} md={6} sx={{ width: '300px', height: '200px' }}>
+        //             <Paper sx={{ p: 2 }}>
+        //                 <Typography variant="h6" mb={2} textAlign="center">Monthly Documents</Typography>
+        //                 <Box sx={{ width: '100%', margin: 'auto' }}>
+        //                     <Line data={monthlyChartData} options={lineOptions} />
+        //                 </Box>
+        //             </Paper>
+        //         </Grid>
+        //     </Grid>
+
+        //     {/* Charts Section */}
+        //     <Grid container spacing={3} mb={4}>
+        //         <Grid item xs={12} md={6} sx={{ width: '450px', height: '450px' }}>
+        //             <Paper sx={{ p: 2 }}>
+        //                 <Typography variant="h6" mb={2} textAlign="center">User Distribution by Role</Typography>
+        //                 <Box sx={{ width: '80%', margin: 'auto' }}>
+        //                     <Doughnut data={usersChartData} options={chartOptions} />
+        //                 </Box>
+        //             </Paper>
+        //         </Grid>
+        //         <Grid item xs={12} md={6} sx={{ width: '450px', height: '450px' }}>
+        //             <Paper sx={{ p: 2 }}>
+        //                 <Typography variant="h6" mb={2} textAlign="center">University Count</Typography>
+        //                 <Box sx={{ width: '80%', margin: 'auto' }}>
+        //                     <Doughnut data={universityChartData} options={chartOptions} />
+        //                     {/* <Typography variant="h4" sx={{ textAlign: 'center', mt: 2 }}>
+        //                         {totalUniversities}
+        //                     </Typography> */}
+        //                 </Box>
+        //             </Paper>
+        //         </Grid>
+        //     </Grid>
+        // </Box>
         <Box sx={{ p: 4 }}>
-            <Typography variant="h5" fontWeight={700} sx={{ mb: 2, color: "#2b4ddb" }}>Super Dashboard</Typography>
-            {/* Top summary boxes */}
-            <Grid container spacing={4} mb={4}>
-                {/* Total Super Admins Card */}
-                <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
-                    <Paper sx={{ ...cardStyles, bgcolor: '#4e73df' }}>
-                        <AdminPanelSettingsIcon sx={{ fontSize: '3rem', mb: 1 }} />
-                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Super Admins</Typography>
-                        <Typography variant="h5" fontWeight={700}>{totalSuperAdmins}</Typography>
-                    </Paper>
-                </Grid>
+            <Typography variant="h5" fontWeight={700} sx={{ mb: 3, color: "#2b4ddb" }}>
+                Super Dashboard
+            </Typography>
 
-                <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
-                    <Paper sx={{ ...cardStyles, bgcolor: '#4e73df' }}>
-                        <AdminPanelSettingsIcon sx={{ fontSize: '3rem', mb: 1 }} />
-                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Admins</Typography>
-                        <Typography variant="h5" fontWeight={700}>{totalAdmins}</Typography>
-                    </Paper>
-                </Grid>
-
-
-                {/* Total Faculty Card */}
-                <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
-                    <Paper sx={{ ...cardStyles, bgcolor: '#1cc88a' }}>
-                        <PeopleAltIcon sx={{ fontSize: '3rem', mb: 1 }} />
-                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Faculty</Typography>
-                        <Typography variant="h5" fontWeight={700}>{totalFaculty}</Typography>
-                    </Paper>
-                </Grid>
-
-                {/* Total Users Card */}
-                <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
-                    <Paper sx={{ ...cardStyles, bgcolor: '#f6c23e' }}>
-                        <PersonIcon sx={{ fontSize: '3rem', mb: 1 }} />
-                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Users</Typography>
-                        <Typography variant="h5" fontWeight={700}>{totalUsers}</Typography>
-                    </Paper>
-                </Grid>
-
-                {/* Total Universities Card */}
-                <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
-                    <Paper sx={{ ...cardStyles, bgcolor: '#e74a3b' }}>
-                        <SchoolIcon sx={{ fontSize: '3rem', mb: 1 }} />
-                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Universities</Typography>
-                        <Typography variant="h5" fontWeight={700}>{totalUniversities}</Typography>
-                    </Paper>
-                </Grid>
-
-                {/* Total Institutions Card */}
-                <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
-                    <Paper sx={{ ...cardStyles, bgcolor: '#52211dff' }}>
-                        <SchoolIcon sx={{ fontSize: '3rem', mb: 1 }} />
-                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Institutions</Typography>
-                        <Typography variant="h5" fontWeight={700}>{totalInstitutions}</Typography>
-                    </Paper>
-                </Grid>
-
-                {/* Total Documents Card */}
-                <Grid item xs={12} sm={6} md={3} sx={{ width: '200px' }}>
-                    <Paper sx={{ ...cardStyles, bgcolor: '#36b9cc' }}>
-                        <DescriptionIcon sx={{ fontSize: '3rem', mb: 1 }} />
-                        <Typography variant="subtitle2" color="white" sx={{ opacity: 0.8 }}>Total Documents</Typography>
-                        <Typography variant="h5" fontWeight={700}>{docCount}</Typography>
-                    </Paper>
-                </Grid>
-
+            {/* ROW 1 : 4 CARDS */}
+            <Grid container spacing={6} justifyContent="center">
+                {[
+                    { label: "Total Super Admins", value: totalSuperAdmins, icon: <AdminPanelSettingsIcon />, color: "#4e73df" },
+                    { label: "Total Admins", value: totalAdmins, icon: <AdminPanelSettingsIcon />, color: "#4e73df" },
+                    { label: "Total Faculty", value: totalFaculty, icon: <PeopleAltIcon />, color: "#1cc88a" },
+                    { label: "Total Users", value: totalUsers, icon: <PersonIcon />, color: "#f6c23e" }
+                ].map((card, i) => (
+                    <Grid key={i} item xs={12} sm={6} md={3}>
+                        <Paper sx={{ ...cardStyles, bgcolor: card.color }}>
+                            {card.icon}
+                            <Typography variant="subtitle2" sx={{ opacity: 0.8 }}>{card.label}</Typography>
+                            <Typography variant="h5" fontWeight={700}>{card.value}</Typography>
+                        </Paper>
+                    </Grid>
+                ))}
             </Grid>
 
-            {/* Monthly Documents */}
-            <Grid container spacing={3} mb={4}>
-                <Grid item xs={12} md={6} sx={{ width: '300px', height: '200px' }}>
-                    <Paper sx={{ p: 2 }}>
-                        <Typography variant="h6" mb={2} textAlign="center">Monthly Documents</Typography>
-                        <Box sx={{ width: '100%', margin: 'auto' }}>
-                            <Line data={monthlyChartData} options={lineOptions} />
-                        </Box>
-                    </Paper>
-                </Grid>
+            {/* ROW 2 : CENTERED 3 CARDS */}
+            <Grid container spacing={6} justifyContent="center" sx={{ mt: 4 }}>
+                {[
+                    { label: "Total Universities", value: totalUniversities, icon: <SchoolIcon />, color: "#e74a3b" },
+                    { label: "Total Institutions", value: totalInstitutions, icon: <SchoolIcon />, color: "#52211d" },
+                    { label: "Total Documents", value: docCount, icon: <DescriptionIcon />, color: "#36b9cc" }
+                ].map((card, i) => (
+                    <Grid key={i} item xs={12} sm={6} md={4}>
+                        <Paper sx={{ ...cardStyles, bgcolor: card.color }}>
+                            {card.icon}
+                            <Typography variant="subtitle2" sx={{ opacity: 0.8 }}>{card.label}</Typography>
+                            <Typography variant="h5" fontWeight={700}>{card.value}</Typography>
+                        </Paper>
+                    </Grid>
+                ))}
             </Grid>
 
-            {/* Charts Section */}
-            <Grid container spacing={3} mb={4}>
-                <Grid item xs={12} md={6} sx={{ width: '450px', height: '450px' }}>
+            {/* ROW 3 : TWO CENTERED DOUGHNUT CHARTS */}
+            <Grid container
+                spacing={8}
+                mb={3}
+                mt={5}
+                justifyContent="center"
+
+            >
+                <Grid item xs={12} md={12} sx={{ width: '450px', height: '450px' }}>
                     <Paper sx={{ p: 2 }}>
                         <Typography variant="h6" mb={2} textAlign="center">User Distribution by Role</Typography>
                         <Box sx={{ width: '80%', margin: 'auto' }}>
@@ -289,6 +374,22 @@ export default function SuperAdminDashboard() {
                             {/* <Typography variant="h4" sx={{ textAlign: 'center', mt: 2 }}>
                                 {totalUniversities}
                             </Typography> */}
+                        </Box>
+                    </Paper>
+                </Grid>
+            </Grid>
+
+            {/* ROW 4 : MONTHLY LINE CHART CENTERED */}
+            <Grid container
+                // spacing={3}
+                // mb={4}
+                justifyContent="center"
+            >
+                <Grid item xs={12} md={6} sx={{ width: '600px', height: '900px' }}>
+                    <Paper sx={{ p: 2 }}>
+                        <Typography variant="h6" mb={2} textAlign="center">Monthly Documents</Typography>
+                        <Box sx={{ width: '100%', margin: 'auto' }}>
+                            <Line data={monthlyChartData} options={lineOptions} />
                         </Box>
                     </Paper>
                 </Grid>

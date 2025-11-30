@@ -539,8 +539,10 @@ import {
     TextField,
     MenuItem,
     Typography,
-    CircularProgress
+    CircularProgress,
+    Paper
 } from '@mui/material';
+import { styled } from "@mui/system";
 import { toast } from 'react-toastify';
 // import { ArrowBack as ArrowBackIcon, Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { ArrowBack as ArrowBackIcon, Add as AddIcon, Delete as DeleteIcon, Cancel as CancelIcon } from '@mui/icons-material';
@@ -550,6 +552,17 @@ import PersonAddRoundedIcon from "@mui/icons-material/PersonAddRounded";
 
 // import CancelIcon from "@mui/icons-material/Cancel";
 // import AddIcon from "@mui/icons-material/Add";
+
+//Image Right Card
+const RightCard = styled("div")(({ theme }) => ({
+    width: "50%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
+    "& img": { maxWidth: "100%", height: "auto" },
+    [theme.breakpoints.down("md")]: { display: "none" },
+}));
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 
@@ -670,168 +683,194 @@ export default function University_Institute() {
 
     return (
         <Box
+            // sx={{
+            //     p: 4,
+            //     maxWidth: "1100px",
+            //     mx: "auto",
+            //     my: 4,
+            //     // bgcolor: "#fff",
+            //     borderRadius: "24px",
+            //     boxShadow: "0px 4px 20px rgba(0,0,0,0.08)",
+            //     display: "flex",
+            //     gap: 4,
+            //     alignItems: "center",
+            // }}
             sx={{
-                p: 4,
-                maxWidth: "1100px",
-                mx: "auto",
-                my: 4,
-                bgcolor: "#fff",
-                borderRadius: "24px",
-                boxShadow: "0px 4px 20px rgba(0,0,0,0.08)",
+                p: { xs: 2, md: 5 },
+                // minHeight: "100vh",
                 display: "flex",
-                gap: 4,
+                justifyContent: "center",
                 alignItems: "center",
+                // background: "#f7fbfc",
             }}
         >
 
             {/* LEFT SIDE FORM */}
-            <Box sx={{ flex: 1, color: "#2b4ddb" }}>
-                <Button
-                    startIcon={<ArrowBackIcon />}
-                    onClick={() => navigate(-1)}
-                    sx={{ mb: 2 }}
-                    disabled={loading}
+            <Paper
+                elevation={4}
+                sx={{
+                    borderRadius: 3,
+                    p: { xs: 3, md: 5 },
+                    width: "100%",
+                    maxWidth: 1100,
+                    background: "#fff",
+                    display: "flex",
+                    flexDirection: { xs: "column", md: "row" },
+                    alignItems: "stretch",
+                }}
+            >
+                <Box sx={{ flex: 1, color: "#2b4ddb" }}>
+                    {/* <Button
+                        startIcon={<ArrowBackIcon />}
+                        onClick={() => navigate(-1)}
+                        sx={{ mb: 2 }}
+                        disabled={loading}
 
-                >
-                    Back to List
-                </Button>
+                    >
+                        Back to List
+                    </Button> */}
 
-                <Typography
-                    variant="h4"
-                    sx={{
-                        fontSize: 22,
-                        fontWeight: 700,
-                        color: "#2b4ddb",
-                        lineHeight: 1.2,
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1.5,
-                    }}
-                >
-                    CREATE INSTITUTION
-                    <PersonAddRoundedIcon sx={{ fontSize: 32, color: "#2b4ddb" }} />
-                </Typography>
+                    <Typography
+                        variant="h4"
+                        sx={{
+                            fontSize: 22,
+                            fontWeight: 700,
+                            color: "#2b4ddb",
+                            lineHeight: 1.2,
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1.5,
+                        }}
+                    >
+                        CREATE INSTITUTION
+                        <PersonAddRoundedIcon sx={{ fontSize: 32, color: "#2b4ddb" }} />
+                    </Typography>
 
 
 
-                <Typography sx={{ mb: 3, color: "gray" }}>
-                    Add institution details & assign courses
-                </Typography>
+                    <Typography sx={{ mb: 3, color: "gray" }}>
+                        Add institution details & assign courses
+                    </Typography>
 
-                <TextField
-                    select
-                    fullWidth
-                    margin="normal"
-                    label="University"
-                    name="university"
-                    value={formData.university}
-                    onChange={handleInputChange}
-                    required
-                    size="small"
-                    disabled={loading || universities.length === 0}
-                    sx={{
-                        // bgcolor: "#f9f9f9",
-                        borderRadius: "10px"
-                    }}
-                >
-                    <MenuItem value="" disabled>
-                        {universities.length === 0 ? 'Loading universities...' : 'Select University'}
-                    </MenuItem>
-
-                    {universities.map((univ) => (
-                        <MenuItem key={univ._id} value={univ.name}>
-                            {univ.name}
+                    <TextField
+                        select
+                        fullWidth
+                        margin="normal"
+                        label="University"
+                        name="university"
+                        value={formData.university}
+                        onChange={handleInputChange}
+                        required
+                        size="small"
+                        disabled={loading || universities.length === 0}
+                        sx={{
+                            // bgcolor: "#f9f9f9",
+                            borderRadius: "10px"
+                        }}
+                    >
+                        <MenuItem value="" disabled>
+                            {universities.length === 0 ? 'Loading universities...' : 'Select University'}
                         </MenuItem>
-                    ))}
-                </TextField>
 
-                <TextField
-                    fullWidth
-                    margin="normal"
-                    label="Institution Name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                    size="small"
-                    disabled={loading}
-                    sx={{ borderRadius: "10px" }}
-                />
+                        {universities.map((univ) => (
+                            <MenuItem key={univ._id} value={univ.name}>
+                                {univ.name}
+                            </MenuItem>
+                        ))}
+                    </TextField>
 
-                <Typography sx={{ mt: 3, fontWeight: 600 }}>Courses</Typography>
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Institution Name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        required
+                        size="small"
+                        disabled={loading}
+                        sx={{ borderRadius: "10px" }}
+                    />
 
-                {formData.courses.map((course, index) => (
-                    <Box
-                        key={index}
-                        sx={{ display: "flex", gap: 2, mt: 2, alignItems: "center" }}
-                    >
-                        <TextField
-                            fullWidth
-                            value={course}
-                            onChange={(e) => handleCourseChange(index, e.target.value)}
-                            placeholder={`Course ${index + 1}`}
-                            disabled={loading}
-                            size="small"
-                            sx={{ borderRadius: "10px" }}
-                        />
+                    <Typography sx={{ mt: 3, fontWeight: 600 }}>Courses</Typography>
 
-                        {formData.courses.length > 1 && (
-                            <Button
-                                type="button"
-                                variant="outlined"
-                                color="error"
-                                onClick={() => removeCourseField(index)}
+                    {formData.courses.map((course, index) => (
+                        <Box
+                            key={index}
+                            sx={{ display: "flex", gap: 2, mt: 2, alignItems: "center" }}
+                        >
+                            <TextField
+                                fullWidth
+                                value={course}
+                                onChange={(e) => handleCourseChange(index, e.target.value)}
+                                placeholder={`Course ${index + 1}`}
                                 disabled={loading}
-                                sx={{ minWidth: "40px" }}
-                            >
-                                <DeleteIcon />
-                            </Button>
-                        )}
-                    </Box>
-                ))}
+                                size="small"
+                                sx={{ borderRadius: "10px" }}
+                            />
 
-                <Button
-                    type="button"
-                    variant="outlined"
-                    startIcon={<AddIcon />}
-                    onClick={addCourseField}
-                    disabled={loading}
-                    size="small"
-                    sx={{ mt: 2 }}
-                >
-                    Add Course
-                </Button>
-
-                <Box sx={{ display: "flex", gap: 2, mt: 4 }}>
-                    <Button
-                        variant="contained"
-                        disabled={loading}
-                        onClick={handleSubmit}
-                        startIcon={<AddIcon />}
-                    >
-                        {loading ? "Creating..." : "Create Institution"}
-                    </Button>
+                            {formData.courses.length > 1 && (
+                                <Button
+                                    type="button"
+                                    variant="outlined"
+                                    color="error"
+                                    onClick={() => removeCourseField(index)}
+                                    disabled={loading}
+                                    sx={{ minWidth: "40px" }}
+                                >
+                                    <DeleteIcon />
+                                </Button>
+                            )}
+                        </Box>
+                    ))}
 
                     <Button
+                        type="button"
                         variant="outlined"
+                        startIcon={<AddIcon />}
+                        onClick={addCourseField}
                         disabled={loading}
-                        onClick={handleCancel}
-                        startIcon={<CancelIcon />}
+                        size="small"
+                        sx={{ mt: 2 }}
                     >
-                        Cancel
+                        Add Course
                     </Button>
+
+                    <Box sx={{ display: "flex", gap: 2, mt: 4 }}>
+                        <Button
+                            variant="contained"
+                            disabled={loading}
+                            onClick={handleSubmit}
+                            startIcon={<AddIcon />}
+                        >
+                            {loading ? "Creating..." : "Create Institution"}
+                        </Button>
+
+                        <Button
+                            variant="outlined"
+                            disabled={loading}
+                            onClick={handleCancel}
+                            startIcon={<CancelIcon />}
+                        >
+                            Cancel
+                        </Button>
+                    </Box>
+
                 </Box>
 
-            </Box>
-
-            {/* RIGHT SIDE ILLUSTRATION */}
-            <Box sx={{ flex: 0.9, display: "flex", justifyContent: "center" }}>
-                <img
-                    src={studentImage}
-                    alt="Illustration"
-                    style={{ width: "90%", objectFit: "contain" }}
-                />
-            </Box>
+                {/* RIGHT SIDE ILLUSTRATION */}
+                {/* <Box sx={{ flex: 0.9, display: "flex", justifyContent: "center" }}>
+                    <img
+                        src={studentImage}
+                        alt="Illustration"
+                        style={{ width: "90%", objectFit: "contain" }}
+                    />
+                </Box> */}
+                {/* RIGHT SIDE */}
+                <RightCard>
+                    <img src={studentImage} alt="Illustration" />
+                </RightCard>
+            </Paper>
         </Box>
     );
 }

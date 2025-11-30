@@ -767,13 +767,13 @@ export default function InstitutionList() {
 
                 {/* TABLE */}
                 <TableContainer>
-                    <Table>
+                    <Table size='small'>
                         <TableHead>
                             <TableRow>
-                                <TableCell>University</TableCell>
-                                <TableCell>Institution Name</TableCell>
-                                <TableCell>Courses</TableCell>
-                                <TableCell align="right">Actions</TableCell>
+                                <TableCell sx={{ fontWeight: 700 }}>University</TableCell>
+                                <TableCell sx={{ fontWeight: 700 }}>Institution Name</TableCell>
+                                <TableCell sx={{ fontWeight: 700 }}>Courses</TableCell>
+                                <TableCell sx={{ fontWeight: 700 }} align="right">Actions</TableCell>
                             </TableRow>
                         </TableHead>
 

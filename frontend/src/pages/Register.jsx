@@ -320,6 +320,7 @@ import {
   IconButton,
   MenuItem,
   Box,
+  Paper,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -335,26 +336,26 @@ const API_BASE = import.meta.env.VITE_API_BASE;
 
 /* ---------- Styled Components ---------- */
 
-const Container = styled("div")(({ theme }) => ({
-  backgroundColor: "#fff",
-  borderRadius: 30,
-  boxShadow: "0 5px 15px rgba(0,0,0,0.08)",
-  width: "100%",
-  maxWidth: 1100,
-  minHeight: 560,
-  display: "flex",
-  margin: "24px",
-  padding: "26px",
-  overflow: "hidden",
-  [theme.breakpoints.down("md")]: {
-    flexDirection: "column",
-    padding: 16,
-    minHeight: "auto",
-  },
-}));
+// const Paper = styled("div")(({ theme }) => ({
+//   backgroundColor: "#fff",
+//   borderRadius: 30,
+//   boxShadow: "0 5px 15px rgba(0,0,0,0.08)",
+//   width: "100%",
+//   maxWidth: 1100,
+//   minHeight: 560,
+//   display: "flex",
+//   margin: "24px",
+//   padding: "26px",
+//   overflow: "hidden",
+//   [theme.breakpoints.down("md")]: {
+//     flexDirection: "column",
+//     padding: 16,
+//     minHeight: "auto",
+//   },
+// }));
 
 const LeftCard = styled("div")(({ theme }) => ({
-  width: "58%",
+  width: "50%",
   padding: "28px 36px",
   display: "flex",
   flexDirection: "column",
@@ -366,7 +367,7 @@ const LeftCard = styled("div")(({ theme }) => ({
 }));
 
 const RightCard = styled("div")(({ theme }) => ({
-  width: "42%",
+  width: "50%",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -375,11 +376,11 @@ const RightCard = styled("div")(({ theme }) => ({
   [theme.breakpoints.down("md")]: { display: "none" },
 }));
 
-const StyledForm = styled("form")({
-  display: "flex",
-  flexDirection: "column",
-  width: "100%",
-});
+// const StyledForm = styled("form")({
+// display: "flex",
+// flexDirection: "column",
+// width: "100%",
+// });
 
 /* ---------- Component ---------- */
 
@@ -487,11 +488,33 @@ const RegisterPage = () => {
   }, [currentRole]);
 
   return (
-    <Box sx={{ minHeight: "100vh", display: "flex", justifyContent: "center", p: 2 }}>
-      <Container>
+    <Box
+      // sx={{ minHeight: "100vh", display: "flex", justifyContent: "center", p: 2 }}
+      sx={{
+        p: { xs: 2, md: 5 },
+        // minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        // background: "#f7fbfc",
+      }}
+    >
+      <Paper
+        elevation={4}
+        sx={{
+          borderRadius: 3,
+          p: { xs: 3, md: 5 },
+          width: "100%",
+          maxWidth: 1100,
+          background: "#fff",
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          alignItems: "stretch",
+        }}
+      >
         {/* LEFT SIDE */}
         <LeftCard>
-          <StyledForm onSubmit={handleSubmit}>
+          <Box onSubmit={handleSubmit}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1.2, mb: 1 }}>
               <Typography
                 sx={{ fontSize: 22, fontWeight: 700, color: "#2b4ddb", lineHeight: 1.2 }}
@@ -509,7 +532,7 @@ const RegisterPage = () => {
             {/* Fields */}
             <TextField
               fullWidth
-              label="Full Name"
+              label="Full Name*"
               name="name"
               size="small"
               value={form.name}
@@ -518,7 +541,7 @@ const RegisterPage = () => {
 
             <TextField
               fullWidth
-              label="Email"
+              label="Email*"
               name="email"
               size="small"
               value={form.email}
@@ -528,7 +551,7 @@ const RegisterPage = () => {
 
             <TextField
               fullWidth
-              label="Password"
+              label="Password*"
               name="password"
               size="small"
               type={showPassword ? "text" : "password"}
@@ -548,7 +571,7 @@ const RegisterPage = () => {
 
             <TextField
               fullWidth
-              label="Confirm Password"
+              label="Confirm Password*"
               name="confirmPassword"
               size="small"
               type={showConfirmPassword ? "text" : "password"}
@@ -570,7 +593,7 @@ const RegisterPage = () => {
 
             <TextField
               fullWidth
-              label="Designation"
+              label="Designation*"
               name="designation"
               size="small"
               sx={{ mt: 2 }}
@@ -581,7 +604,7 @@ const RegisterPage = () => {
             <TextField
               select
               fullWidth
-              label="Role"
+              label="Role*"
               name="role"
               size="small"
               sx={{ mt: 2 }}
@@ -598,7 +621,7 @@ const RegisterPage = () => {
             <TextField
               select
               fullWidth
-              label="University"
+              label="University*"
               name="university"
               size="small"
               disabled={fetchingUnis}
@@ -627,15 +650,15 @@ const RegisterPage = () => {
             >
               {loading ? "Registering..." : "Register"}
             </Button>
-          </StyledForm>
+          </Box>
         </LeftCard>
 
         {/* RIGHT SIDE */}
         <RightCard>
           <img src={studentimg} alt="student" />
         </RightCard>
-      </Container>
-    </Box>
+      </Paper >
+    </Box >
   );
 };
 
