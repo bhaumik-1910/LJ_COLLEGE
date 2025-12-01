@@ -75,7 +75,7 @@ router.get("/", authRequired, requireAnyRole(["faculty", "admin"]), async (req, 
     try {
         // Get the user's university ID from the authenticated user
         const userUniversityId = await resolveUniversity(req);
-        console.log("University ID 1 ->:", userUniversityId);
+        // console.log("University ID 1 ->:", userUniversityId);
 
         if (!userUniversityId) {
             return res.status(400).json({
@@ -132,27 +132,37 @@ router.get("/", authRequired, requireAnyRole(["faculty", "admin"]), async (req, 
 
 
 
-// POST /api/documents — verify student's university
+// POST /api/documents — verify Document's university
+
+//Proper Chale che 
 // router.post("/", authRequired, requireRole("faculty"),
 //     upload.fields([
 //         { name: "file", maxCount: 1 },
 //         { name: "images", maxCount: 4 },
 //     ]),
 //     async (req, res) => {
+
 //         try {
-//             const { university, universityName, institute, course, type, categoryId, categoryName, date } = req.body;
-//             if (!universityName) return res.status(400).json({ message: "University is required" });
+//             const { university, institute, course, type, categoryId, categoryName, date } = req.body;
+
+//             if (!university) return res.status(400).json({ message: "University is required" });
 //             if (!institute) return res.status(400).json({ message: "Institute is required" });
 //             if (!course) return res.status(400).json({ message: "Course is required" });
 //             if (!type) return res.status(400).json({ message: "Type is required" });
 //             if (!date) return res.status(400).json({ message: "Date is required" });
-//             if (!req.files || !req.files.file || !req.files.file[0]) {
+//             if (!req.files?.file?.[0]) {
 //                 return res.status(400).json({ message: "Document file is required" });
 //             }
 
-//             // const student = await Student.findOne({ enrolno });
-//             // if (!student) return res.status(404).json({ message: "Student not found" });
+//             // ---------- GET UNIVERSITY NAME ----------
+//             const uniDoc = await University.findById(university).select("name");
+//             if (!uniDoc) return res.status(404).json({ message: "University not found" });
 
+//             // ---------- GET INSTITUTE NAME ----------
+//             const instDoc = await Institution.findById(institute).select("name");
+//             if (!instDoc) return res.status(404).json({ message: "Institute not found" });
+
+//             // ---------- CATEGORY ----------
 //             let category = null;
 //             if (categoryId) {
 //                 category = await Category.findById(categoryId);
@@ -162,51 +172,43 @@ router.get("/", authRequired, requireAnyRole(["faculty", "admin"]), async (req, 
 //             }
 //             if (!category) return res.status(400).json({ message: "Category is required" });
 
+//             // ---------- FILE MOVE ----------
 //             const file = req.files.file[0];
-//             // Prepare category-specific directories
 //             const safeCat = sanitizeName(category.name);
 //             const catBase = path.resolve("uploads", "categories", safeCat);
-//             const filesDir = path.join(catBase, "files");
-//             const imagesDir = path.join(catBase, "images");
-//             ensureDir(filesDir);
-//             ensureDir(imagesDir);
 
-//             // Move main document file to category/files
-//             const srcFilePath = path.resolve("uploads", "files", file.filename);
-//             const dstFilePath = path.join(filesDir, file.filename);
-//             try { fs.renameSync(srcFilePath, dstFilePath); } catch (e) { /* fallback copy */
-//                 fs.copyFileSync(srcFilePath, dstFilePath);
-//                 try { fs.unlinkSync(srcFilePath); } catch { }
-//             }
+//             ensureDir(`${catBase}/files`);
+//             ensureDir(`${catBase}/images`);
+
+//             const srcFilePath = path.resolve("uploads/files", file.filename);
+//             const dstFilePath = path.join(catBase, "files", file.filename);
+
+//             fs.renameSync(srcFilePath, dstFilePath);
+
 //             const fileUrl = `/uploads/categories/${safeCat}/files/${file.filename}`;
 
-//             // Move images to category/images
+//             // ---------- IMAGES MOVE ----------
 //             const movedImages = [];
-//             for (const img of (req.files.images || [])) {
-//                 const srcImgPath = path.resolve("uploads", "images", img.filename);
-//                 const dstImgPath = path.join(imagesDir, img.filename);
-//                 try { fs.renameSync(srcImgPath, dstImgPath); } catch (e) {
-//                     fs.copyFileSync(srcImgPath, dstImgPath);
-//                     try { fs.unlinkSync(srcImgPath); } catch { }
-//                 }
+//             for (const img of req.files.images || []) {
+//                 const srcImg = path.resolve("uploads/images", img.filename);
+//                 const dstImg = path.join(catBase, "images", img.filename);
+
+//                 fs.renameSync(srcImg, dstImg);
 //                 movedImages.push(`/uploads/categories/${safeCat}/images/${img.filename}`);
 //             }
 
-//             const instituteDoc = await Institution.findById(institute).select("name");
-//             if (!instituteDoc) {
-//                 return res.status(400).json({ message: "Institute not found" });
-//             }
-//             const instituteName = instituteDoc.name;
-
+//             // ---------- CREATE DOCUMENT ----------
 //             const doc = await Document.create({
-//                 university: university,
-//                 universityName: universityName,
-//                 institute: institute,
-//                 instituteName: instituteName,
-//                 course: course,
+//                 university: uniDoc._id,
+//                 universityName: uniDoc.name,
+
+//                 institute: instDoc._id,
+//                 instituteName: instDoc.name,
+
+//                 course,
 //                 category: category._id,
 //                 categoryName: category.name,
-//                 type: type.trim(),
+//                 type,
 //                 date: new Date(date),
 //                 fileUrl,
 //                 fileOriginalName: file.originalname,
@@ -215,13 +217,13 @@ router.get("/", authRequired, requireAnyRole(["faculty", "admin"]), async (req, 
 //             });
 
 //             res.status(201).json({ message: "Document uploaded", document: doc });
-//         } catch (e) {
-//             console.error(e);
+
+//         } catch (error) {
+//             console.error("Document Upload Error:", error);
 //             res.status(500).json({ message: "Failed to create document" });
 //         }
 //     }
 // );
-
 router.post("/", authRequired, requireRole("faculty"),
     upload.fields([
         { name: "file", maxCount: 1 },
@@ -232,6 +234,7 @@ router.post("/", authRequired, requireRole("faculty"),
         try {
             const { university, institute, course, type, categoryId, categoryName, date } = req.body;
 
+            // validations
             if (!university) return res.status(400).json({ message: "University is required" });
             if (!institute) return res.status(400).json({ message: "Institute is required" });
             if (!course) return res.status(400).json({ message: "Course is required" });
@@ -241,15 +244,15 @@ router.post("/", authRequired, requireRole("faculty"),
                 return res.status(400).json({ message: "Document file is required" });
             }
 
-            // ---------- GET UNIVERSITY NAME ----------
+            // Get university name
             const uniDoc = await University.findById(university).select("name");
             if (!uniDoc) return res.status(404).json({ message: "University not found" });
 
-            // ---------- GET INSTITUTE NAME ----------
+            // Get institute name
             const instDoc = await Institution.findById(institute).select("name");
             if (!instDoc) return res.status(404).json({ message: "Institute not found" });
 
-            // ---------- CATEGORY ----------
+            // Category
             let category = null;
             if (categoryId) {
                 category = await Category.findById(categoryId);
@@ -259,32 +262,53 @@ router.post("/", authRequired, requireRole("faculty"),
             }
             if (!category) return res.status(400).json({ message: "Category is required" });
 
-            // ---------- FILE MOVE ----------
+            // -----------------------------
+            //  SANITIZE NAMES FOR FOLDERS
+            // -----------------------------
+            const uniSafe = sanitizeName(uniDoc.name);
+            const instSafe = sanitizeName(instDoc.name);
+            const courseSafe = sanitizeName(course);
+            const catSafe = sanitizeName(category.name);
+
+            // -----------------------------
+            //  FINAL PATH : /uni/inst/course/category
+            // -----------------------------
+            // const basePath = path.resolve("uploads", uniSafe, instSafe, courseSafe, catSafe);
+
+            const basePath = path.resolve("D:/DocumentStorage", uniSafe, instSafe, courseSafe, catSafe);
+
+            ensureDir(path.join(basePath, "files"));
+            ensureDir(path.join(basePath, "images"));
+
+            // -----------------------------
+            //  MOVE MAIN FILE
+            // -----------------------------
             const file = req.files.file[0];
-            const safeCat = sanitizeName(category.name);
-            const catBase = path.resolve("uploads", "categories", safeCat);
-
-            ensureDir(`${catBase}/files`);
-            ensureDir(`${catBase}/images`);
-
             const srcFilePath = path.resolve("uploads/files", file.filename);
-            const dstFilePath = path.join(catBase, "files", file.filename);
+            const dstFilePath = path.join(basePath, "files", file.filename);
 
             fs.renameSync(srcFilePath, dstFilePath);
 
-            const fileUrl = `/uploads/categories/${safeCat}/files/${file.filename}`;
+            const fileUrl = `/uploads/${uniSafe}/${instSafe}/${courseSafe}/${catSafe}/files/${file.filename}`;
 
-            // ---------- IMAGES MOVE ----------
+            // -----------------------------
+            //  MOVE IMAGES
+            // -----------------------------
             const movedImages = [];
             for (const img of req.files.images || []) {
                 const srcImg = path.resolve("uploads/images", img.filename);
-                const dstImg = path.join(catBase, "images", img.filename);
+                const dstImg = path.join(basePath, "images", img.filename);
 
                 fs.renameSync(srcImg, dstImg);
-                movedImages.push(`/uploads/categories/${safeCat}/images/${img.filename}`);
+
+                movedImages.push(
+                    `/uploads/${uniSafe}/${instSafe}/${courseSafe}/${catSafe}/images/${img.filename}`
+                );
             }
 
-            // ---------- CREATE DOCUMENT ----------
+            // -----------------------------
+            //  CREATE DOCUMENT
+            // -----------------------------
             const doc = await Document.create({
                 university: uniDoc._id,
                 universityName: uniDoc.name,

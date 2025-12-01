@@ -24,7 +24,8 @@ app.use(express.urlencoded({ limit: '5mb', extended: true }));
 app.use(cors())
 app.use(express.json());
 // Static serving for uploaded files
-app.use('/uploads', express.static('uploads'));
+// app.use('/uploads', express.static('uploads'));
+app.use("/uploads", express.static("D:/DocumentStorage"));
 
 // Connect to MongoDB
 connectDB();
