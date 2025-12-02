@@ -59,27 +59,73 @@ router.get("/universities", authRequired, requireRole("superadmin"), async (_req
     }
 });
 
-// GET /api/superadmin/documents — list all documents (admin only)
+// GET /api/superadmin/documents — list all documents (Super admin only)
+// router.get("/documents", authRequired, requireRole("superadmin"), async (req, res) => {
+//     try {
+//         const { limit = 100, page = 1 } = req.query;
+//         const l = Math.min(parseInt(limit, 10) || 100, 500);
+//         const p = Math.max(parseInt(page, 10) || 1, 1);
+//         const docs = await Document.find({})
+//             .sort({ createdAt: -1 })
+//             .skip((p - 1) * l)
+//             .limit(l)
+//             // .populate({ path: "student", select: "enrolno fullName university" })
+//             // .populate({ path: "category", select: "name" });
+//             .populate({ path: "category", select: "name" })
+//             .populate({ path: "uploadedBy", select: "fullName email" });
+//         const total = await Document.countDocuments({});
+//         res.json({ items: docs, total, page: p, limit: l });
+//     } catch (e) {
+//         console.error(e);
+//         res.status(500).json({ message: "Server error" });
+//     }
+// });
+
 router.get("/documents", authRequired, requireRole("superadmin"), async (req, res) => {
     try {
-        const { limit = 100, page = 1 } = req.query;
+        // pagination
+        const { limit = 100, page = 1, category = "", type = "" } = req.query;
+
         const l = Math.min(parseInt(limit, 10) || 100, 500);
         const p = Math.max(parseInt(page, 10) || 1, 1);
-        const docs = await Document.find({})
+
+        // BUILD FILTER
+        const filter = {};
+
+        // Category Filter
+        if (category) {
+            filter.categoryName = category;  // string match
+        }
+
+        // Type Filter
+        if (type) {
+            filter.type = type;              // string match
+        }
+
+        // QUERY DOCUMENTS WITH FILTER
+        const docs = await Document.find(filter)
             .sort({ createdAt: -1 })
             .skip((p - 1) * l)
             .limit(l)
-            // .populate({ path: "student", select: "enrolno fullName university" })
-            // .populate({ path: "category", select: "name" });
             .populate({ path: "category", select: "name" })
             .populate({ path: "uploadedBy", select: "fullName email" });
-        const total = await Document.countDocuments({});
-        res.json({ items: docs, total, page: p, limit: l });
+
+        const total = await Document.countDocuments(filter);
+
+        res.json({
+            success: true,
+            items: docs,
+            total,
+            page: p,
+            limit: l
+        });
+
     } catch (e) {
         console.error(e);
         res.status(500).json({ message: "Server error" });
     }
 });
+
 
 // GET /api/superadmin/documents/count — total documents across all universities
 router.get("/documents/count", authRequired, requireRole("superadmin"), async (_req, res) => {

@@ -75,7 +75,6 @@ router.get("/", authRequired, requireAnyRole(["faculty", "admin"]), async (req, 
     try {
         // Get the user's university ID from the authenticated user
         const userUniversityId = await resolveUniversity(req);
-        // console.log("University ID 1 ->:", userUniversityId);
 
         if (!userUniversityId) {
             return res.status(400).json({
@@ -93,8 +92,21 @@ router.get("/", authRequired, requireAnyRole(["faculty", "admin"]), async (req, 
             });
         }
 
+        const filter = { university: userUniversityId };
+
+        // categoryId filter
+        if (req.query.categoryId) {
+            filter.category = new mongoose.Types.ObjectId(req.query.categoryId);
+        }
+
+        // categoryName filter (optional)
+        if (req.query.categoryName) {
+            filter.categoryName = req.query.categoryName;
+        }
+
+
         // Find documents using the university ID
-        const docs = await Document.find({ university: userUniversityId })
+        const docs = await Document.find(filter)
             .sort({ createdAt: -1 })
             .populate('category', 'name')
             .populate('uploadedBy', 'name email')
