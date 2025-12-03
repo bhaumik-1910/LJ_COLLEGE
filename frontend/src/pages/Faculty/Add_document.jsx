@@ -39,6 +39,7 @@ export default function Add_document() {
         type: "",
         categoryId: "",
         categoryName: "",
+        subCategory: "",
         date: "",
         file: null,
         images: [], // up to 4
@@ -187,6 +188,7 @@ export default function Add_document() {
             fd.append('institute', form.institute);
             fd.append('course', form.course);
             fd.append("type", form.type);
+            fd.append("subCategory", form.subCategory.trim());
             fd.append("date", form.date);
 
             if (form.categoryId) fd.append("categoryId", form.categoryId);
@@ -205,84 +207,12 @@ export default function Add_document() {
 
             toast.success("Document uploaded successfully");
 
-            setForm({ university: '', universityName: "", institute: "", course: "", type: "", categoryId: "", categoryName: "", date: "", file: null, images: [] });
+            setForm({ university: '', universityName: "", institute: "", course: "", type: "", categoryId: "", categoryName: "", subCategory: "", date: "", file: null, images: [] });
         } catch (error) {
             toast.error(error.message || "Something went wrong");
         } finally {
             setLoading(false);
         }
-
-
-        // if (!validate()) return;
-
-        // setLoading(true);
-        // try {
-        //     const formData = new FormData();
-
-        //     // Add form fields to formData
-        //     formData.append('university', form.university);
-        //     formData.append('universityName', form.universityName);
-        //     formData.append('institute', form.institute);
-        //     formData.append('course', form.course);
-        //     formData.append('type', form.type);
-        //     formData.append('date', form.date);
-
-        //     // Add category (either ID or name)
-        //     if (form.categoryId) {
-        //         formData.append('categoryId', form.categoryId);
-        //     } else if (form.categoryName) {
-        //         formData.append('categoryName', form.categoryName);
-        //     }
-
-        //     // Add the main document file
-        //     if (form.file) {
-        //         formData.append('file', form.file);
-        //     }
-
-        //     // Add image files
-        //     form.images.forEach((image, index) => {
-        //         formData.append('images', image);
-        //     });
-
-        //     const res = await fetch(`${API_BASE}/documents`, {
-        //         method: 'POST',
-        //         headers: {
-        //             Authorization: `Bearer ${token}`,
-        //         },
-        //         body: formData
-        //     });
-
-        //     const data = await res.json().catch(err => {
-        //         console.error('Error parsing JSON response:', err);
-        //         throw new Error('Invalid response from server');
-        //     });
-
-        //     if (!res.ok) {
-        //         throw new Error(data.message || 'Failed to upload document');
-        //     }
-
-        //     toast.success('Document uploaded successfully');
-
-        //     // Reset form
-        //     setForm({
-        //         university: '',
-        //         universityName: '',
-        //         institute: '',
-        //         course: '',
-        //         type: '',
-        //         categoryId: '',
-        //         categoryName: '',
-        //         date: '',
-        //         file: null,
-        //         images: []
-        //     });
-
-        // } catch (error) {
-        //     console.error('Upload error:', error);
-        //     toast.error(error.message || 'Failed to upload document');
-        // } finally {
-        //     setLoading(false);
-        // }
     };
 
 
@@ -601,6 +531,24 @@ export default function Add_document() {
                                     fullWidth
                                 />
                             </Grid>
+
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Sub Category (Optional)"
+                                    name="subCategory"
+                                    size="small"
+                                    value={form.subCategory}
+                                    onChange={(e) =>
+                                        setForm((p) => ({
+                                            ...p,
+                                            subCategory: e.target.value, // ✅ OPTIONAL
+                                        }))
+                                    }
+                                    fullWidth
+                                    placeholder="e.g., Unit-1, Practical, Mid Term"
+                                />
+                            </Grid>
+
 
                             <Grid item xs={12}>
                                 <TextField

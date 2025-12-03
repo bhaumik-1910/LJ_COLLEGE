@@ -104,6 +104,16 @@ router.get("/", authRequired, requireAnyRole(["faculty", "admin"]), async (req, 
             filter.categoryName = req.query.categoryName;
         }
 
+        // TYPE FILTER 
+        if (req.query.type) {
+            filter.type = req.query.type;
+        }
+
+        // SUB CATEGORY FILTER 
+        if (req.query.subCategory) {
+            filter.subCategory = req.query.subCategory;
+        }
+
 
         // Find documents using the university ID
         const docs = await Document.find(filter)
@@ -244,7 +254,7 @@ router.post("/", authRequired, requireRole("faculty"),
     async (req, res) => {
 
         try {
-            const { university, institute, course, type, categoryId, categoryName, date } = req.body;
+            const { university, institute, course, type, categoryId, categoryName, subCategory, date } = req.body;
 
             // validations
             if (!university) return res.status(400).json({ message: "University is required" });
@@ -331,6 +341,9 @@ router.post("/", authRequired, requireRole("faculty"),
                 course,
                 category: category._id,
                 categoryName: category.name,
+
+                subCategory: subCategory || "",
+
                 type,
                 date: new Date(date),
                 fileUrl,
@@ -607,5 +620,67 @@ router.get("/stats/monthly", authRequired, requireAnyRole(["faculty", "admin"]),
         res.status(500).json({ message: "Failed to fetch monthly stats" });
     }
 });
+
+
+//fatch Type so 
+// router.get("/types", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
+//     try {
+//         const types = await Document.distinct("type");
+//         res.json(types.filter(t => t));
+//     } catch (err) {
+//         res.status(500).json({ message: "Failed to fetch types" });
+//     }
+// });
+router.get("/types", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
+    try {
+        const userUniversityId = await resolveUniversity(req);
+
+        if (!userUniversityId) {
+            return res.status(400).json({ message: "University not found for user" });
+        }
+
+        const types = await Document.distinct("type", {
+            university: userUniversityId,
+        });
+
+        res.json(types.filter(t => t)); // remove empty values
+
+    } catch (err) {
+        console.error("Fetch Types Error:", err);
+        res.status(500).json({ message: "Failed to fetch types" });
+    }
+});
+
+
+//Fetch sub categoty
+// router.get("/subcategories", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
+//     try {
+//         const subs = await Document.distinct("subCategory");
+//         res.json(subs.filter(s => s));   // empty remove
+//     } catch (err) {
+//         res.status(500).json({ message: "Failed to fetch sub categories" });
+//     }
+// });
+router.get("/subcategories", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
+    try {
+        const userUniversityId = await resolveUniversity(req);
+
+        if (!userUniversityId) {
+            return res.status(400).json({ message: "University not found for user" });
+        }
+
+        const subs = await Document.distinct("subCategory", {
+            university: userUniversityId,
+        });
+
+        res.json(subs.filter(s => s)); // remove empty values
+
+    } catch (err) {
+        console.error("Fetch SubCategory Error:", err);
+        res.status(500).json({ message: "Failed to fetch sub categories" });
+    }
+});
+
+
 
 export default router;

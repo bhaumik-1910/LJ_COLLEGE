@@ -60,6 +60,10 @@ const documentSchema = new mongoose.Schema(
             required: true,
             trim: true,
         },
+        subCategory: {
+            type: String,
+            default: ""
+        },
         type: {
             type: String,
             required: true,

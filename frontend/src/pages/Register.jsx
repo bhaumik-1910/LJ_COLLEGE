@@ -325,7 +325,7 @@ import {
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { styled } from "@mui/system";
-import { useNavigate } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthContext } from "../context/AuthContext";
 import studentimg from "../assets/images/student-add.png";
@@ -376,11 +376,11 @@ const RightCard = styled("div")(({ theme }) => ({
   [theme.breakpoints.down("md")]: { display: "none" },
 }));
 
-// const StyledForm = styled("form")({
-// display: "flex",
-// flexDirection: "column",
-// width: "100%",
-// });
+const StyledForm = styled("form")({
+  display: "flex",
+  flexDirection: "column",
+  width: "100%",
+});
 
 /* ---------- Component ---------- */
 
@@ -514,7 +514,7 @@ const RegisterPage = () => {
       >
         {/* LEFT SIDE */}
         <LeftCard>
-          <Box onSubmit={handleSubmit}>
+          <StyledForm onSubmit={handleSubmit}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1.2, mb: 1 }}>
               <Typography
                 sx={{ fontSize: 22, fontWeight: 700, color: "#2b4ddb", lineHeight: 1.2 }}
@@ -650,7 +650,7 @@ const RegisterPage = () => {
             >
               {loading ? "Registering..." : "Register"}
             </Button>
-          </Box>
+          </StyledForm>
         </LeftCard>
 
         {/* RIGHT SIDE */}

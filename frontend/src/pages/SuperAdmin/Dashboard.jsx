@@ -390,7 +390,7 @@ export default function SuperAdminDashboard() {
                         <Typography variant="h6" mb={2} textAlign="center">Monthly Documents</Typography>
                         <Box sx={{ width: '100%', margin: 'auto' }}>
                             <Line data={monthlyChartData} options={lineOptions} />
-                        </Box>
+                        </Box> 
                     </Paper>
                 </Grid>
             </Grid>

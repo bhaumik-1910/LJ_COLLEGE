@@ -224,6 +224,7 @@ import {
     CircularProgress,
     TablePagination,
     Paper,
+    Grid,
 } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
 
@@ -242,10 +243,16 @@ export default function AdminDocumentList() {
 
     const [categories, setCategories] = useState([]);
     const [selectedCat, setSelectedCat] = useState("");
+    const [types, setTypes] = useState([]);
+    const [selectedType, setSelectedType] = useState("");
+    const [subCategories, setSubCategories] = useState([]);
+    const [selectedSubCategory, setSelectedSubCategory] = useState("");
+
     const [loadingCats, setLoadingCats] = useState(false);
     const [docs, setDocs] = useState([]);
     const [loading, setLoading] = useState(false);
     const [q, setQ] = useState(''); // (kept for existing logic)
+
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -262,6 +269,36 @@ export default function AdminDocumentList() {
         }
     };
 
+    const fetchTypes = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/documents/types`, {
+                headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+            });
+            const data = await res.json();
+            if (res.ok) setTypes(Array.isArray(data) ? data : []);
+            else toast.error(data.message || "Failed to fetch types");
+        } catch (e) {
+            toast.error("Failed to fetch types");
+        }
+    };
+
+    const fetchSubCategories = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/documents/subcategories`, {
+                headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+            });
+
+            const data = await res.json();
+
+            if (res.ok) setSubCategories(Array.isArray(data) ? data : []);
+            else toast.error(data.message || "Failed to fetch sub categories");
+
+        } catch (e) {
+            toast.error("Failed to fetch sub categories");
+        }
+    };
+
+    // Proper Document Data So 
     // const fetchDocs = async (categoryIdOrName = "") => {
     //     setLoading(true);
     //     try {
@@ -270,52 +307,38 @@ export default function AdminDocumentList() {
     //                 ? `?categoryId=${encodeURIComponent(categoryIdOrName.slice(3))}`
     //                 : `?categoryName=${encodeURIComponent(categoryIdOrName)}`
     //             : "";
+
     //         const res = await fetch(`${API_BASE}/documents${qs}`, { headers });
     //         const data = await res.json();
-    //         setDocs(res.ok ? (Array.isArray(data) ? data : []) : []);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-    // In Document_List.jsx data ave che 
-    // const fetchDocs = async () => {
-    //     setLoading(true);
-    //     try {
-    //         const res = await fetch(`${API_BASE}/documents`, {
-    //             headers: { 'Authorization': `Bearer ${token}` }
-    //         });
 
     //         if (!res.ok) {
-    //             const error = await res.json();
-    //             if (res.status === 400 && error.message.includes('not associated with any university')) {
-    //                 alert('Your account is not associated with any university. Please contact support.');
-    //                 return;
-    //             }
-    //             throw new Error(error.message || 'Failed to fetch documents');
+    //             toast.error(data.message || "Failed to fetch documents");
+    //             setDocs([]);
+    //             return;
     //         }
 
-    //         const data = await res.json();
-    //         setDocs(Array.isArray(data) ? data : []);
-    //     } catch (error) {
-    //         console.error('Error:', error);
+    //         // correct data extraction
+    //         if (data.success && Array.isArray(data.data)) {
+    //             setDocs(data.data);
+    //         } else {
+    //             setDocs([]);
+    //         }
+
+    //     } catch (e) {
+    //         toast.error("Failed to fetch documents");
     //         setDocs([]);
     //     } finally {
     //         setLoading(false);
     //     }
     // };
-
-    // Proper Document Data So 
-    const fetchDocs = async (categoryIdOrName = "") => {
+    const fetchDocs = async (query = "") => {
         setLoading(true);
         try {
-            const qs = categoryIdOrName
-                ? categoryIdOrName.startsWith("id:")
-                    ? `?categoryId=${encodeURIComponent(categoryIdOrName.slice(3))}`
-                    : `?categoryName=${encodeURIComponent(categoryIdOrName)}`
-                : "";
+            const res = await fetch(
+                `${API_BASE}/documents${query ? `?${query}` : ""}`,
+                { headers }
+            );
 
-            const res = await fetch(`${API_BASE}/documents${qs}`, { headers });
             const data = await res.json();
 
             if (!res.ok) {
@@ -324,13 +347,7 @@ export default function AdminDocumentList() {
                 return;
             }
 
-            // correct data extraction
-            if (data.success && Array.isArray(data.data)) {
-                setDocs(data.data);
-            } else {
-                setDocs([]);
-            }
-
+            setDocs(data.data || []);
         } catch (e) {
             toast.error("Failed to fetch documents");
             setDocs([]);
@@ -339,9 +356,12 @@ export default function AdminDocumentList() {
         }
     };
 
+
     useEffect(() => {
         if (!token) return;
         fetchCategories();
+        fetchTypes();
+        fetchSubCategories();
         fetchDocs("");
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [token]);
@@ -349,9 +369,41 @@ export default function AdminDocumentList() {
     const handleCategoryChange = (e) => {
         const val = e.target.value;
         setSelectedCat(val);
+
+        setSelectedType("");
+        setSelectedSubCategory("");
+
         if (!token) return;
         if (!val) fetchDocs("");
-        else fetchDocs(`id:${val}`);
+        // else fetchDocs(`id:${val}`);
+        else fetchDocs(`categoryId=${val}`);
+    };
+
+    const handleTypeChange = (e) => {
+        const val = e.target.value;
+
+        setSelectedType(val);
+        setSelectedCat("");
+        setSelectedSubCategory("");
+
+        if (!val) {
+            fetchDocs("");    // ALL DATA
+        } else {
+            fetchDocs(`type=${val}`);   // ONLY TYPE FILTER
+        }
+    };
+
+
+    const handleSubCategoryChange = (e) => {
+        const val = e.target.value;
+        setSelectedSubCategory(val);
+
+        let query = "";
+
+        if (selectedCat) query += `categoryId=${selectedCat}`;
+        if (val) query += `${query ? "&" : ""}subCategory=${encodeURIComponent(val)}`;
+
+        fetchDocs(query);
     };
 
     const getFileName = (doc) => {
@@ -391,6 +443,24 @@ export default function AdminDocumentList() {
         setPage(0);
     }, [q, rowsPerPage]);
 
+
+    //Dowlond
+    const downloadFile = async (url, filename = "download") => {
+        try {
+            const res = await fetch(toBackendUrl(url));
+            const blob = await res.blob();
+            const link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        } catch (err) {
+            toast.error("Download failed");
+        }
+    };
+
+
     return (
         <Box sx={{ p: 3 }}>
             <Paper
@@ -409,28 +479,65 @@ export default function AdminDocumentList() {
                         Documents List
                     </Typography>
 
-                    <Box display="flex" alignItems="center" gap={2}>
-                        <TextField
-                            select
-                            label={loadingCats ? "Loading categories..." : "Filter by Category"}
-                            size="small"
-                            value={selectedCat}
-                            onChange={handleCategoryChange}
-                            sx={{
-                                minWidth: 240,
-                                background: "#fff",
-                                borderRadius: 2,
-                                boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-                                "& .MuiInputLabel-root": { color: "text.secondary" }
-                            }}
-                            disabled={loadingCats}
-                        >
-                            <MenuItem value="">All</MenuItem>
-                            {categories.map((c) => (
-                                <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
-                            ))}
-                        </TextField>
-                    </Box>
+                    <Grid container spacing={2} alignItems="center">
+                        <Grid item xs={12} sm={4}>
+                            <TextField
+                                select
+                                fullWidth
+                                label={loadingCats ? "Loading Type..." : "Filter by Type"}
+                                size="small"
+                                value={selectedType}
+                                onChange={handleTypeChange}
+                                sx={{ minWidth: 200 }}
+                            >
+                                <MenuItem value="">All</MenuItem>
+                                {types.map((t, i) => (
+                                    <MenuItem key={i} value={t}>
+                                        {t}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
+
+                        <Grid item xs={12} sm={4}>
+                            <TextField
+                                select
+                                fullWidth
+                                label={loadingCats ? "Loading Categories..." : "Filter by Category"}
+                                value={selectedCat}
+                                onChange={handleCategoryChange}
+                                sx={{ minWidth: 200 }}
+                                size="small"
+                                disabled={loadingCats}
+                            >
+                                <MenuItem value="">All</MenuItem>
+                                {categories.map((c) => (
+                                    <MenuItem key={c._id} value={c._id}>
+                                        {c.name}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
+
+                        <Grid item xs={12} sm={4}>
+                            <TextField
+                                select
+                                fullWidth
+                                label={loadingCats ? "Loading Sub Categories..." : "Filter by Sub Category"}
+                                size="small"
+                                value={selectedSubCategory}
+                                onChange={handleSubCategoryChange}
+                                sx={{ minWidth: 200 }}
+                            >
+                                <MenuItem value="">All</MenuItem>
+                                {subCategories.map((sc, i) => (
+                                    <MenuItem key={i} value={sc}>
+                                        {sc}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
+                    </Grid>
                 </Box>
 
                 {/* Card wrapper with shadow & rounded */}
@@ -441,7 +548,17 @@ export default function AdminDocumentList() {
                             <CircularProgress />
                         </Box>
                     ) : docs.length === 0 ? (
-                        <Typography sx={{ p: 2 }}>No documents found</Typography>
+                        <Box
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                            minHeight="200px"
+                        >
+                            <Typography sx={{ p: 2 }}>
+                                No documents found
+                            </Typography>
+                        </Box>
+
                     ) : (
                         <TableContainer component={Box}>
                             <Table size="small">
@@ -467,19 +584,42 @@ export default function AdminDocumentList() {
                                             <TableCell>{d.category?.name || d.categoryName}</TableCell>
                                             <TableCell>{d.date ? new Date(d.date).toLocaleDateString() : "-"}</TableCell>
                                             <TableCell>
-                                                <Link href={toBackendUrl(d.fileUrl)} target="_blank" rel="noopener" underline="hover">
+                                                {/* <Link href={toBackendUrl(d.fileUrl)} target="_blank" rel="noopener" underline="hover">
+                                                    {getFileName(d)}
+                                                </Link> */}
+                                                <Link
+                                                    component="button"
+                                                    underline="hover"
+                                                    onClick={() => downloadFile(d.fileUrl, getFileName(d))}
+                                                >
                                                     {getFileName(d)}
                                                 </Link>
+
                                             </TableCell>
                                             <TableCell>
                                                 <Box display="flex" gap={0.5} flexWrap="wrap">
                                                     {(d.images || []).slice(0, 4).map((img, idx) => (
+                                                        // <img
+                                                        //     key={idx}
+                                                        //     src={toBackendUrl(img)}
+                                                        //     alt={`img-${idx}`}
+                                                        //     style={{ width: 36, height: 36, objectFit: "cover", borderRadius: 4, border: "1px solid #eee" }}
+                                                        // />
                                                         <img
                                                             key={idx}
                                                             src={toBackendUrl(img)}
                                                             alt={`img-${idx}`}
-                                                            style={{ width: 36, height: 36, objectFit: "cover", borderRadius: 4, border: "1px solid #eee" }}
+                                                            onClick={() => downloadFile(img, `image-${idx + 1}.jpg`)}
+                                                            style={{
+                                                                width: 36,
+                                                                height: 36,
+                                                                objectFit: "cover",
+                                                                borderRadius: 4,
+                                                                border: "1px solid #ddd",
+                                                                cursor: "pointer"
+                                                            }}
                                                         />
+
                                                     ))}
                                                 </Box>
                                             </TableCell>
