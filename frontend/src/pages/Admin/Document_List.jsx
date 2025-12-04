@@ -258,14 +258,28 @@ export default function AdminDocumentList() {
 
     const headers = useMemo(() => ({ ...(token ? { Authorization: `Bearer ${token}` } : {}) }), [token]);
 
+    // const fetchCategories = async () => {
+    //     setLoadingCats(true);
+    //     try {
+    //         const res = await fetch(`${API_BASE}/categories`, { headers });
+    //         const data = await res.json();
+    //         if (res.ok) setCategories(Array.isArray(data) ? data : []);
+    //     } finally {
+    //         setLoadingCats(false);
+    //     }
+    // };
     const fetchCategories = async () => {
-        setLoadingCats(true);
         try {
-            const res = await fetch(`${API_BASE}/categories`, { headers });
+            const res = await fetch(`${API_BASE}/documents/categories`, {
+                headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+            });
+
             const data = await res.json();
+
             if (res.ok) setCategories(Array.isArray(data) ? data : []);
-        } finally {
-            setLoadingCats(false);
+            else toast.error(data.message || "Failed to fetch categories");
+        } catch (e) {
+            toast.error("Failed to fetch categories");
         }
     };
 

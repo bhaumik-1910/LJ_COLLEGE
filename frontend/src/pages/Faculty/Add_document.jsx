@@ -18,7 +18,7 @@ export default function Add_document() {
     const { token } = useContext(AuthContext);
     const theme = useTheme();
 
-    const [students, setStudents] = useState([]);
+    // const [students, setStudents] = useState([]);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -40,7 +40,8 @@ export default function Add_document() {
         categoryId: "",
         categoryName: "",
         subCategory: "",
-        date: "",
+        // date: "",
+        date: new Date().toISOString().split("T")[0],
         file: null,
         images: [], // up to 4
     });
@@ -50,7 +51,6 @@ export default function Add_document() {
     const handleChange = (e) => {
         // const { name, value } = e.target;
         // setForm((prev) => ({ ...prev, [name]: value }));
-
 
         const { name, value, type, files } = e.target;
         if (type === 'file') {
@@ -104,23 +104,6 @@ export default function Add_document() {
     //     }
     // };
 
-    const fetchCategories = async () => {
-        try {
-            const res = await fetch(`${API_BASE}/categories`, {
-                headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
-            });
-            const data = await res.json();
-            if (res.ok) setCategories(Array.isArray(data) ? data : []);
-            else toast.error(data.message || "Failed to fetch categories");
-        } catch (e) {
-            toast.error("Failed to fetch categories");
-        }
-    };
-
-    useEffect(() => {
-        // fetchStudents();
-        fetchCategories();
-    }, []);
 
     const validate = () => {
         if (!form.universityName) return toast.error("Select University");
@@ -144,77 +127,6 @@ export default function Add_document() {
         if (form.images.length > 4) return toast.error("Maximum 4 images");
         return null;
     };
-
-    const onSubmit = async (e) => {
-        // e.preventDefault();
-        // const err = validate();
-        // if (err) return;
-
-        // setLoading(true);
-        // try {
-        //     const fd = new FormData();
-        //     // fd.append("enrolno", form.enrolno);
-        //     fd.append("type", form.type);
-        //     fd.append("date", form.date);
-        //     if (form.categoryId) fd.append("categoryId", form.categoryId);
-        //     if (form.categoryName.trim()) fd.append("categoryName", form.categoryName.trim());
-        //     if (form.file) fd.append("file", form.file);
-        //     for (const img of form.images) fd.append("images", img);
-
-        //     const res = await fetch(`${API_BASE}/documents`, {
-        //         method: "POST",
-        //         headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
-        //         body: fd,
-        //     });
-        //     const data = await res.json().catch(() => ({}));
-        //     if (!res.ok) throw new Error(data.message || "Upload failed");
-        //     toast.success("Document uploaded successfully");
-        //     setForm({ universityName: "", institute: "", course: "", type: "", categoryId: "", categoryName: "", date: "", file: null, images: [] });
-        // } catch (error) {
-        //     toast.error(error.message || "Something went wrong");
-        // } finally {
-        //     setLoading(false);
-        // }
-
-        e.preventDefault();
-        const err = validate();
-        if (err) return;
-
-        setLoading(true);
-        try {
-            const fd = new FormData();
-            fd.append('university', form.university);
-            fd.append('universityName', form.universityName);
-            fd.append('institute', form.institute);
-            fd.append('course', form.course);
-            fd.append("type", form.type);
-            fd.append("subCategory", form.subCategory.trim());
-            fd.append("date", form.date);
-
-            if (form.categoryId) fd.append("categoryId", form.categoryId);
-            if (form.categoryName.trim()) fd.append("categoryName", form.categoryName.trim());
-
-            if (form.file) fd.append("file", form.file);
-            for (const img of form.images) fd.append("images", img);
-
-            const res = await fetch(`${API_BASE}/documents`, {
-                method: "POST",
-                headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
-                body: fd,
-            });
-            const data = await res.json().catch(() => ({}));
-            if (!res.ok) throw new Error(data.message || "Upload failed");
-
-            toast.success("Document uploaded successfully");
-
-            setForm({ university: '', universityName: "", institute: "", course: "", type: "", categoryId: "", categoryName: "", subCategory: "", date: "", file: null, images: [] });
-        } catch (error) {
-            toast.error(error.message || "Something went wrong");
-        } finally {
-            setLoading(false);
-        }
-    };
-
 
     // Add these fetch functions
     const fetchUniversities = async () => {
@@ -318,6 +230,39 @@ export default function Add_document() {
         }
     };
 
+    const fetchCategories = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/categories`, {
+                headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+            });
+            const data = await res.json();
+            if (res.ok) setCategories(Array.isArray(data) ? data : []);
+            else toast.error(data.message || "Failed to fetch categories");
+        } catch (e) {
+            toast.error("Failed to fetch categories");
+        }
+    };
+    // const fetchCategories = async () => {
+    //     try {
+    //         const res = await fetch(`${API_BASE}/documents/categories`, {
+    //             headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+    //         });
+
+    //         const data = await res.json();
+
+    //         if (res.ok) setCategories(Array.isArray(data) ? data : []);
+    //         else toast.error(data.message || "Failed to fetch categories");
+    //     } catch (e) {
+    //         toast.error("Failed to fetch categories");
+    //     }
+    // };
+
+
+    useEffect(() => {
+        // fetchStudents();
+        fetchCategories();
+    }, []);
+
     useEffect(() => {
         fetchUniversities();
     }, []);
@@ -336,6 +281,78 @@ export default function Add_document() {
             setCourses([]);
         }
     }, [form.institute]);
+
+
+    const onSubmit = async (e) => {
+        // e.preventDefault();
+        // const err = validate();
+        // if (err) return;
+
+        // setLoading(true);
+        // try {
+        //     const fd = new FormData();
+        //     // fd.append("enrolno", form.enrolno);
+        //     fd.append("type", form.type);
+        //     fd.append("date", form.date);
+        //     if (form.categoryId) fd.append("categoryId", form.categoryId);
+        //     if (form.categoryName.trim()) fd.append("categoryName", form.categoryName.trim());
+        //     if (form.file) fd.append("file", form.file);
+        //     for (const img of form.images) fd.append("images", img);
+
+        //     const res = await fetch(`${API_BASE}/documents`, {
+        //         method: "POST",
+        //         headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+        //         body: fd,
+        //     });
+        //     const data = await res.json().catch(() => ({}));
+        //     if (!res.ok) throw new Error(data.message || "Upload failed");
+        //     toast.success("Document uploaded successfully");
+        //     setForm({ universityName: "", institute: "", course: "", type: "", categoryId: "", categoryName: "", date: "", file: null, images: [] });
+        // } catch (error) {
+        //     toast.error(error.message || "Something went wrong");
+        // } finally {
+        //     setLoading(false);
+        // }
+
+        e.preventDefault();
+        const err = validate();
+        if (err) return;
+
+        setLoading(true);
+        try {
+            const fd = new FormData();
+            fd.append('university', form.university);
+            fd.append('universityName', form.universityName);
+            fd.append('institute', form.institute);
+            fd.append('course', form.course);
+            fd.append("type", form.type);
+            fd.append("subCategory", form.subCategory.trim());
+            fd.append("date", form.date);
+
+            if (form.categoryId) fd.append("categoryId", form.categoryId);
+            if (form.categoryName.trim()) fd.append("categoryName", form.categoryName.trim());
+
+            if (form.file) fd.append("file", form.file);
+            for (const img of form.images) fd.append("images", img);
+
+            const res = await fetch(`${API_BASE}/documents`, {
+                method: "POST",
+                headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+                body: fd,
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.message || "Upload failed");
+
+            toast.success("Document uploaded successfully");
+
+            setForm({ university: '', universityName: "", institute: "", course: "", type: "", categoryId: "", categoryName: "", subCategory: "", date: "", file: null, images: [] });
+        } catch (error) {
+            toast.error(error.message || "Something went wrong");
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     return (
         <Box component="form" onSubmit={onSubmit} sx={{ p: 3, maxWidth: 1000, mx: "auto" }}>
@@ -478,9 +495,10 @@ export default function Add_document() {
                                 </TextField>
                             </Grid>
 
+                            {/* Type */}
                             <Grid item xs={12}>
                                 <TextField
-                                    label="Type"
+                                    label="Type*"
                                     name="type"
                                     value={form.type}
                                     size="small"
@@ -490,10 +508,11 @@ export default function Add_document() {
                                 />
                             </Grid>
 
+                            {/* Category */}
                             <Grid item xs={12}>
                                 <TextField
                                     select
-                                    label="Category (existing)"
+                                    label="Category (existing)*"
                                     name="categoryId"
                                     size="small"
                                     value={form.categoryId}
@@ -514,7 +533,37 @@ export default function Add_document() {
                                     ))}
                                 </TextField>
                             </Grid>
+                            {/* <TextField
+                                select
+                                label="Category (existing)*"
+                                name="categoryId"
+                                size="small"
+                                value={form.categoryId}
+                                onChange={(e) => {
+                                    const selectedId = e.target.value;
 
+                                    const selectedCategory = categories.find(
+                                        (c) => c._id.toString() === selectedId
+                                    );
+
+                                    setForm((p) => ({
+                                        ...p,
+                                        categoryId: selectedId,
+                                        categoryName: selectedCategory?.name || "",
+                                        newCategoryName: "",     //IMPORTANT: NEW CATEGORY CLEAR
+                                    }));
+                                }}
+                                fullWidth
+                            >
+                                <MenuItem value="">None</MenuItem>
+                                {categories.map((c) => (
+                                    <MenuItem key={c._id} value={c._id.toString()}>
+                                        {c.name}
+                                    </MenuItem>
+                                ))}
+                            </TextField> */}
+
+                            {/* New Category */}
                             <Grid item xs={12}>
                                 <TextField
                                     label="Or New Category"
@@ -532,6 +581,7 @@ export default function Add_document() {
                                 />
                             </Grid>
 
+                            {/* Sub Category */}
                             <Grid item xs={12}>
                                 <TextField
                                     label="Sub Category (Optional)"
@@ -541,7 +591,7 @@ export default function Add_document() {
                                     onChange={(e) =>
                                         setForm((p) => ({
                                             ...p,
-                                            subCategory: e.target.value, // ✅ OPTIONAL
+                                            subCategory: e.target.value, //OPTIONAL
                                         }))
                                     }
                                     fullWidth
@@ -549,8 +599,8 @@ export default function Add_document() {
                                 />
                             </Grid>
 
-
-                            <Grid item xs={12}>
+                            {/* Date */}
+                            {/* <Grid item xs={12}>
                                 <TextField
                                     type="date"
                                     label="Date"
@@ -561,8 +611,22 @@ export default function Add_document() {
                                     fullWidth
                                     InputLabelProps={{ shrink: true }}
                                 />
+                            </Grid> */}
+                            <Grid item xs={12}>
+                                <TextField
+                                    type="date"
+                                    label="Date"
+                                    name="date"
+                                    value={form.date}
+                                    size="small"
+                                    fullWidth
+                                    disabled    // ✅ USER CHANGE NA KARI SAKE
+                                    InputLabelProps={{ shrink: true }}
+                                />
                             </Grid>
 
+
+                            {/* Document */}
                             <Grid item xs={12}>
                                 <Button variant="outlined" component="label">
                                     Upload Document (pdf/doc/ppt/xls)
@@ -578,6 +642,7 @@ export default function Add_document() {
                                 </Typography>
                             </Grid>
 
+                            {/* Images */}
                             <Grid item xs={12}>
                                 <Button variant="outlined" component="label">
                                     Upload Images (max 4)

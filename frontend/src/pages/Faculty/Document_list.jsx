@@ -38,51 +38,6 @@ export default function Document_list() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
-
-    const fetchCategories = async () => {
-        setLoadingCats(true);
-        try {
-            const res = await fetch(`${API_BASE}/categories`, { headers });
-            const data = await res.json();
-            if (res.ok) setCategories(Array.isArray(data) ? data : []);
-            else toast.error(data.message || "Failed to fetch categories");
-        } catch (e) {
-            toast.error("Failed to fetch categories");
-        } finally {
-            setLoadingCats(false);
-        }
-    };
-
-    const fetchTypes = async () => {
-        try {
-            const res = await fetch(`${API_BASE}/documents/types`, {
-                headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
-            });
-            const data = await res.json();
-            if (res.ok) setTypes(Array.isArray(data) ? data : []);
-            else toast.error(data.message || "Failed to fetch types");
-        } catch (e) {
-            toast.error("Failed to fetch types");
-        }
-    };
-
-    const fetchSubCategories = async () => {
-        try {
-            const res = await fetch(`${API_BASE}/documents/subcategories`, {
-                headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
-            });
-
-            const data = await res.json();
-
-            if (res.ok) setSubCategories(Array.isArray(data) ? data : []);
-            else toast.error(data.message || "Failed to fetch sub categories");
-
-        } catch (e) {
-            toast.error("Failed to fetch sub categories");
-        }
-    };
-
-
     const headers = useMemo(() => ({ ...(token ? { Authorization: `Bearer ${token}` } : {}) }), [token]);
 
     const paginatedDocs = useMemo(() => {
@@ -128,6 +83,64 @@ export default function Document_list() {
     //         setLoading(false);
     //     }
     // };
+
+
+    // const fetchCategories = async () => {
+    //     setLoadingCats(true);
+    //     try {
+    //         const res = await fetch(`${API_BASE}/categories`, { headers });
+    //         const data = await res.json();
+    //         if (res.ok) setCategories(Array.isArray(data) ? data : []);
+    //         else toast.error(data.message || "Failed to fetch categories");
+    //     } catch (e) {
+    //         toast.error("Failed to fetch categories");
+    //     } finally {
+    //         setLoadingCats(false);
+    //     }
+    // };
+    const fetchCategories = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/documents/categories`, {
+                headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+            });
+
+            const data = await res.json();
+
+            if (res.ok) setCategories(Array.isArray(data) ? data : []);
+            else toast.error(data.message || "Failed to fetch categories");
+        } catch (e) {
+            toast.error("Failed to fetch categories");
+        }
+    };
+
+    const fetchTypes = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/documents/types`, {
+                headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+            });
+            const data = await res.json();
+            if (res.ok) setTypes(Array.isArray(data) ? data : []);
+            else toast.error(data.message || "Failed to fetch types");
+        } catch (e) {
+            toast.error("Failed to fetch types");
+        }
+    };
+
+    const fetchSubCategories = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/documents/subcategories`, {
+                headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+            });
+
+            const data = await res.json();
+
+            if (res.ok) setSubCategories(Array.isArray(data) ? data : []);
+            else toast.error(data.message || "Failed to fetch sub categories");
+
+        } catch (e) {
+            toast.error("Failed to fetch sub categories");
+        }
+    };
 
     const fetchDocs = async (query = "") => {
         setLoading(true);

@@ -283,6 +283,21 @@ router.post("/", authRequired, requireRole("faculty"),
                 if (!category) category = await Category.create({ name: categoryName.trim() });
             }
             if (!category) return res.status(400).json({ message: "Category is required" });
+            // CATEGORY FROM DROPDOWN ONLY (NO AUTO CREATE)
+            // if (!categoryId) {
+            //     return res.status(400).json({ message: "Category is required" });
+            // }
+
+            // const category = await Category.findOne({
+            //     _id: categoryId,
+            //     university: university,   // ensure same university
+            //     active: true
+            // });
+
+            // if (!category) {
+            //     return res.status(404).json({ message: "Invalid category for this university" });
+            // }
+
 
             // -----------------------------
             //  SANITIZE NAMES FOR FOLDERS
@@ -339,13 +354,16 @@ router.post("/", authRequired, requireRole("faculty"),
                 instituteName: instDoc.name,
 
                 course,
+
                 category: category._id,
                 categoryName: category.name,
 
                 subCategory: subCategory || "",
 
                 type,
-                date: new Date(date),
+                // date: new Date(date),
+                date: new Date(),   //Always today's date from server
+
                 fileUrl,
                 fileOriginalName: file.originalname,
                 images: movedImages,
@@ -363,84 +381,111 @@ router.post("/", authRequired, requireRole("faculty"),
 
 
 // DELETE /api/documents/:id — verify university before delete
-// router.delete("/:id", authRequired, requireRole("faculty"), async (req, res) => {
+//Proper to the delete
+// router.delete("/:id", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
 //     try {
 //         const { id } = req.params;
-//         const doc = await Document.findById(id).populate({ path: "student", select: "university" });
-//         if (!doc) return res.status(404).json({ message: "Document not found" });
 
-//         const uni = await resolveUniversity(req);
-//         if (!uni) return res.status(400).json({ message: "Faculty university not set in token/profile" });
-
-//         if (!doc.student || doc.student.university !== uni) {
-//             return res.status(403).json({ message: "Forbidden: Cannot delete other university's document" });
+//         // Find document
+//         const doc = await Document.findById(id);
+//         if (!doc) {
+//             return res.status(404).json({ message: "Document not found" });
 //         }
 
-//         // Helpers
-//         const toDiskPath = (p) => (p && p.startsWith("/uploads")) ? path.resolve(p.replace("/uploads", "uploads")) : (p ? path.resolve(p) : "");
+//         // Helper: Convert URL to absolute disk path
+//         const toDiskPath = (p) => {
+//             if (!p) return "";
+//             if (p.startsWith("/uploads")) {
+//                 return path.resolve("uploads" + p.replace("/uploads", ""));
+//             }
+//             return path.resolve(p);
+//         };
+
+//         // Helper: Delete file if exists
 //         const removeIfExists = (absPath) => {
 //             try {
-//                 if (absPath && fs.existsSync(absPath)) fs.unlinkSync(absPath);
-//             } catch { }
+//                 if (absPath && fs.existsSync(absPath)) {
+//                     fs.unlinkSync(absPath);
+//                 }
+//             } catch (err) {
+//                 console.error("File delete failed:", err);
+//             }
 //         };
+
+//         // Helper: Remove parent dirs if empty
 //         const removeIfEmpty = (dir) => {
 //             try {
-//                 const uploadsRoot = path.resolve("uploads");
+//                 const root = path.resolve("uploads");
 //                 let current = dir;
-//                 while (current && current.startsWith(uploadsRoot)) {
+
+//                 while (current.startsWith(root)) {
 //                     if (!fs.existsSync(current)) break;
-//                     const items = fs.readdirSync(current);
-//                     if (items.length > 0) break;
+//                     if (fs.readdirSync(current).length > 0) break;
+
 //                     fs.rmdirSync(current);
 //                     const parent = path.dirname(current);
-//                     if (parent === current || parent.length < uploadsRoot.length) break;
+//                     if (parent === current) break;
 //                     current = parent;
-//                     // stop once we removed up to category folder or uploads root
-//                     if (current === uploadsRoot) break;
+
+//                     if (current === root) break;
 //                 }
-//             } catch { }
+//             } catch (err) {
+//                 console.error("Remove empty dir failed:", err);
+//             }
 //         };
 
-//         // Remove files
+//         //Delete main file
 //         const fileDisk = toDiskPath(doc.fileUrl);
 //         removeIfExists(fileDisk);
-//         (doc.images || []).forEach((img) => removeIfExists(toDiskPath(img)));
 
-//         // Attempt to remove empty directories (files/, images/, maybe category/)
-//         const dirsToCheck = [];
-//         if (fileDisk) dirsToCheck.push(path.dirname(fileDisk));
-//         (doc.images || []).forEach((img) => { const d = path.dirname(toDiskPath(img)); if (d) dirsToCheck.push(d); });
-//         Array.from(new Set(dirsToCheck)).forEach((d) => removeIfEmpty(d));
+//         //Delete images
+//         const imageDirs = [];
+//         (doc.images || []).forEach((img) => {
+//             const abs = toDiskPath(img);
+//             removeIfExists(abs);
+//             imageDirs.push(path.dirname(abs));
+//         });
 
-//         // Delete DB record
+//         // Remove empty folders (files/, images/, category/)
+//         const dirsToCheck = [path.dirname(fileDisk), ...imageDirs];
+//         Array.from(new Set(dirsToCheck)).forEach((dir) => removeIfEmpty(dir));
+
+//         // Remove from DB
 //         await Document.findByIdAndDelete(id);
-//         res.json({ success: true });
-//     } catch (e) {
-//         console.error(e);
-//         res.status(500).json({ message: "Failed to delete document" });
+
+//         return res.json({ success: true, message: "Document deleted successfully" });
+
+//     } catch (err) {
+//         console.error("Delete error:", err);
+//         return res.status(500).json({ message: "Failed to delete document" });
 //     }
-// }
-// );
+// });
 router.delete("/:id", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Find document
+        //  Find document
         const doc = await Document.findById(id);
         if (!doc) {
             return res.status(404).json({ message: "Document not found" });
         }
 
-        // Helper: Convert URL to absolute disk path
+        //  BASE STORAGE ROOT (D Drive)
+        const STORAGE_ROOT = "D:/DocumentStorage";
+
+        //  Convert public URL to disk path
         const toDiskPath = (p) => {
             if (!p) return "";
             if (p.startsWith("/uploads")) {
-                return path.resolve("uploads" + p.replace("/uploads", ""));
+                return path.join(
+                    STORAGE_ROOT,
+                    p.replace("/uploads/", "")
+                );
             }
             return path.resolve(p);
         };
 
-        // Helper: Delete file if exists
+        //  Safe delete file
         const removeIfExists = (absPath) => {
             try {
                 if (absPath && fs.existsSync(absPath)) {
@@ -451,33 +496,29 @@ router.delete("/:id", authRequired, requireAnyRole(["faculty", "admin"]), async 
             }
         };
 
-        // Helper: Remove parent dirs if empty
+        //  Remove empty parent directories safely
         const removeIfEmpty = (dir) => {
             try {
-                const root = path.resolve("uploads");
                 let current = dir;
 
-                while (current.startsWith(root)) {
+                while (current.startsWith(STORAGE_ROOT)) {
                     if (!fs.existsSync(current)) break;
                     if (fs.readdirSync(current).length > 0) break;
 
                     fs.rmdirSync(current);
-                    const parent = path.dirname(current);
-                    if (parent === current) break;
-                    current = parent;
-
-                    if (current === root) break;
+                    current = path.dirname(current);
                 }
+
             } catch (err) {
                 console.error("Remove empty dir failed:", err);
             }
         };
 
-        //Delete main file
+        //  DELETE MAIN FILE
         const fileDisk = toDiskPath(doc.fileUrl);
         removeIfExists(fileDisk);
 
-        //Delete images
+        //  DELETE IMAGES
         const imageDirs = [];
         (doc.images || []).forEach((img) => {
             const abs = toDiskPath(img);
@@ -485,20 +526,24 @@ router.delete("/:id", authRequired, requireAnyRole(["faculty", "admin"]), async 
             imageDirs.push(path.dirname(abs));
         });
 
-        // Remove empty folders (files/, images/, category/)
+        //  CLEAN EMPTY FOLDERS
         const dirsToCheck = [path.dirname(fileDisk), ...imageDirs];
         Array.from(new Set(dirsToCheck)).forEach((dir) => removeIfEmpty(dir));
 
-        // Remove from DB
+        //  DELETE FROM DATABASE
         await Document.findByIdAndDelete(id);
 
-        return res.json({ success: true, message: "Document deleted successfully" });
+        return res.json({
+            success: true,
+            message: "Document deleted successfully from DB & D Drive"
+        });
 
     } catch (err) {
         console.error("Delete error:", err);
         return res.status(500).json({ message: "Failed to delete document" });
     }
 });
+
 
 // GET /api/documents/count — scoped to university
 // router.get("/count", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
@@ -618,6 +663,40 @@ router.get("/stats/monthly", authRequired, requireAnyRole(["faculty", "admin"]),
         res.json({ year, months });
     } catch {
         res.status(500).json({ message: "Failed to fetch monthly stats" });
+    }
+});
+
+
+//Categoty Fetch to 
+router.get("/categories", authRequired, requireAnyRole(["faculty", "admin"]), async (req, res) => {
+    try {
+        const userUniversityId = await resolveUniversity(req);
+
+        if (!userUniversityId) {
+            return res.status(400).json({ message: "University not found for user" });
+        }
+
+        const categories = await Document.aggregate([
+            {
+                $match: {
+                    university: new mongoose.Types.ObjectId(userUniversityId)
+                }
+            },
+            {
+                $group: {
+                    _id: "$category",
+                    name: { $first: "$categoryName" }
+                }
+            },
+            {
+                $sort: { name: 1 }
+            }
+        ]);
+
+        res.json(categories);
+    } catch (err) {
+        console.error("Fetch Categories From Document Error:", err);
+        res.status(500).json({ message: "Failed to fetch categories" });
     }
 });
 

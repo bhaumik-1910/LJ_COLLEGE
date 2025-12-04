@@ -2,6 +2,7 @@ import express from "express";
 import University from "../models/University.js";
 import { sendOtpEmail } from "../utils/email.js";
 import { setOtp, verifyOtp, isVerified, clearVerification } from "../utils/otpStore.js";
+import { authRequired, requireRole } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -78,5 +79,31 @@ router.get("/", async (_req, res) => {
 //         res.status(500).json({ message: 'Server error' });
 //     }
 // });
+
+// DELETE UNIVERSITY
+router.delete("/:id", authRequired, requireRole("superadmin"), async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const uni = await University.findById(id);
+
+    if (!uni) {
+      return res.status(404).json({ message: "University not found" });
+    }
+
+    await University.findByIdAndDelete(id);
+
+    res.json({
+      success: true,
+      message: "University deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete University Error:", error);
+    res.status(500).json({
+      message: "Failed to delete university",
+    });
+  }
+});
+
 
 export default router;

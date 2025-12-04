@@ -46,6 +46,7 @@ import AdminProfile from './pages/Admin/Profile.jsx'
 import AdminFacultyList from './pages/Admin/Faculty_List.jsx'
 import University_Institute from './pages/SuperAdmin/University_Institute.jsx'
 import InstitutionList from './pages/SuperAdmin/Institution_List.jsx'
+import UniversityList from './pages/SuperAdmin/University_List.jsx'
 
 function Root() {
   const [mode, setMode] = useState('light')
@@ -83,6 +84,7 @@ function Root() {
                   <Route index element={<SuperAdminDashboard />} />
                   <Route path="university-register" element={<SuperU_Register />} />
                   <Route path="register" element={<Register />} />
+                  <Route path="university-list" element={<UniversityList />} />
                   <Route path="university-users" element={<SuperUniversityUsers />} />
                   <Route path="institution" element={<University_Institute />} />
                   <Route path="institution-list" element={<InstitutionList />} />

@@ -150,6 +150,7 @@ const superAdminLinks = [
   { id: 2, title: 'Register', image: iconsImgs.add, path: '/superadmin-dashboard/register' },
   { id: 3, title: 'Universities', image: iconsImgs.add, path: '/superadmin-dashboard/university-register' },
   { id: 4, title: 'University Users', image: iconsImgs.users, path: '/superadmin-dashboard/university-users' },
+  { id: 5, title: 'University List', image: iconsImgs.users, path: '/superadmin-dashboard/university-list' },
   { id: 5, title: 'Institution', image: iconsImgs.users, path: '/superadmin-dashboard/institution' },
   { id: 6, title: 'Institution List', image: iconsImgs.users, path: '/superadmin-dashboard/institution-list' },
 
