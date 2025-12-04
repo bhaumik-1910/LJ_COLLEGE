@@ -388,9 +388,9 @@ export default function SuperAdminDashboard() {
                 <Grid item xs={12} md={6} sx={{ width: '600px', height: '900px' }}>
                     <Paper sx={{ p: 2 }}>
                         <Typography variant="h6" mb={2} textAlign="center">Monthly Documents</Typography>
-                        <Box sx={{ width: '100%', margin: 'auto' }}>
-                            <Line data={monthlyChartData} options={lineOptions} />
-                        </Box> 
+                        {/* <Box sx={{ width: '100%', margin: 'auto' }}> */}
+                        <Line data={monthlyChartData} options={lineOptions} />
+                        {/* </Box>  */}
                     </Paper>
                 </Grid>
             </Grid>

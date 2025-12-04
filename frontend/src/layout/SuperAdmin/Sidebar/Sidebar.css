@@ -35,7 +35,7 @@
 
 .navigation {
   margin-top: 28px;
-  height: 600px;
+  /* height: 600px; */
 
   &::-webkit-scrollbar {
     width: 4px;
