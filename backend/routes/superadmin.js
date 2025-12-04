@@ -140,26 +140,26 @@ router.get("/documents/count", authRequired, requireRole("superadmin"), async (_
 
 // GET /api/superadmin/documents/stats/monthly — monthly counts for a given year
 router.get("/documents/stats/monthly", authRequired, requireRole("superadmin"), async (req, res) => {
-    try {
-        const now = new Date();
-        const year = parseInt(req.query.year, 10) || now.getFullYear();
-        const start = new Date(year, 0, 1);
-        const end = new Date(year + 1, 0, 1);
+    // try {
+    //     const now = new Date();
+    //     const year = parseInt(req.query.year, 10) || now.getFullYear();
+    //     const start = new Date(year, 0, 1);
+    //     const end = new Date(year + 1, 0, 1);
 
-        const agg = await Document.aggregate([
-            { $match: { date: { $gte: start, $lt: end } } },
-            { $group: { _id: { $month: "$date" }, count: { $sum: 1 } } },
-            { $project: { month: "$_id", count: 1, _id: 0 } },
-            { $sort: { month: 1 } },
-        ]);
+    //     const agg = await Document.aggregate([
+    //         { $match: { date: { $gte: start, $lt: end } } },
+    //         { $group: { _id: { $month: "$date" }, count: { $sum: 1 } } },
+    //         { $project: { month: "$_id", count: 1, _id: 0 } },
+    //         { $sort: { month: 1 } },
+    //     ]);
 
-        const months = Array.from({ length: 12 }, (_, i) => ({ month: i + 1, count: 0 }));
-        for (const { month, count } of agg) months[month - 1].count = count;
-        res.json({ year, months });
-    } catch (e) {
-        console.error(e);
-        res.status(500).json({ message: "Server error" });
-    }
+    //     const months = Array.from({ length: 12 }, (_, i) => ({ month: i + 1, count: 0 }));
+    //     for (const { month, count } of agg) months[month - 1].count = count;
+    //     res.json({ year, months });
+    // } catch (e) {
+    //     console.error(e);
+    //     res.status(500).json({ message: "Server error" });
+    // }
 });
 
 // GET /api/users/me - Fetches the profile of the currently logged-in user
