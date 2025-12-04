@@ -261,13 +261,7 @@ export default function FacultyList() {
     return (
         <Box sx={{ p: 3 }}>
             <Paper
-                elevation={4}
-                sx={{
-                    p: 2,
-                    borderRadius: 3,
-                    overflow: "hidden",
-                    boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
-                }}
+                elevation={2} sx={{ borderRadius: 2, p: { xs: 2, md: 3 }, bgcolor: '#fff' }}
             >
 
                 {/* Header Section */}
@@ -329,7 +323,7 @@ export default function FacultyList() {
                         <TableContainer>
                             <Table size="small">
                                 <TableHead>
-                                    <TableRow sx={{ bgcolor: "#f5f7ff" }}>
+                                    <TableRow>
                                         <TableCell sx={{ fontWeight: 700 }}>Avatar</TableCell>
                                         <TableCell sx={{ fontWeight: 700 }}>Name</TableCell>
                                         <TableCell sx={{ fontWeight: 700 }}>Email</TableCell>

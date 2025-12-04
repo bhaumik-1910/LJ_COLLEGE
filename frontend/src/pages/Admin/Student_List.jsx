@@ -183,188 +183,188 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function AdminStudentList() {
-    const { token } = useContext(AuthContext);
-    const [rows, setRows] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    // const { token } = useContext(AuthContext);
+    // const [rows, setRows] = useState([]);
+    // const [loading, setLoading] = useState(true);
+    // const [error, setError] = useState("");
 
-    const authHeader = useMemo(() => (token ? { Authorization: `Bearer ${token}` } : {}), [token]);
+    // const authHeader = useMemo(() => (token ? { Authorization: `Bearer ${token}` } : {}), [token]);
 
-    // Search + pagination
-    const [search, setSearch] = useState("");
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    // // Search + pagination
+    // const [search, setSearch] = useState("");
+    // const [page, setPage] = useState(0);
+    // const [rowsPerPage, setRowsPerPage] = useState(10);
 
-    const filteredRows = useMemo(() => {
-        const q = search.trim().toLowerCase();
-        if (!q) return rows;
-        return rows.filter((r) => {
-            const fields = [r.enrolno, r.fullName, r.email, r.course, r.contact, r.gender, r.address, r.university];
-            return fields.some((v) => String(v || "").toLowerCase().includes(q));
-        });
-    }, [rows, search]);
+    // const filteredRows = useMemo(() => {
+    //     const q = search.trim().toLowerCase();
+    //     if (!q) return rows;
+    //     return rows.filter((r) => {
+    //         const fields = [r.enrolno, r.fullName, r.email, r.course, r.contact, r.gender, r.address, r.university];
+    //         return fields.some((v) => String(v || "").toLowerCase().includes(q));
+    //     });
+    // }, [rows, search]);
 
-    const pagedRows = useMemo(() => {
-        const start = page * rowsPerPage;
-        return filteredRows.slice(start, start + rowsPerPage);
-    }, [filteredRows, page, rowsPerPage]);
+    // const pagedRows = useMemo(() => {
+    //     const start = page * rowsPerPage;
+    //     return filteredRows.slice(start, start + rowsPerPage);
+    // }, [filteredRows, page, rowsPerPage]);
 
-    useEffect(() => {
-        setPage(0);
-    }, [search, rowsPerPage]);
+    // useEffect(() => {
+    //     setPage(0);
+    // }, [search, rowsPerPage]);
 
-    const handleChangePage = (_evt, newPage) => setPage(newPage);
-    const handleChangeRowsPerPage = (evt) => {
-        setRowsPerPage(parseInt(evt.target.value, 10));
-        setPage(0);
-    };
+    // const handleChangePage = (_evt, newPage) => setPage(newPage);
+    // const handleChangeRowsPerPage = (evt) => {
+    //     setRowsPerPage(parseInt(evt.target.value, 10));
+    //     setPage(0);
+    // };
 
-    const fetchStudents = async () => {
-        setLoading(true);
-        setError("");
-        try {
-            const res = await fetch(`${API_BASE}/faculty/students`, {
-                headers: { "Content-Type": "application/json", ...authHeader },
-            });
-            const data = await res.json().catch(() => ([]));
-            if (!res.ok) throw new Error(data.message || "Failed to fetch students");
-            const list = Array.isArray(data) ? data : (Array.isArray(data.items) ? data.items : []);
-            setRows(list);
-        } catch (e) {
-            setError(e.message || "Something went wrong");
-        } finally {
-            setLoading(false);
-        }
-    };
+    // const fetchStudents = async () => {
+    //     setLoading(true);
+    //     setError("");
+    //     try {
+    //         const res = await fetch(`${API_BASE}/faculty/students`, {
+    //             headers: { "Content-Type": "application/json", ...authHeader },
+    //         });
+    //         const data = await res.json().catch(() => ([]));
+    //         if (!res.ok) throw new Error(data.message || "Failed to fetch students");
+    //         const list = Array.isArray(data) ? data : (Array.isArray(data.items) ? data.items : []);
+    //         setRows(list);
+    //     } catch (e) {
+    //         setError(e.message || "Something went wrong");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
-    useEffect(() => {
-        if (token) fetchStudents();
-    }, [token]);
+    // useEffect(() => {
+    //     if (token) fetchStudents();
+    // }, [token]);
 
-    return (
-        <Box sx={{ p: 3 }}>
-            <Paper
-                elevation={4}
-                sx={{
-                    borderRadius: 3,
-                    p: 2,
-                    mt: 1,
-                    boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
-                }}
-            >
+    // return (
+    //     <Box sx={{ p: 3 }}>
+    //         <Paper
+    //             elevation={4}
+    //             sx={{
+    //                 borderRadius: 3,
+    //                 p: 2,
+    //                 mt: 1,
+    //                 boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
+    //             }}
+    //         >
 
-                {/* Header */}
-                <Stack
-                    direction={{ xs: "column", sm: "row" }}
-                    spacing={2}
-                    alignItems="center"
-                    justifyContent="space-between"
-                    mb={2}
-                >
-                    <Typography variant="h5" fontWeight={700} sx={{ color: "#2b4ddb" }}>
-                        Student List
-                    </Typography>
+    //             {/* Header */}
+    //             <Stack
+    //                 direction={{ xs: "column", sm: "row" }}
+    //                 spacing={2}
+    //                 alignItems="center"
+    //                 justifyContent="space-between"
+    //                 mb={2}
+    //             >
+    //                 <Typography variant="h5" fontWeight={700} sx={{ color: "#2b4ddb" }}>
+    //                     Student List
+    //                 </Typography>
 
-                    <Stack
-                        direction="row"
-                        spacing={1}
-                        alignItems="center"
-                        sx={{ width: { xs: "100%", sm: "auto" } }}
-                    >
-                        <TextField
-                            size="small"
-                            placeholder="Search student..."
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            sx={{ minWidth: 220, background: "#fff", borderRadius: 1 }}
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <SearchIcon color="action" />
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
-                        {/* <Button
-                            // size="small"
-                            variant="outlined"
-                            onClick={() => fetchStudents()}
-                        >
-                            Refresh
-                        </Button> */}
-                        <IconButton onClick={() => fetchStudents()}>
-                            <RefreshIcon />
-                        </IconButton>
-                    </Stack>
-                </Stack>
+    //                 <Stack
+    //                     direction="row"
+    //                     spacing={1}
+    //                     alignItems="center"
+    //                     sx={{ width: { xs: "100%", sm: "auto" } }}
+    //                 >
+    //                     <TextField
+    //                         size="small"
+    //                         placeholder="Search student..."
+    //                         value={search}
+    //                         onChange={(e) => setSearch(e.target.value)}
+    //                         sx={{ minWidth: 220, background: "#fff", borderRadius: 1 }}
+    //                         InputProps={{
+    //                             startAdornment: (
+    //                                 <InputAdornment position="start">
+    //                                     <SearchIcon color="action" />
+    //                                 </InputAdornment>
+    //                             ),
+    //                         }}
+    //                     />
+    //                     {/* <Button
+    //                         // size="small"
+    //                         variant="outlined"
+    //                         onClick={() => fetchStudents()}
+    //                     >
+    //                         Refresh
+    //                     </Button> */}
+    //                     <IconButton onClick={() => fetchStudents()}>
+    //                         <RefreshIcon />
+    //                     </IconButton>
+    //                 </Stack>
+    //             </Stack>
 
-                {/* LOADING */}
-                {loading && (
-                    <Box display="flex" alignItems="center" justifyContent="center" py={6}>
-                        <CircularProgress />
-                    </Box>
-                )}
+    //             {/* LOADING */}
+    //             {loading && (
+    //                 <Box display="flex" alignItems="center" justifyContent="center" py={6}>
+    //                     <CircularProgress />
+    //                 </Box>
+    //             )}
 
-                {/* ERROR */}
-                {!loading && error && (
-                    <Typography color="error" mb={2}>{error}</Typography>
-                )}
+    //             {/* ERROR */}
+    //             {!loading && error && (
+    //                 <Typography color="error" mb={2}>{error}</Typography>
+    //             )}
 
-                {/* TABLE + SHADOW + ROUNDED */}
-                {!loading && !error && (
-                    filteredRows.length === 0 ? (
-                        <Typography color="text.secondary">No students found.</Typography>
-                    ) : (
-                        <>
-                            <TableContainer>
-                                <Table size="small">
-                                    <TableHead>
-                                        <TableRow sx={{ bgcolor: "#f5f7ff" }}>
-                                            <TableCell sx={{ fontWeight: 700 }}>Enrollment No</TableCell>
-                                            <TableCell sx={{ fontWeight: 700 }}>Full Name</TableCell>
-                                            <TableCell sx={{ fontWeight: 700 }}>Email</TableCell>
-                                            <TableCell sx={{ fontWeight: 700 }}>Course</TableCell>
-                                            <TableCell sx={{ fontWeight: 700 }}>Contact</TableCell>
-                                            <TableCell sx={{ fontWeight: 700 }}>Gender</TableCell>
-                                            <TableCell sx={{ fontWeight: 700 }}>University</TableCell>
-                                            <TableCell sx={{ fontWeight: 700 }}>Address</TableCell>
-                                        </TableRow>
-                                    </TableHead>
+    //             {/* TABLE + SHADOW + ROUNDED */}
+    //             {!loading && !error && (
+    //                 filteredRows.length === 0 ? (
+    //                     <Typography color="text.secondary">No students found.</Typography>
+    //                 ) : (
+    //                     <>
+    //                         <TableContainer>
+    //                             <Table size="small">
+    //                                 <TableHead>
+    //                                     <TableRow>
+    //                                         <TableCell sx={{ fontWeight: 700 }}>Enrollment No</TableCell>
+    //                                         <TableCell sx={{ fontWeight: 700 }}>Full Name</TableCell>
+    //                                         <TableCell sx={{ fontWeight: 700 }}>Email</TableCell>
+    //                                         <TableCell sx={{ fontWeight: 700 }}>Course</TableCell>
+    //                                         <TableCell sx={{ fontWeight: 700 }}>Contact</TableCell>
+    //                                         <TableCell sx={{ fontWeight: 700 }}>Gender</TableCell>
+    //                                         <TableCell sx={{ fontWeight: 700 }}>University</TableCell>
+    //                                         <TableCell sx={{ fontWeight: 700 }}>Address</TableCell>
+    //                                     </TableRow>
+    //                                 </TableHead>
 
-                                    <TableBody>
-                                        {pagedRows.map((r) => (
-                                            <TableRow key={r._id} hover>
-                                                <TableCell>{r.enrolno}</TableCell>
-                                                <TableCell>{r.fullName}</TableCell>
-                                                <TableCell>{r.email}</TableCell>
-                                                <TableCell>{r.course}</TableCell>
-                                                <TableCell>{r.contact}</TableCell>
-                                                <TableCell>{r.gender}</TableCell>
-                                                <TableCell>{r.university}</TableCell>
-                                                <TableCell>{r.address}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
+    //                                 <TableBody>
+    //                                     {pagedRows.map((r) => (
+    //                                         <TableRow key={r._id} hover>
+    //                                             <TableCell>{r.enrolno}</TableCell>
+    //                                             <TableCell>{r.fullName}</TableCell>
+    //                                             <TableCell>{r.email}</TableCell>
+    //                                             <TableCell>{r.course}</TableCell>
+    //                                             <TableCell>{r.contact}</TableCell>
+    //                                             <TableCell>{r.gender}</TableCell>
+    //                                             <TableCell>{r.university}</TableCell>
+    //                                             <TableCell>{r.address}</TableCell>
+    //                                         </TableRow>
+    //                                     ))}
+    //                                 </TableBody>
+    //                             </Table>
+    //                         </TableContainer>
 
-                            <TablePagination
-                                component="div"
-                                count={filteredRows.length}
-                                page={page}
-                                onPageChange={handleChangePage}
-                                rowsPerPage={rowsPerPage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                                rowsPerPageOptions={[5, 10, 25, 50]}
-                                showFirstButton
-                                showLastButton
-                            />
-                        </>
-                    )
-                )}
-            </Paper>
-        </Box>
-    );
+    //                         <TablePagination
+    //                             component="div"
+    //                             count={filteredRows.length}
+    //                             page={page}
+    //                             onPageChange={handleChangePage}
+    //                             rowsPerPage={rowsPerPage}
+    //                             onRowsPerPageChange={handleChangeRowsPerPage}
+    //                             rowsPerPageOptions={[5, 10, 25, 50]}
+    //                             showFirstButton
+    //                             showLastButton
+    //                         />
+    //                     </>
+    //                 )
+    //             )}
+    //         </Paper>
+    //     </Box>
+    // );
 }
 
 

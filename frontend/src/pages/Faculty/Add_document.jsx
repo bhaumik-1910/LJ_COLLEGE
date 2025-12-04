@@ -355,8 +355,8 @@ export default function Add_document() {
 
 
     return (
-        <Box component="form" onSubmit={onSubmit} sx={{ p: 3, maxWidth: 1000, mx: "auto" }}>
-            <Paper elevation={4} sx={{ p: { xs: 2, md: 4 }, borderRadius: 2 }}>
+        <Box component="form" onSubmit={onSubmit} sx={{ p: 3, maxWidth: 1100, mx: "auto" }}>
+            <Paper elevation={4} sx={{ borderRadius: 2, p: { xs: 2, md: 6 }, bgcolor: '#fff' }}>
                 <Grid
                     container
                     spacing={3}
@@ -620,7 +620,7 @@ export default function Add_document() {
                                     value={form.date}
                                     size="small"
                                     fullWidth
-                                    disabled    // ✅ USER CHANGE NA KARI SAKE
+                                    disabled    // USER CHANGE NA KARI SAKE
                                     InputLabelProps={{ shrink: true }}
                                 />
                             </Grid>

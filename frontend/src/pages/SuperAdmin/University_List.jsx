@@ -110,7 +110,7 @@ export default function UniversityList() {
 
     return (
         <Box sx={{ p: 3 }}>
-            <Paper sx={{ p: 3 }}>
+            <Paper elevation={2} sx={{ borderRadius: 2, p: { xs: 2, md: 3 }, bgcolor: '#fff' }}>
 
                 {/* HEADER */}
                 <Box
