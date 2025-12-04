@@ -402,25 +402,25 @@ export default function SuperAdminDashboard() {
     const totalAdmins = users.filter((u) => String(u.role).toLowerCase() === "admin").length;
     const totalFaculty = users.filter((u) => String(u.role).toLowerCase() === "faculty").length;
     const totalUniversities = universities.length;
-    const totalOtherUsers = totalUsers - (totalAdmins + totalFaculty);
+    // const totalOtherUsers = totalUsers - (totalAdmins + totalFaculty);
     const totalInstitutions = institutionCount;
 
     // Data for the charts
     const usersChartData = {
-        labels: ["Super Admins", "Admins", "Faculty", "Other Users"],
+        labels: ["Super Admins", "Admins", "Faculty"],//, "Other Users"
         datasets: [{
-            data: [totalSuperAdmins, totalAdmins, totalFaculty, totalOtherUsers],
+            data: [totalSuperAdmins, totalAdmins, totalFaculty],//totalOtherUsers
             backgroundColor: [
-                "rgba(255, 99, 132, 0.6)",
-                "rgba(54, 162, 235, 0.6)",
-                "rgba(255, 206, 86, 0.6)",
-                "rgba(126, 108, 64, 0.6)",
+                "rgba(255, 99, 132, 1)",
+                "rgba(54, 162, 235)",
+                "rgba(255, 206, 86)",
+                // "rgba(126, 108, 64)",
             ],
             borderColor: [
                 "rgba(255, 99, 132, 1)",
                 "rgba(54, 162, 235, 1)",
                 "rgba(255, 206, 86, 1)",
-                "rgba(126, 108, 64, 1)",
+                // "rgba(126, 108, 64, 1)",
             ],
             borderWidth: 1,
         }],
@@ -431,7 +431,7 @@ export default function SuperAdminDashboard() {
         labels: ["Universities", "Institutions"],
         datasets: [{
             data: [totalUniversities, totalInstitutions],
-            backgroundColor: ["rgba(75, 192, 192, 0.6)", "rgba(255, 99, 132, 0.6)"],
+            backgroundColor: ["rgba(75, 192, 192)", "rgba(255, 99, 132, 1)"],
             borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
             borderWidth: 1,
         }],

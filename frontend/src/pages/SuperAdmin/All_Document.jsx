@@ -207,6 +207,22 @@ export default function All_Document() {
     return filtered.slice(start, start + rowsPerPage);
   }, [filtered, page, rowsPerPage]);
 
+  //Download 
+  const downloadFile = async (url, filename = "download") => {
+    try {
+      const res = await fetch(toBackendUrl(url));
+      const blob = await res.blob();
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      toast.error("Download failed");
+    }
+  };
+
   return (
     <Box sx={{ p: 3 }}>
       <Paper
@@ -267,7 +283,7 @@ export default function All_Document() {
             <TextField
               select
               size="small"
-              label="Filter by Type"
+              label={loading ? "Loading Type..." : "Filter by Type"}
               value={selectedTypes}
               onChange={handleTypeChange}
               sx={{
@@ -282,6 +298,7 @@ export default function All_Document() {
                 <MenuItem key={t} value={t}>{t}</MenuItem>
               ))}
             </TextField>
+
           </Box>
         </Box>
 
@@ -304,6 +321,7 @@ export default function All_Document() {
                     <TableCell sx={{ fontWeight: 700 }}>Course</TableCell>
                     <TableCell sx={{ fontWeight: 700 }}>Type</TableCell>
                     <TableCell sx={{ fontWeight: 700 }}>Category</TableCell>
+                    <TableCell sx={{ fontWeight: 700 }}>Sub Category</TableCell>
                     <TableCell sx={{ fontWeight: 700 }}>Date</TableCell>
                     <TableCell sx={{ fontWeight: 700 }}>File</TableCell>
                     <TableCell sx={{ fontWeight: 700 }}>Images</TableCell>
@@ -318,10 +336,18 @@ export default function All_Document() {
                       <TableCell>{d.course}</TableCell>
                       <TableCell>{d.type}</TableCell>
                       <TableCell>{d.category?.name || d.categoryName}</TableCell>
+                      <TableCell>{d.subCategory || "-"}</TableCell>
                       <TableCell>{d.date ? new Date(d.date).toLocaleDateString() : "-"}</TableCell>
 
                       <TableCell>
-                        <Link href={toBackendUrl(d.fileUrl)} target="_blank" underline="hover">
+                        {/* <Link href={toBackendUrl(d.fileUrl)} target="_blank" underline="hover">
+                          {getFileName(d)}
+                        </Link> */}
+                        <Link
+                          component="button"
+                          underline="hover"
+                          onClick={() => downloadFile(d.fileUrl, getFileName(d))}
+                        >
                           {getFileName(d)}
                         </Link>
                       </TableCell>
@@ -329,16 +355,30 @@ export default function All_Document() {
                       <TableCell>
                         <Box display="flex" gap={0.5}>
                           {(d.images || []).slice(0, 4).map((img, idx) => (
+                            // <img
+                            //   key={idx}
+                            //   src={toBackendUrl(img)}
+                            //   alt="img"
+                            //   style={{
+                            //     width: 36,
+                            //     height: 36,
+                            //     borderRadius: 4,
+                            //     objectFit: "cover",
+                            //     border: "1px solid #eee",
+                            //   }}
+                            // />
                             <img
                               key={idx}
                               src={toBackendUrl(img)}
-                              alt="img"
+                              alt={`img-${idx}`}
+                              onClick={() => downloadFile(img, `image-${idx + 1}.jpg`)}
                               style={{
                                 width: 36,
                                 height: 36,
-                                borderRadius: 4,
                                 objectFit: "cover",
-                                border: "1px solid #eee",
+                                borderRadius: 4,
+                                border: "1px solid #ddd",
+                                cursor: "pointer"
                               }}
                             />
                           ))}

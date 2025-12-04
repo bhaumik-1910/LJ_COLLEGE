@@ -397,7 +397,6 @@ export default function Document_list() {
                                                 >
                                                     {getFileName(d)}
                                                 </Link>
-
                                             </TableCell>
                                             <TableCell>
                                                 <Box display="flex" gap={0.5} flexWrap="wrap">
