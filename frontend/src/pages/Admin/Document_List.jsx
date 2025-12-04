@@ -478,13 +478,7 @@ export default function AdminDocumentList() {
     return (
         <Box sx={{ p: 3 }}>
             <Paper
-                elevation={4}
-                sx={{
-                    p: 2,
-                    borderRadius: 3,
-                    overflow: "hidden",
-                    boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
-                }}
+                elevation={2} sx={{ borderRadius: 2, p: { xs: 2, md: 3 }, bgcolor: '#fff' }}
             >
 
                 {/* Header */}
@@ -583,6 +577,7 @@ export default function AdminDocumentList() {
                                         <TableCell sx={{ fontWeight: 700 }}>Course</TableCell>
                                         <TableCell sx={{ fontWeight: 700 }}>Type</TableCell>
                                         <TableCell sx={{ fontWeight: 700 }}>Category</TableCell>
+                                        <TableCell>Sub Category</TableCell>
                                         <TableCell sx={{ fontWeight: 700 }}>Date</TableCell>
                                         <TableCell sx={{ fontWeight: 700 }}>File</TableCell>
                                         <TableCell sx={{ fontWeight: 700 }}>Images</TableCell>
@@ -596,6 +591,7 @@ export default function AdminDocumentList() {
                                             <TableCell>{d.course}</TableCell>
                                             <TableCell>{d.type}</TableCell>
                                             <TableCell>{d.category?.name || d.categoryName}</TableCell>
+                                            <TableCell>{d.subCategory || "-"}</TableCell>
                                             <TableCell>{d.date ? new Date(d.date).toLocaleDateString() : "-"}</TableCell>
                                             <TableCell>
                                                 {/* <Link href={toBackendUrl(d.fileUrl)} target="_blank" rel="noopener" underline="hover">

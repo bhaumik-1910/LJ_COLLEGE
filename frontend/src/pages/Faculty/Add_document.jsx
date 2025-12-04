@@ -356,7 +356,7 @@ export default function Add_document() {
 
     return (
         <Box component="form" onSubmit={onSubmit} sx={{ p: 3, maxWidth: 1000, mx: "auto" }}>
-            <Paper elevation={4} sx={{ p: { xs: 2, md: 4 }, borderRadius: 2 }}>
+            <Paper elevation={2} sx={{ borderRadius: 2, p: { xs: 2, md: 3 }, bgcolor: '#fff' }}>
                 <Grid
                     container
                     spacing={3}

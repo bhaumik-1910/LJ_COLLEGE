@@ -261,7 +261,7 @@ export default function Document_list() {
     return (
         <Box sx={{ p: 3 }}>
 
-            <Paper sx={{ p: 3 }}>
+            <Paper elevation={2} sx={{ borderRadius: 2, p: { xs: 2, md: 3 }, bgcolor: '#fff' }}>
 
                 <Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={2} mb={3}>
 
