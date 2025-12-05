@@ -323,7 +323,7 @@ export default function FacultyList() {
                         <TableContainer>
                             <Table size="small">
                                 <TableHead>
-                                    <TableRow sx={{ bgcolor: "#f5f7ff" }}>
+                                    <TableRow>
                                         <TableCell sx={{ fontWeight: 700 }}>Avatar</TableCell>
                                         <TableCell sx={{ fontWeight: 700 }}>Name</TableCell>
                                         <TableCell sx={{ fontWeight: 700 }}>Email</TableCell>

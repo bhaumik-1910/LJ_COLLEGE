@@ -161,7 +161,7 @@ export default function UniversityList() {
                     </Box>
                 ) : filteredUniversities.length === 0 ? (
                     <Typography textAlign="center" py={4}>
-                        No universities found
+                        No Universities Found
                     </Typography>
                 ) : (
                     <>
@@ -169,10 +169,10 @@ export default function UniversityList() {
                             <Table size="small">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>University Name</TableCell>
-                                        <TableCell>Email</TableCell>
-                                        <TableCell>Created At</TableCell>
-                                        <TableCell align="right">Action</TableCell>
+                                        <TableCell sx={{ fontWeight: 700 }}>University Name</TableCell>
+                                        <TableCell sx={{ fontWeight: 700 }}>Email</TableCell>
+                                        <TableCell sx={{ fontWeight: 700 }}>Created At</TableCell>
+                                        <TableCell align="center" sx={{ fontWeight: 700 }}>Action</TableCell>
                                     </TableRow>
                                 </TableHead>
 
@@ -184,7 +184,7 @@ export default function UniversityList() {
                                             <TableCell>
                                                 {new Date(u.createdAt).toLocaleDateString()}
                                             </TableCell>
-                                            <TableCell align="right">
+                                            <TableCell align="center">
                                                 {/* <Tooltip title="Edit">
                                                     <IconButton color="primary">
                                                         <EditIcon />

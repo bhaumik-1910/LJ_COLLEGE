@@ -370,7 +370,7 @@ export default function FacultyDashboard() {
                 {!loading && (documentCount > 0) && (
                     <Box sx={{ maxWidth: '400px', width: '100%', height: 400 }}>
                         <Paper elevation={3} sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
-                            <Typography variant="h6" fontWeight={700} mb={2}>Overall Distribution</Typography>
+                            <Typography variant="h6" fontWeight={700} mb={2} align='center'>Overall Distribution</Typography>
                             <Box sx={{ flexGrow: 1, width: '100%' }}>
                                 <Doughnut data={countsChartData} options={chartOptions} />
                             </Box>
@@ -381,8 +381,8 @@ export default function FacultyDashboard() {
 
             {/* Display message if no data */}
             {!loading && (documentCount === 0) && (
-                <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                    <Typography textAlign="center" mt={4} color="text.secondary">
+                <Grid item xs={12} md={6}>
+                    <Typography mt={4} color="text.secondary" align='center'>
                         No data available for the chart.
                     </Typography>
                 </Grid>

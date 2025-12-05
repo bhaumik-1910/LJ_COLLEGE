@@ -310,7 +310,7 @@ export default function All_Document() {
               <CircularProgress />
             </Box>
           ) : docs.length === 0 ? (
-            <Typography>No documents found</Typography>
+            <Typography align="center">No Documents Found</Typography>
           ) : (
             <TableContainer>
               <Table size="small">
@@ -323,8 +323,8 @@ export default function All_Document() {
                     <TableCell sx={{ fontWeight: 700 }}>Category</TableCell>
                     <TableCell sx={{ fontWeight: 700 }}>Sub Category</TableCell>
                     <TableCell sx={{ fontWeight: 700 }}>Date</TableCell>
-                    <TableCell sx={{ fontWeight: 700 }}>File</TableCell>
-                    <TableCell sx={{ fontWeight: 700 }}>Images</TableCell>
+                    <TableCell sx={{ fontWeight: 700 }} align="center">File</TableCell>
+                    <TableCell sx={{ fontWeight: 700 }} align="center">Images</TableCell>
                   </TableRow>
                 </TableHead>
 
@@ -353,7 +353,16 @@ export default function All_Document() {
                       </TableCell>
 
                       <TableCell>
-                        <Box display="flex" gap={0.5}>
+                        <Box
+                          // display="flex"
+                          gap={0.5}
+                          sx={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(2, 1fr)", 
+                            gap: "6px",
+                            width: 80,
+                          }}
+                        >
                           {(d.images || []).slice(0, 4).map((img, idx) => (
                             // <img
                             //   key={idx}

@@ -792,7 +792,7 @@ export default function University_Institute() {
                         sx={{ borderRadius: "10px" }}
                     />
 
-                    <Typography sx={{ mt: 3, fontWeight: 600 }}>Courses</Typography>
+                    <Typography sx={{ mt: 3, fontWeight: 600 }}>Courses*</Typography>
 
                     {formData.courses.map((course, index) => (
                         <Box

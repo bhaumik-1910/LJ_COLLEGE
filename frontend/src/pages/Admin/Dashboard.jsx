@@ -178,7 +178,7 @@ export default function AdminDashboard() {
 
             {/* Display message if no data */}
             {!loading && (facultyCount + documentCount === 0) && (
-                <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                <Grid item xs={12} md={6}>
                     <Typography textAlign="center" mt={4} color="text.secondary">
                         No data available for the chart.
                     </Typography>

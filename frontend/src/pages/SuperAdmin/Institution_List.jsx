@@ -773,7 +773,7 @@ export default function InstitutionList() {
                                 <TableCell sx={{ fontWeight: 700 }}>University</TableCell>
                                 <TableCell sx={{ fontWeight: 700 }}>Institution Name</TableCell>
                                 <TableCell sx={{ fontWeight: 700 }}>Courses</TableCell>
-                                <TableCell sx={{ fontWeight: 700 }} align="right">Actions</TableCell>
+                                <TableCell sx={{ fontWeight: 700 }} align="center">Actions</TableCell>
                             </TableRow>
                         </TableHead>
 
@@ -800,7 +800,7 @@ export default function InstitutionList() {
                                                     </Box>
                                                 ) : 'No courses'}
                                             </TableCell>
-                                            <TableCell align="right">
+                                            <TableCell align="center">
                                                 <IconButton
                                                     onClick={() => handleEditClick(institution)}
                                                     color="primary"
@@ -822,10 +822,15 @@ export default function InstitutionList() {
                                     ))
                             ) : (
                                 <TableRow>
-                                    <TableCell colSpan={4} align="center">
-                                        No institutions found.
+                                    <TableCell
+                                        colSpan={4}
+                                        align="center"
+                                        sx={{ py: 8 }}   
+                                    >
+                                        No Institutions Found.
                                     </TableCell>
                                 </TableRow>
+
                             )}
                         </TableBody>
 

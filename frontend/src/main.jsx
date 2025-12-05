@@ -30,7 +30,7 @@ import SuperAdminProfile from './pages/SuperAdmin/Profile.jsx'
 import SuperAll_Document from './pages/SuperAdmin/All_Document.jsx'
 import SuperAdminList from './pages/SuperAdmin/Super_Admin_List.jsx'
 import AdminList from './pages/SuperAdmin/Admin_List.jsx'
-import Admin_Faculty from './pages/SuperAdmin/Faculty.jsx'
+import Admin_Faculty from './pages/SuperAdmin/Faculty_List.jsx'
 
 import FacultyDashboard from "./pages/Faculty/Dashboard.jsx";
 import Add_Student from './pages/Faculty/Add_Student.jsx'

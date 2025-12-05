@@ -364,16 +364,16 @@ export default function Document_list() {
                             <Table size="small">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>Univesity Name</TableCell>
-                                        <TableCell>Institute Name</TableCell>
-                                        <TableCell>Course</TableCell>
-                                        <TableCell>Type</TableCell>
-                                        <TableCell>Category</TableCell>
-                                        <TableCell>Sub Category</TableCell>
-                                        <TableCell>Date</TableCell>
-                                        <TableCell>File</TableCell>
-                                        <TableCell>Images</TableCell>
-                                        <TableCell align="right">Action</TableCell>
+                                        <TableCell sx={{ fontWeight: 700 }}>Univesity Name</TableCell>
+                                        <TableCell sx={{ fontWeight: 700 }}>Institute Name</TableCell>
+                                        <TableCell sx={{ fontWeight: 700 }}>Course</TableCell>
+                                        <TableCell sx={{ fontWeight: 700 }}>Type</TableCell>
+                                        <TableCell sx={{ fontWeight: 700 }}>Category</TableCell>
+                                        <TableCell sx={{ fontWeight: 700 }}>Sub Category</TableCell>
+                                        <TableCell sx={{ fontWeight: 700 }}>Date</TableCell>
+                                        <TableCell sx={{ fontWeight: 700 }} align="center">File</TableCell>
+                                        <TableCell sx={{ fontWeight: 700 }} align="center">Images</TableCell>
+                                        <TableCell align="center" sx={{ fontWeight: 700 }}>Action</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>

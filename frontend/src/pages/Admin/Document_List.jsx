@@ -571,16 +571,16 @@ export default function AdminDocumentList() {
                         <TableContainer component={Box}>
                             <Table size="small">
                                 <TableHead>
-                                    <TableRow sx={{ bgcolor: "#f5f7ff" }}>
+                                    <TableRow>
                                         <TableCell sx={{ fontWeight: 700 }}>Univesity Name</TableCell>
                                         <TableCell sx={{ fontWeight: 700 }}>Institute Name</TableCell>
                                         <TableCell sx={{ fontWeight: 700 }}>Course</TableCell>
                                         <TableCell sx={{ fontWeight: 700 }}>Type</TableCell>
                                         <TableCell sx={{ fontWeight: 700 }}>Category</TableCell>
-                                        <TableCell>Sub Category</TableCell>
+                                        <TableCell sx={{ fontWeight: 700 }}>Sub Category</TableCell>
                                         <TableCell sx={{ fontWeight: 700 }}>Date</TableCell>
-                                        <TableCell sx={{ fontWeight: 700 }}>File</TableCell>
-                                        <TableCell sx={{ fontWeight: 700 }}>Images</TableCell>
+                                        <TableCell sx={{ fontWeight: 700 }} align="center">File</TableCell>
+                                        <TableCell sx={{ fontWeight: 700 }} align="center">Images</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>

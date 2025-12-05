@@ -474,18 +474,12 @@ export default function UniversityUsers() {
           <Table size="small" sx={{ minWidth: 720 }}>
             <TableHead>
               <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                  Email
-                </TableCell>
-                <TableCell>Role</TableCell>
-                <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
-                  University
-                </TableCell>
-                <TableCell sx={{ display: { xs: "none", lg: "table-cell" } }}>
-                  Created
-                </TableCell>
-                <TableCell align="right">Actions</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Name</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Email</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Role</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>University</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Created</TableCell>
+                <TableCell align="center" sx={{ fontWeight: 700 }}>Actions</TableCell>
               </TableRow>
             </TableHead>
 
@@ -505,7 +499,7 @@ export default function UniversityUsers() {
                 <TableRow>
                   <TableCell colSpan={6} align="center" sx={{ py: 4 }}>
                     <Typography variant="body2" color="text.secondary">
-                      No users
+                      No University Users
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -568,7 +562,7 @@ export default function UniversityUsers() {
                         : "-"}
                     </TableCell>
 
-                    <TableCell align="right">
+                    <TableCell align="center">
                       <IconButton size="small" color="primary" onClick={() => onEdit(r)}>
                         <EditIcon />
                       </IconButton>
